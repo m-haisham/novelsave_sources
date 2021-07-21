@@ -1,6 +1,6 @@
 from .betwixtedbutterfly import BetwixtedButterfly
 from .boxnovel import BoxNovel
-from .chickengage import ChickEngege
+from .chickengege import ChickEngege
 from .chrysagarden import Chrysanthemumgarden
 from .dragontea import DragonTea
 from .dummynovels import DummyNovels

@@ -61,8 +61,8 @@ class Ktlchamber(Source):
 
         return novel, chapters
 
-    def chapter(self, url: str) -> Chapter:
-        soup = self.soup(url)
+    def chapter(self, chapter: Chapter):
+        soup = self.soup(chapter.url)
 
         entry_content = soup.find('div', {'class': 'entry-content'})
         p_elements = entry_content.find_all('p')
@@ -74,9 +74,5 @@ class Ktlchamber(Source):
 
         result = self.chapter_regex.search(soup.find('h1', {'class': 'entry-title'}).text)
 
-        return Chapter(
-            no=int(result.group(1)),
-            title=result.group(2),
-            paragraphs=paragraphs,
-            url=url,
-        )
+        chapter.title = result.group(2)
+        chapter.paragraphs = paragraphs

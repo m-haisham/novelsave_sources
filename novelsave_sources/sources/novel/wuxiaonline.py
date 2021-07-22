@@ -1,8 +1,8 @@
-import re
 from typing import Tuple, List
 
 from .source import Source
 from ...models import Novel, Chapter
+
 
 class WuxiaOnline(Source):
     __name__ = 'WuxiaWorld.online'
@@ -16,7 +16,7 @@ class WuxiaOnline(Source):
         novel = Novel(
             title=soup.select_one('h1.entry-title').text.strip(),
             author=soup.select_one('a[href*="author"]').text.strip(),
-            thumbnail=self.base + soup.select_one('.info_image img')['src'],
+            thumbnail=self.base_urls[0] + soup.select_one('.info_image img')['src'],
             synopsis='\n'.join([str(element) for element in synopsis_elements]),
             url=url,
         )
@@ -33,8 +33,8 @@ class WuxiaOnline(Source):
 
         return novel, chapters
 
-    def chapter(self, url: str) -> Chapter:
-        soup = self.soup(url)
+    def chapter(self, chapter: Chapter):
+        soup = self.soup(chapter.url)
 
         content = soup.select_one('#list_chapter .content-area')
 
@@ -50,10 +50,7 @@ class WuxiaOnline(Source):
 
         self.clean_contents(content)
 
-        return Chapter(
-            paragraphs=str(content),
-            url=url,
-        )
+        chapter.paragraphs = str(content)
 
     def clean_element(self, element):
 

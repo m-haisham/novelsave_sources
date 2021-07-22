@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 
 from .source import Source
 from ...models import Chapter, Novel
-from novelsave.exceptions import ChapterException
+from ...exceptions import ChapterException
 
 
 class BetwixtedButterfly(Source):
@@ -54,8 +54,8 @@ class BetwixtedButterfly(Source):
 
         return novel, chapters
 
-    def chapter(self, url: str) -> Chapter:
-        soup = self.soup(url)
+    def chapter(self, chapter: Chapter):
+        soup = self.soup(chapter.url)
 
         elements = soup.select(".entry-inner section .elementor-element:not(.elementor-widget-button, "
                                ".elementor-column)")
@@ -67,7 +67,7 @@ class BetwixtedButterfly(Source):
         # this source lists chapters that aren't completed/translated in table of contents
         # links of said chapter are redirected to another url that indicates the lack of the chapter
         if content is None:
-            raise ChapterException('Absent', f'"{url}" redirected to placeholder')
+            raise ChapterException('Absent', f'"{chapter}" redirected to placeholder')
 
         # remove navigation buttons
         for button in content.select('.elementor-widget-button'):
@@ -80,7 +80,4 @@ class BetwixtedButterfly(Source):
 
         self.clean_contents(content)
 
-        return Chapter(
-            paragraphs=str(content),
-            url=url,
-        )
+        chapter.paragraphs = str(content)

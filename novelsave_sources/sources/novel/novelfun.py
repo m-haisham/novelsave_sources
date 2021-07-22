@@ -60,20 +60,17 @@ class NovelFun(Source):
             Chapter(
                 index=c['chapNum'],
                 title=c["title"],
-                url=self.base+c['url'],
+                url=self.base_urls[0]+c['url'],
             )
             for c in response.json()['data']['chapterListChunks'][0]['items']
         ]
 
         return novel, chapters
 
-    def chapter(self, url: str) -> Chapter:
-        soup = self.soup(url)
+    def chapter(self, chapter: Chapter):
+        soup = self.soup(chapter.url)
 
         content = soup.select_one('h1 ~ div')
         self.clean_contents(content)
 
-        return Chapter(
-            paragraphs=str(content),
-            url=url,
-        )
+        chapter.paragraphs = str(content)

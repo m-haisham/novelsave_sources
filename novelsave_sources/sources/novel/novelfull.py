@@ -35,7 +35,7 @@ class NovelFull(Source):
 
         novel = Novel(
             title=image_element['alt'],
-            thumbnail=self.base + image_element['src'],
+            thumbnail=self.base_urls[0] + image_element['src'],
             author=author,
             url=url,
         )
@@ -60,15 +60,15 @@ class NovelFull(Source):
         for a in soup.select('ul.list-chapter li a'):
             chapter = Chapter(
                 title=a['title'].strip(),
-                url=self.base + a['href'],
+                url=self.base_urls[0] + a['href'],
             )
 
             chapters.append(chapter)
 
         return chapters
 
-    def chapter(self, url: str) -> Chapter:
-        soup = self.soup(url)
+    def chapter(self, chapter: Chapter):
+        soup = self.soup(chapter.url)
 
         content = soup.select_one('div#chapter-content')
 
@@ -76,11 +76,5 @@ class NovelFull(Source):
         for ads in content.select('h3, h2, .adsbygoogle, script, ins, .ads, .ads-holder'):
             ads.extract()
 
-        return Chapter(
-            title=soup.select_one('.chapter-text').find(text=True, recursive=False).strip(),
-            paragraphs=str(content),
-            url=url,
-        )
-    
-    def novel_folder_name(self, url):
-        return super(NovelFull, self).novel_folder_name(url.rstrip('.html'))
+        chapter.title = soup.select_one('.chapter-text').find(text=True, recursive=False).strip()
+        chapter.paragraphs = str(content)

@@ -16,7 +16,7 @@ class NovelPassion(Source):
         novel = Novel(
             title=soup.select_one('.psn h2.ddm').text.strip(),
             author=', '.join(authors),
-            thumbnail=self.base + soup.select_one('.g_thumb img')['src'],
+            thumbnail=self.base_urls[0] + soup.select_one('.g_thumb img')['src'],
             synopsis='\n'.join(synopsis_paragraphs),
             url=url,
         )
@@ -29,21 +29,18 @@ class NovelPassion(Source):
             chapter = Chapter(
                 index=i,
                 title=a.select_one('span').text.strip(),
-                url=self.base + a['href'],
+                url=self.base_urls[0] + a['href'],
             )
 
             chapters.append(chapter)
 
         return novel, chapters
 
-    def chapter(self, url: str) -> Chapter:
-        soup = self.soup(url)
+    def chapter(self, chapter: Chapter):
+        soup = self.soup(chapter.url)
 
         content = soup.select_one('.cha-words')
         self.clean_contents(content)
 
-        return Chapter(
-            title=soup.select_one('h2.dac').text.strip(),
-            paragraphs=str(content),
-            url=url,
-        )
+        chapter.title = soup.select_one('h2.dac').text.strip()
+        chapter.paragraphs = str(content)

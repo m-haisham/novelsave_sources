@@ -70,8 +70,8 @@ class NovelSite(Source):
 
         return novel, chapters
 
-    def chapter(self, url: str) -> Chapter:
-        soup = self.soup(url)
+    def chapter(self, chapter: Chapter):
+        soup = self.soup(chapter.url)
 
         content = soup.select_one('.reading-content')
 
@@ -83,11 +83,5 @@ class NovelSite(Source):
 
         self.clean_contents(content)
 
-        return Chapter(
-            title=soup.select_one('.breadcrumb >li.active').text.strip(),
-            paragraphs=str(content),
-            url=url,
-        )
-
-    def novel_folder_name(self, url):
-        return super().novel_folder_name(url).rstrip('-novel')
+        chapter.title = soup.select_one('.breadcrumb >li.active').text.strip(),
+        chapter.paragraphs = str(content)

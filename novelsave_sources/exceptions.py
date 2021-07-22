@@ -12,3 +12,7 @@ class UnknownSourceException(SourcesException):
 
 class UnavailableException(SourcesException):
     """thrown when a function is unavailable"""
+
+
+class ChapterException(SourcesException):
+    """thrown when something unexpected happens during chapter update"""

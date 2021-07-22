@@ -56,8 +56,8 @@ class Chrysanthemumgarden(Source):
 
         return novel, chapters
 
-    def chapter(self, url: str) -> Chapter:
-        soup = self.soup(url)
+    def chapter(self, chapter: Chapter):
+        soup = self.soup(chapter.url)
 
         content = soup.select_one('#novel-content')
         self.clean_contents(content)
@@ -67,11 +67,8 @@ class Chrysanthemumgarden(Source):
             if not element.text.strip():
                 element.extract()
 
-        return Chapter(
-            title=soup.select_one('.chapter-title').text.strip(),
-            paragraphs=str(content),
-            url=url,
-        )
+        chapter.title = soup.select_one('.chapter-title').text.strip()
+        chapter.paragraphs = str(content)
 
     def clean_element(self, element):
 

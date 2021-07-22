@@ -8,7 +8,7 @@ class Chapter:
     index: int = -1
     no: float = None
     title: str = None
-    paragraphs: Union[str, List[str]] = None
+    paragraphs: str = None
     volume: Tuple[int, str] = None
     url: str = None
 

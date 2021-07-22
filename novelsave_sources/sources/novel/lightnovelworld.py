@@ -26,29 +26,24 @@ class LightNovelWorld(Source):
 
             chapter = Chapter(
                 index=i,
-                url=f"{LightNovelWorld.base}{a['href']}"
+                url=LightNovelWorld.base_urls[0] + a['href'],
             )
 
             chapters.append(chapter)
 
         return novel, chapters
 
-    def chapter(self, url: str) -> Chapter:
-        soup = self.soup(url)
+    def chapter(self, chapter: Chapter):
+        soup = self.soup(chapter.url)
 
         title_element = soup.find('div', {'class': 'titles'}).find('h2')
         result = self.chapter_title_regex.search(title_element.text)
         if len(result.groups()) > 1:
-            title = result.group(2)
+            chapter.title = result.group(2)
         else:
-            title = title_element.text.strip()
+            chapter.title = title_element.text.strip()
 
-        chapter = Chapter(
-            title=title,
-            paragraphs=[],
-            url=url,
-        )
-
+        chapter.paragraphs = []
         chapter_content = soup.find('div', {'class': 'chapter-content'})
         for text in chapter_content.find_all(text=True):
             chapter.paragraphs.append(text.strip())

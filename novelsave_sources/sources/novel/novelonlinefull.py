@@ -55,13 +55,10 @@ class NovelOnlineFull(Source):
 
         return novel, chapters
 
-    def chapter(self, url: str) -> Chapter:
-        soup = self.soup(url)
+    def chapter(self, chapter: Chapter):
+        soup = self.soup(chapter.url)
 
         content = soup.select_one('#vung_doc')
         self.clean_contents(content)
 
-        return Chapter(
-            paragraphs=str(content),
-            url=url,
-        )
+        chapter.paragraphs = str(content)

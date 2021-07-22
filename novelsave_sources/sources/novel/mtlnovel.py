@@ -43,8 +43,8 @@ class MtlNovel(Source):
 
         return novel, chapters
 
-    def chapter(self, url: str) -> Chapter:
-        soup = self.soup(url)
+    def chapter(self, chapter: Chapter):
+        soup = self.soup(chapter.url)
 
         paragraphs = soup.select_one('.par')
 
@@ -52,8 +52,5 @@ class MtlNovel(Source):
         for frame in paragraphs.select('amp-iframe'):
             frame.decompose()
 
-        return Chapter(
-            title=soup.select_one('.current-crumb').text.strip(),
-            paragraphs=str(paragraphs),
-            url=url,
-        )
+        chapter.title = soup.select_one('.current-crumb').text.strip()
+        chapter.paragraphs = str(paragraphs)

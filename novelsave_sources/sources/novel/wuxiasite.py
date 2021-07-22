@@ -51,13 +51,10 @@ class WuxiaSite(Source):
 
         return novel, chapters
 
-    def chapter(self, url: str) -> Chapter:
-        soup = self.soup(url)
+    def chapter(self, chapter: Chapter):
+        soup = self.soup(chapter.url)
 
         contents = soup.select('.text-left p, .cha-words p')
         body = [str(p) for p in contents if p.text.strip()]
 
-        return Chapter(
-            paragraphs=''.join(body),
-            url=url,
-        )
+        chapter.paragraphs = ''.join(body)

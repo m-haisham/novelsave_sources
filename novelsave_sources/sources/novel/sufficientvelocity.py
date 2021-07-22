@@ -2,7 +2,7 @@ from typing import List, Tuple
 from urllib.parse import urlparse
 
 from .source import Source
-from novelsave.exceptions import ResponseException
+from ...exceptions import BadResponseException
 from ...models import Chapter, Novel
 
 
@@ -17,17 +17,15 @@ class SufficientVelocity(Source):
         author_element = soup.select_one('.username')
 
         # getting a thumbnail
-        stripped_baseurl = self.base.rstrip("/")
+        stripped_baseurl = self.base_urls[0].rstrip("/")
 
         # getting writer profile image
         try:
             author_soup = self.soup(f'{stripped_baseurl}{author_element["href"]}')
             avatar = author_soup.select_one('.avatarWrapper > .avatar')
             thumbnail = f'{stripped_baseurl}{avatar["href"]}'
-        except ResponseException as e:
-            # access to profile denied
-            if e.response.status_code == 403:
-                thumbnail = None
+        except BadResponseException:
+            thumbnail = None
 
         novel = Novel(
             title=soup.select_one('.p-breadcrumbs > li:last-child').text.strip(),
@@ -48,11 +46,11 @@ class SufficientVelocity(Source):
 
         return novel, chapters
 
-    def chapter(self, url: str) -> Chapter:
-        parsed_url = urlparse(url)
+    def chapter(self, chapter: Chapter):
+        parsed_url = urlparse(chapter.url)
         raw_url = f'{parsed_url.scheme}://{parsed_url.netloc}{parsed_url.path}'
 
-        soup = self.cached_soup(raw_url)
+        soup = self.soup(raw_url)
 
         article = soup.select_one(f'.u-anchorTarget#{parsed_url.fragment}').parent
         content = article.select_one('.message-inner .message-userContent .bbWrapper')
@@ -61,8 +59,5 @@ class SufficientVelocity(Source):
         paragraphs = str(content)[5:-6].split('<br/>\n<br/>')
         paragraphs = [p.strip() for p in paragraphs]
 
-        return Chapter(
-            title=article.select_one('.message-cell--threadmark-header > span').text.strip(),
-            paragraphs='<p>' + '</p><p>'.join(paragraphs) + '</p>',
-            url=url,
-        )
+        chapter.title = article.select_one('.message-cell--threadmark-header > span').text.strip()
+        chapter.paragraphs = '<p>' + '</p><p>'.join(paragraphs) + '</p>'

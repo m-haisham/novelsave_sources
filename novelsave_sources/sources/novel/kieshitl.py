@@ -38,20 +38,14 @@ class KieshiTl(Source):
 
         return novel, chapters
 
-    def chapter(self, url: str) -> Chapter:
-        soup = self.soup(url)
+    def chapter(self, chapter: Chapter):
+        soup = self.soup(chapter.url)
 
         _, no = soup.select_one('h1.entry-title').text.split('Chapter', maxsplit=1)
 
-        chapter = Chapter(
-            no=float(no.strip()),
-            title=soup.select_one('.entry-content > h2').text.strip(),
-            paragraphs=[],
-            url=url,
-        )
+        chapter.title = soup.select_one('.entry-content > h2').text.strip()
+        chapter.paragraphs = []
 
         for p in soup.select('.entry-content > h2 ~ p.has-medium-font-size:not(.has-text-align-right):not('
                              '.has-pale-cyan-blue-background-color):not(.has-text-align-left)'):
             chapter.paragraphs.append(p.text.strip())
-
-        return chapter

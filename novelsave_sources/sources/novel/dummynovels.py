@@ -51,8 +51,8 @@ class DummyNovels(Source):
 
         return novel, chapters
 
-    def chapter(self, url: str) -> Chapter:
-        soup = self.soup(url)
+    def chapter(self, chapter: Chapter):
+        soup = self.soup(chapter.url)
 
         content = soup.select_one('.elementor-widget-theme-post-content > div')
 
@@ -62,8 +62,5 @@ class DummyNovels(Source):
 
         self.clean_contents(content)
 
-        return Chapter(
-            title=soup.select_one('.chapter-heading:not(.novel-title-for-chapters)').text.strip(),
-            paragraphs=str(content),
-            url=url,
-        )
+        chapter.title = soup.select_one('.chapter-heading:not(.novel-title-for-chapters)').text.strip()
+        chapter.paragraphs = str(content)

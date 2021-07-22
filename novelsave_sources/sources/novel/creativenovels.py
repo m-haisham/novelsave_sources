@@ -75,8 +75,8 @@ class CreativeNovels(Source):
 
         return chapters
 
-    def chapter(self, url: str) -> Chapter:
-        soup = self.soup(url)
+    def chapter(self, chapter: Chapter):
+        soup = self.soup(chapter.url)
 
         content = soup.select_one('article .entry-content')
         for tag in content.select('.announcements_crn, .support-placement, span[style*="color:transparent"]'):
@@ -84,8 +84,5 @@ class CreativeNovels(Source):
 
         self.clean_contents(content)
 
-        return Chapter(
-            title=soup.select_one('.entry-title').text.strip(),
-            paragraphs=str(content),
-            url=url,
-        )
+        chapter.title = soup.select_one('.entry-title').text.strip()
+        chapter.paragraphs = str(content)

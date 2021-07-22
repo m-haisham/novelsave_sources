@@ -46,8 +46,8 @@ class NovelsRock(Source):
 
         return novel, chapters
 
-    def chapter(self, url: str) -> Chapter:
-        soup = self.soup(url)
+    def chapter(self, chapter: Chapter):
+        soup = self.soup(chapter.url)
 
         contents = soup.select('div.reading-content p')
 
@@ -57,7 +57,4 @@ class NovelsRock(Source):
                 ad.decompose()
             body.append(str(p))
 
-        return Chapter(
-            paragraphs=''.join(body),
-            url=url,
-        )
+            chapter.paragraphs = ''.join(body)

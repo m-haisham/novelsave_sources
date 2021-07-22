@@ -29,14 +29,11 @@ class ScribbleHub(Source):
 
         return novel, chapters
 
-    def chapter(self, url: str) -> Chapter:
-        soup = self.soup(url)
+    def chapter(self, chapter: Chapter):
+        soup = self.soup(chapter.url)
 
-        return Chapter(
-            title=soup.select_one('.chapter-title').text.strip(),
-            paragraphs=str(soup.select_one('#chp_raw')),
-            url=url,
-        )
+        chapter.title = soup.select_one('.chapter-title').text.strip()
+        chapter.paragraphs = str(soup.select_one('#chp_raw'))
 
     def parse_toc(self, id: int) -> List[Chapter]:
 

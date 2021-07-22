@@ -65,8 +65,8 @@ class FanFiction(Source):
 
         return novel, chapters
 
-    def chapter(self, url: str) -> Chapter:
-        soup = self.soup(url)
+    def chapter(self, chapter: Chapter):
+        soup = self.soup(chapter.url)
 
         chapter_select = soup.select_one('#chap_select, select#jump')
         if chapter_select:
@@ -74,9 +74,5 @@ class FanFiction(Source):
         else:
             title = soup.select_one('#profile_top b.xcontrast_txt, #content b').text.strip()
 
-        return Chapter(
-            title=title,
-            paragraphs=str(soup.select_one('#storytext, #storycontent')),
-            url=url,
-        )
-
+        chapter.title = title
+        chapter.paragraphs = str(soup.select_one('#storytext, #storycontent'))

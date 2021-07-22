@@ -5,10 +5,9 @@ from urllib.parse import urlparse
 from bs4 import Comment
 from requests.cookies import RequestsCookieJar
 
-from ...exceptions import UnavailableException
-from ...utils import slugify
-from ...models import Novel, Chapter
 from ..crawler import Crawler
+from ...exceptions import UnavailableException
+from ...models import Novel, Chapter
 
 
 class Source(Crawler):
@@ -26,7 +25,7 @@ class Source(Crawler):
         :param url: url to test
         :return: whether the url is from this source
         """
-        return any([url.startswith(url) for url in cls.base_urls])
+        return any([url.startswith(base_url) for base_url in cls.base_urls])
 
     def __init__(self):
         super(Source, self).__init__()
@@ -80,21 +79,14 @@ class Source(Crawler):
         """
         raise NotImplementedError
 
-    def chapter(self, url: str) -> Chapter:
+    def chapter(self, chapter: Chapter):
         """
         soup chapter information from url
 
-        :param url: link pointing to chapter
+        :param chapter: chapter to update
         :return: chapter object
         """
         raise NotImplementedError
-
-    def novel_folder_name(self, url):
-        """
-        :param url: novel url
-        :return: suitable novel folder name
-        """
-        return slugify(url.strip('/ ').split('/')[-1])
 
     # ---- Inspired from https://github.com/dipu-bd/lightnovel-crawler ----
     # ----      And almost a perfect copy of the functions below       ----

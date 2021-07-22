@@ -50,8 +50,8 @@ class ReadLightNovel(Source):
 
         return novel, chapters
 
-    def chapter(self, url: str) -> Chapter:
-        soup = self.soup(url)
+    def chapter(self, chapter: Chapter):
+        soup = self.soup(chapter.url)
 
         content = soup.find('div', {'class': 'chapter-content3'}).find('div', {'class': 'desc'})
 
@@ -79,8 +79,5 @@ class ReadLightNovel(Source):
         for i in range(len(paragraphs)):
             paragraphs[i] = re.sub(r' \. ?', '. ', paragraphs[i]).strip()
 
-        return Chapter(
-            title=title,
-            paragraphs=paragraphs,
-            url=url
-        )
+        chapter.title = title
+        chapter.paragraphs = paragraphs

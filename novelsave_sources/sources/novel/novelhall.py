@@ -36,23 +36,20 @@ class NovelHall(Source):
             chapter = Chapter(
                 index=i,
                 title=a.text.strip(),
-                url=self.base + a['href'],
+                url=self.base_urls[0] + a['href'],
             )
 
             chapters.append(chapter)
 
         return novel, chapters
 
-    def chapter(self, url: str) -> Chapter:
-        soup = self.soup(url)
+    def chapter(self, chapter: Chapter):
+        soup = self.soup(chapter.url)
 
         content = soup.select_one('.entry-content')
         self.clean_contents(content)
 
         content = '<p>' + re.sub(r'<br ?/?>', '</p><p>', str(content).strip('<div></div>').strip()) + '</p>'
 
-        return Chapter(
-            title=soup.select_one('.single-header h1').text.strip(),
-            paragraphs=content,
-            url=url,
-        )
+        chapter.title = soup.select_one('.single-header h1').text.strip()
+        chapter.paragraphs = content

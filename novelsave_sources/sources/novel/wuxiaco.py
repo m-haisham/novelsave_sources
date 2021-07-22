@@ -32,15 +32,15 @@ class WuxiaCo(Source):
             chapter = Chapter(
                 index=i,
                 title=title,
-                url=f"{self.base}{item['href']}"
+                url=self.base_urls[0] + item['href'],
             )
 
             chapters.append(chapter)
 
         return novel, chapters
 
-    def chapter(self, url: str) -> Chapter:
-        soup = self.soup(url)
+    def chapter(self, chapter: Chapter):
+        soup = self.soup(chapter.url)
 
         title = soup.find('h1', {'class': 'chapter-title'}).text
 
@@ -58,13 +58,10 @@ class WuxiaCo(Source):
         #
         content = self._clean_content(content)
 
-        return Chapter(
-            title=title,
-            paragraphs=content,
-            url=url
-        )
+        chapter.title = title
+        chapter.paragraphs = '<p>' + '</p><p>'.join(content) + '</p>'
 
-    def _clean_content(self, content):
+    def _clean_content(self, content) -> List[str]:
         paragraphs = []
 
         # check is paragraph has line breaks or tabs inside

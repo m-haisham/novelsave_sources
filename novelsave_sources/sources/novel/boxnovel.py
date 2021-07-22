@@ -39,14 +39,11 @@ class BoxNovel(Source):
 
         return novel, chapters
 
-    def chapter(self, url: str) -> Chapter:
-        soup = self.soup(url)
+    def chapter(self, chapter: Chapter):
+        soup = self.soup(chapter.url)
 
         contents = soup.select_one('div.text-left')
         for element in contents.select('h1, h2, h3, .code-block, script, .adsbygoogle'):
             element.extract()
 
-        return Chapter(
-            paragraphs=str(contents),
-            url=url
-        )
+        chapter.paragraphs = str(contents)

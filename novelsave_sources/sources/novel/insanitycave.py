@@ -44,8 +44,8 @@ class InsanityCave(Source):
 
         return novel, chapters
 
-    def chapter(self, url: str) -> Chapter:
-        soup = self.soup(url)
+    def chapter(self, chapter: Chapter):
+        soup = self.soup(chapter.url)
 
         result = self.chapter_title_regex.search(soup.find('div', {'class': 'title-block'}).text.strip())
         if not result or len(result.groups()) < 2:
@@ -65,9 +65,6 @@ class InsanityCave(Source):
             else:
                 paras.append(para)
 
-        return Chapter(
-            no=int(result.group(1)),
-            title=result.group(2).strip(),
-            paragraphs=paras,
-            url=url,
-        )
+
+        chapter.title = result.group(2).strip()
+        chapter.paragraphs = paras

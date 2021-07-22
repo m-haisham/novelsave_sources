@@ -66,8 +66,8 @@ class DragonTea(Source):
 
         return novel, chapters
 
-    def chapter(self, url: str) -> Chapter:
-        soup = self.soup(url)
+    def chapter(self, chapter: Chapter):
+        soup = self.soup(chapter.url)
 
         content = soup.select_one('.reading-content')
 
@@ -79,8 +79,5 @@ class DragonTea(Source):
 
         self.clean_contents(content)
 
-        return Chapter(
-            title=soup.select_one('.breadcrumb >li.active').text.strip(),
-            paragraphs=str(content),
-            url=url,
-        )
+        chapter.title = soup.select_one('.breadcrumb >li.active').text.strip()
+        chapter.paragraphs = str(content)

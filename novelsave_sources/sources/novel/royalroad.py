@@ -23,21 +23,18 @@ class RoyalRoad(Source):
             chapter = Chapter(
                 index=len(chapters),
                 title=a.text.strip(),
-                url=f'{self.base}{a["href"]}'
+                url=self.base_urls[0] + a["href"],
             )
 
             chapters.append(chapter)
 
         return novel, chapters
 
-    def chapter(self, url: str) -> Chapter:
-        soup = self.soup(url)
+    def chapter(self, chapter: Chapter):
+        soup = self.soup(chapter.url)
 
         contents = soup.select_one('.chapter-content')
         self.clean_contents(contents)
 
-        return Chapter(
-            title=soup.find('h1').text.strip(),
-            paragraphs=str(contents),
-            url=url,
-        )
+        chapter.title = soup.find('h1').text.strip()
+        chapter.paragraphs = str(contents)

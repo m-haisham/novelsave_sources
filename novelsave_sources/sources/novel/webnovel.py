@@ -41,8 +41,8 @@ class Webnovel(Source):
 
         return novel, self.toc(novel_id)
 
-    def chapter(self, url: str) -> Chapter:
-        novel_id, chapter_id = self.parse_chapter_url(url)
+    def chapter(self, chapter: Chapter):
+        novel_id, chapter_id = self.parse_chapter_url(chapter.url)
         response = self.session.get(
             'https://www.webnovel.com/go/pcm/chapter/getContent',
             params={
@@ -55,10 +55,8 @@ class Webnovel(Source):
         response = self.validate(response)
         data = response['data']['chapterInfo']
 
-        return Chapter(
-            title=data['chapterName'],
-            paragraphs='<p>' + '</p><p>'.join([para['content'] for para in data['contents']]) + '</p>',
-        )
+        chapter.title = data['chapterName']
+        chapter.paragraphs = '<p>' + '</p><p>'.join([para['content'] for para in data['contents']]) + '</p>'
 
     def toc(self, novel_id: int) -> List[Chapter]:
         response = self.session.get(

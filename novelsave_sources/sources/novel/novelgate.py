@@ -30,20 +30,17 @@ class NovelGate(Source):
                     index=len(chapters),
                     title=a.text.strip(),
                     volume=volume,
-                    url=self.base + a['href'],
+                    url=self.base_urls[0] + a['href'],
                 )
 
                 chapters.append(chapter)
 
         return novel, chapters
 
-    def chapter(self, url: str) -> Chapter:
-        soup = self.soup(url)
+    def chapter(self, chapter: Chapter):
+        soup = self.soup(chapter.url)
 
         contents = soup.select_one('#chapter-body')
         self.clean_contents(contents)
 
-        return Chapter(
-            paragraphs=str(contents),
-            url=url,
-        )
+        chapter.paragraphs = str(contents)

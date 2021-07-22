@@ -17,11 +17,6 @@ class WuxiaCom(Source):
     def novel(self, url: str) -> Tuple[Novel, List[Chapter]]:
         soup = self.soup(url)
 
-        try:
-            thumbnail = soup.select_one('img.media-object')['src']
-        except Exception:
-            thumbnail = None
-
         authors = ''
         for d in soup.select_one('.media-body dl, .novel-body').select('dt, dd'):
             authors += d.text.strip()
@@ -29,7 +24,7 @@ class WuxiaCom(Source):
 
         novel = Novel(
             title=soup.select_one('.section-content h2').text,
-            thumbnail=thumbnail,
+            thumbnail=soup.select_one('img.media-object').get('src'),
             author=authors.strip().strip(';'),
             url=url,
         )
@@ -39,15 +34,15 @@ class WuxiaCom(Source):
             for a in panel.select('ul.list-chapters li.chapter-item a'):
                 chapter = Chapter(
                     index=len(chapters),
-                    url=f"{self.base}{a['href']}"
+                    url=self.base_urls[0] + a['href'],
                 )
 
                 chapters.append(chapter)
 
         return novel, chapters
 
-    def chapter(self, url: str) -> Chapter:
-        soup = self.soup(url)
+    def chapter(self, chapter: Chapter):
+        soup = self.soup(chapter.url)
 
         contents = soup.select_one('#chapterContent')
         if not contents:
@@ -55,15 +50,12 @@ class WuxiaCom(Source):
         if not contents:
             contents = soup.select_one('.panel-default .fr-view')
         if not contents:
-            raise ValueError(f'Unable to read chapter content from {url}')
+            raise ValueError(f'Unable to read chapter content from {chapter}')
 
         for nav in (contents.select('.chapter-nav') or []):
             nav.extract()
 
         self.clean_contents(contents)
 
-        return Chapter(
-            title=soup.select_one('#chapter-outer  h4').text.strip(),
-            paragraphs=str(contents),
-            url=url,
-        )
+        chapter.title = soup.select_one('#chapter-outer  h4').text.strip()
+        chapter.paragraphs = str(contents)

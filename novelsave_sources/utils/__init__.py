@@ -1,6 +1,5 @@
-import re
+from ..exceptions import UnknownSourceException
 
-from novelsave.exceptions import MissingSource
 from novelsave_sources.sources.metadata import meta_sources
 from novelsave_sources.sources.novel import sources
 
@@ -15,7 +14,7 @@ def parse_source(url):
         if source.of(url):
             return source()
 
-    raise MissingSource(url)
+    raise UnknownSourceException(f'"{url}" does not correspond to any available source')
 
 
 def parse_metasource(url):
@@ -28,8 +27,5 @@ def parse_metasource(url):
         if source.of(url):
             return source()
 
-    raise MissingSource(url, metadata=True)
+    raise UnknownSourceException(f'"{url}" does not correspond to any available metadata source')
 
-
-def slugify(s, replace=''):
-    return re.sub(r'[\\/:*"\'<>|.%$^&£?]', replace, s)

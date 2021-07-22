@@ -4,8 +4,6 @@ A collection of webnovel sources offering varying amounts of scraping capability
 
 ## Sources
 
-## Sources
-
 > Request a new source by [creating a new issue](https://github.com/mHaisham/novelsave/issues/new/choose)
 
 ### Novel

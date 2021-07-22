@@ -1,8 +1,5 @@
 from typing import List
 
-import requests
-from bs4 import BeautifulSoup
-
 from ..crawler import Crawler
 from ...models import MetaData
 
@@ -15,7 +12,7 @@ class MetaSource(Crawler):
         """
         :return: whether the url is from this source
         """
-        return any([url.startswith(url) for url in cls.base_urls])
+        return any([url.startswith(base_url) for base_url in cls.base_urls])
 
     def retrieve(self, url) -> List[MetaData]:
         """

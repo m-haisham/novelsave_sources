@@ -1,7 +1,7 @@
 from typing import List, Tuple
 
 from .source import Source
-from ...models import Chapter, Novel
+from ...models import Chapter, Novel, Metadata
 
 
 class WuxiaCom(Source):
@@ -14,7 +14,7 @@ class WuxiaCom(Source):
         r'(volume|chapter) .?\d+',
     ]
 
-    def novel(self, url: str) -> Tuple[Novel, List[Chapter]]:
+    def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
         soup = self.soup(url)
 
         authors = ''
@@ -39,7 +39,7 @@ class WuxiaCom(Source):
 
                 chapters.append(chapter)
 
-        return novel, chapters
+        return novel, chapters, []
 
     def chapter(self, chapter: Chapter):
         soup = self.soup(chapter.url)

@@ -2,7 +2,7 @@ import re
 from typing import Tuple, List
 
 from .source import Source
-from ...models import Novel, Chapter
+from ...models import Novel, Chapter, Metadata
 
 
 class LightNovelWorld(Source):
@@ -10,7 +10,7 @@ class LightNovelWorld(Source):
 
     chapter_title_regex = re.compile(r'chapter (\d+\.?\d*):? ?(.+)?', flags=re.IGNORECASE)
 
-    def novel(self, url: str) -> Tuple[Novel, List[Chapter]]:
+    def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
         soup = self.soup(url)
 
         novel = Novel(
@@ -31,7 +31,7 @@ class LightNovelWorld(Source):
 
             chapters.append(chapter)
 
-        return novel, chapters
+        return novel, chapters, []
 
     def chapter(self, chapter: Chapter):
         soup = self.soup(chapter.url)

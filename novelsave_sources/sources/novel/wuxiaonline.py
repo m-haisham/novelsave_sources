@@ -1,14 +1,14 @@
 from typing import Tuple, List
 
 from .source import Source
-from ...models import Novel, Chapter
+from ...models import Novel, Chapter, Metadata
 
 
 class WuxiaOnline(Source):
     __name__ = 'WuxiaWorld.online'
     base_urls = ['https://wuxiaworld.online']
 
-    def novel(self, url: str) -> Tuple[Novel, List[Chapter]]:
+    def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
         soup = self.soup(url)
 
         synopsis_elements = soup.select_one('#noidungm').find_all(text=True, recursive=False)
@@ -31,7 +31,7 @@ class WuxiaOnline(Source):
 
             chapters.append(chapter)
 
-        return novel, chapters
+        return novel, chapters, []
 
     def chapter(self, chapter: Chapter):
         soup = self.soup(chapter.url)

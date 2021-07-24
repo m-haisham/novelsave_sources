@@ -3,7 +3,7 @@ from typing import List, Tuple
 from bs4 import BeautifulSoup
 
 from .source import Source
-from ...models import Chapter, Novel
+from ...models import Chapter, Novel, Metadata
 from ...exceptions import ChapterException
 
 
@@ -17,8 +17,9 @@ class BetwixtedButterfly(Source):
         'nav', 'h1', 'h2',
     ]
 
-    def novel(self, url: str) -> Tuple[Novel, List[Chapter]]:
+    def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
         soup = self.soup(url)
+        metadata = []
 
         details_parent, synopsis_parent, *_ = soup.select('.elementor-text-editor')
 
@@ -40,7 +41,7 @@ class BetwixtedButterfly(Source):
 
         # tags
         for a in soup.select('a.elementor-button'):
-            novel.add_meta('subject', a.text.strip())
+            metadata.append(Metadata('subject', a.text.strip()))
 
         chapters = []
         for a in soup.select('.elementor-tab-content > p a'):
@@ -52,7 +53,7 @@ class BetwixtedButterfly(Source):
 
             chapters.append(chapter)
 
-        return novel, chapters
+        return novel, chapters, metadata
 
     def chapter(self, chapter: Chapter):
         soup = self.soup(chapter.url)

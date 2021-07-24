@@ -1,42 +1,42 @@
 from typing import List
 
 from .metasource import MetaSource
-from ...models import MetaData
+from ...models import Metadata
 
 
 class NovelUpdates(MetaSource):
     base_urls = ['https://www.novelupdates.com']
 
-    def retrieve(self, url) -> List[MetaData]:
+    def retrieve(self, url) -> List[Metadata]:
         metadata = []
         soup = self.soup(url)
 
         # alternate titles
         for text in soup.select_one('#editassociated').find_all(text=True, recursive=False):
-            metadata.append(MetaData('title', text.strip(), {'type': 'alternate'}))
+            metadata.append(Metadata('title', text.strip(), {'type': 'alternate'}))
 
         # novel type
-        metadata.append(MetaData('type', soup.select_one('.genre.type').text))
+        metadata.append(Metadata('type', soup.select_one('.genre.type').text))
 
         # genre
         for a in soup.select('#seriesgenre > a'):
-            metadata.append(MetaData('subject', a.text))
+            metadata.append(Metadata('subject', a.text))
 
         # og language
-        metadata.append(MetaData('lang', soup.select_one('#showlang > a').text, {'id': 'original language'}))
+        metadata.append(Metadata('lang', soup.select_one('#showlang > a').text, {'id_': 'original language'}))
 
         # illustrators
         for a in soup.select('#showartists > a'):
-            metadata.append(MetaData('contributor', a.text, {'role': 'ill'}))
+            metadata.append(Metadata('contributor', a.text, {'role': 'ill'}))
 
         # publishers
         if soup.select_one('#showopublisher > a'):
-            metadata.append(MetaData('publisher', soup.select_one('#showopublisher > a').text, {'role': 'original'}))
+            metadata.append(Metadata('publisher', soup.select_one('#showopublisher > a').text, {'role': 'original'}))
         if soup.select_one('#showepublisher > a'):
-            metadata.append(MetaData('publisher', soup.select_one('#showepublisher > a').text, {'role': 'english'}))
+            metadata.append(Metadata('publisher', soup.select_one('#showepublisher > a').text, {'role': 'english'}))
 
         # publication
         if not soup.select_one('#edityear > .seriesna'):
-            metadata.append(MetaData('date', soup.select_one('#edityear').text.strip(), {'role': 'publication'}))
+            metadata.append(Metadata('date', soup.select_one('#edityear').text.strip(), {'role': 'publication'}))
 
         return metadata

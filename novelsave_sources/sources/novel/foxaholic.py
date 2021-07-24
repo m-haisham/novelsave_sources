@@ -3,7 +3,7 @@ from typing import List, Tuple
 from bs4 import BeautifulSoup
 
 from .source import Source
-from ...models import Chapter, Novel
+from ...models import Chapter, Novel, Metadata
 
 
 class Foxaholic(Source):
@@ -20,8 +20,9 @@ class Foxaholic(Source):
         r'^ $',  # non-breaking whitespace
     ]
 
-    def novel(self, url: str) -> Tuple[Novel, List[Chapter]]:
+    def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
         soup = self.soup(url)
+        metadata = []
 
         authors = soup.select('.author-content > a')
         synopsis_paras = soup.select('.summary__content > p')
@@ -39,19 +40,19 @@ class Foxaholic(Source):
             if item.select_one('.summary-heading').text.strip() == 'Alternative':
                 for alt in item.select_one('.summary-content').text.strip().split(', '):
                     if alt != novel.title:
-                        novel.add_meta('title', alt, others={'role': 'alt'})
+                        metadata.append(Metadata('title', alt, others={'role': 'alt'}))
                 break
 
         for author in authors[1:]:
-            novel.add_meta('contributor', author.text.strip(), others={'role': 'aut', 'link': author['href']})
+            metadata.append(Metadata('contributor', author.text.strip(), others={'role': 'aut', 'link': author['href']}))
 
         artists = soup.select('.artist-content a')
         for artist in artists:
-            novel.add_meta('contributor', artist.text.strip(), others={'link': artist['href']})
+            metadata.append(Metadata('contributor', artist.text.strip(), others={'link': artist['href']}))
 
         genres = soup.select('.genres-content > a')
         for genre in genres:
-            novel.add_meta('subject', genre.text.strip())
+            metadata.append(Metadata('subject', genre.text.strip()))
 
         novel_id = soup.select_one('.wp-manga-action-button')['data-post']
         response = self.session.post(
@@ -74,7 +75,7 @@ class Foxaholic(Source):
 
             chapters.append(chapter)
 
-        return novel, chapters
+        return novel, chapters, metadata
 
     def chapter(self, chapter: Chapter):
         soup = self.soup(chapter.url)

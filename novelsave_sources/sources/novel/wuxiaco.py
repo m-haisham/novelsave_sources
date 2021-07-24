@@ -2,14 +2,14 @@ import re
 from typing import Tuple, List
 
 from .source import Source
-from ...models import Novel, Chapter
+from ...models import Novel, Chapter, Metadata
 
 
 class WuxiaCo(Source):
     __name__ = 'WuxiaWorld.co'
     base_urls = ['https://www.wuxiaworld.co']
 
-    def novel(self, url: str) -> Tuple[Novel, List[Chapter]]:
+    def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
         soup = self.soup(url)
 
         novel = Novel(
@@ -37,7 +37,7 @@ class WuxiaCo(Source):
 
             chapters.append(chapter)
 
-        return novel, chapters
+        return novel, chapters, []
 
     def chapter(self, chapter: Chapter):
         soup = self.soup(chapter.url)

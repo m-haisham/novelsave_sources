@@ -3,7 +3,7 @@ from typing import List, Tuple
 from bs4 import BeautifulSoup
 
 from .source import Source
-from ...models import Chapter, Novel
+from ...models import Chapter, Novel, Metadata
 
 
 class DragonTea(Source):
@@ -16,8 +16,9 @@ class DragonTea(Source):
         'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
     ]
 
-    def novel(self, url: str) -> Tuple[Novel, List[Chapter]]:
+    def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
         soup = self.soup(url)
+        metadata = []
 
         summary_paragraphs = [p.text for p in soup.select('.summary__content > p')]
 
@@ -32,18 +33,19 @@ class DragonTea(Source):
         # other metadata
         for item in soup.select('.post-content_item'):
             if item.select_one('.summary-heading').text.strip() == 'Alternative':
-                novel.add_meta('title', item.select_one('.summary-content').text.strip(), others={'role': 'alt'})
+                metadata.append(Metadata('title', item.select_one('.summary-content').text.strip(),
+                                         others={'role': 'alt'}))
                 break
 
         for a in soup.select('.genres-content > a'):
-            novel.add_meta('subject', a.text.strip())
+            metadata.append(Metadata('subject', a.text.strip()))
 
         artist_content = soup.select_one('.artist-content > a')
         if artist_content:
-            novel.add_meta('contributor', artist_content.text.strip(),
-                           others={'role': 'ill', 'link': artist_content['href']})
+            metadata.append(Metadata('contributor', artist_content.text.strip(),
+                                     others={'role': 'ill', 'link': artist_content['href']}))
 
-        novel_id = soup.select_one('.rating-post-id')['value']
+        novel_id = soup.select_one('.rating-post-id_')['value']
         response = self.session.post(
             'https://dragontea.ink/wp-admin/admin-ajax.php',
             data={
@@ -64,7 +66,7 @@ class DragonTea(Source):
 
             chapters.append(chapter)
 
-        return novel, chapters
+        return novel, chapters, metadata
 
     def chapter(self, chapter: Chapter):
         soup = self.soup(chapter.url)

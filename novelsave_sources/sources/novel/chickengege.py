@@ -1,14 +1,15 @@
 from typing import Tuple, List
 
 from .source import Source
-from ...models import Novel, Chapter
+from ...models import Novel, Chapter, Metadata
 
 
 class ChickEngege(Source):
     base_urls = ['https://www.chickengege.org']
 
-    def novel(self, url: str) -> Tuple[Novel, List[Chapter]]:
+    def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
         soup = self.soup(url)
+        metadata = []
 
         thumbnail_element = soup.select_one('.novelist-cover-image')
 
@@ -21,7 +22,7 @@ class ChickEngege(Source):
         for element in soup.select('.entry-content > div strong'):
             text = element.text.strip()
             if text == 'Original Title:':
-                novel.add_meta('title', element.findNext('span').text.strip(), others={'type': 'original'})
+                metadata.append(Metadata('title', element.findNext('span').text.strip(), others={'type': 'original'}))
             elif text == 'Synopsis:':
                 lines = []
                 for text in element.parent.find_all(text=True):
@@ -44,14 +45,14 @@ class ChickEngege(Source):
             elif text == 'Translator(s):':
                 ul = element.findNext('ul')
                 for a in ul.select('li > a'):
-                    novel.add_meta('contributor', a.text.strip(), others={'role': 'translator'})
+                    metadata.append(Metadata('contributor', a.text.strip(), others={'role': 'translator'}))
             elif text == 'Editor(s):':
                 ul = element.findNext('ul')
                 for a in ul.select('li > a'):
-                    novel.add_meta('contributor', a.text.strip(), others={'role': 'editor'})
+                    metadata.append(Metadata('contributor', a.text.strip(), others={'role': 'editor'}))
 
         for a in soup.select('a[rel="tag"]'):
-            novel.add_meta('subject', a.text.strip())
+            metadata.append(Metadata('subject', a.text.strip()))
 
         chapters = []
         for a in soup.select('#novelList > li > a'):
@@ -63,7 +64,7 @@ class ChickEngege(Source):
 
             chapters.append(chapter)
 
-        return novel, chapters
+        return novel, chapters, metadata
 
     def chapter(self, chapter: Chapter):
         soup = self.soup(chapter.url)

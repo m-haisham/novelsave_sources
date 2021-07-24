@@ -1,14 +1,14 @@
 from typing import Tuple, List
 
 from .source import Source
-from ...models import Novel, Chapter
+from ...models import Novel, Chapter, Metadata
 
 
 class KieshiTl(Source):
     __name__ = 'Kieshi\'s Little Steps'
     base_urls = ['https://kieshitl.wordpress.com']
 
-    def novel(self, url: str) -> Tuple[Novel, List[Chapter]]:
+    def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
         soup = self.soup(url)
 
         entry_content = soup.select_one('div.entry-content')
@@ -36,7 +36,7 @@ class KieshiTl(Source):
 
             chapters.append(chapter)
 
-        return novel, chapters
+        return novel, chapters, []
 
     def chapter(self, chapter: Chapter):
         soup = self.soup(chapter.url)

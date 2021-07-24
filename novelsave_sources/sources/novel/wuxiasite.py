@@ -1,15 +1,16 @@
 from typing import List, Tuple
 
 from .source import Source
-from ...models import Chapter, Novel
+from ...models import Chapter, Novel, Metadata
 
 
 class WuxiaSite(Source):
     __name__ = 'WuxiaWorld.site'
     base_urls = ['https://wuxiaworld.site']
 
-    def novel(self, url: str) -> Tuple[Novel, List[Chapter]]:
+    def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
         soup = self.soup(url)
+        metadata = []
 
         # ---- info ----
 
@@ -34,7 +35,7 @@ class WuxiaSite(Source):
         )
 
         for a in soup.select('a[href*="genre"][rel="tag"]'):
-            novel.add_meta('subject', a.text.strip())
+            metadata.append(Metadata('subject', a.text.strip()))
 
         # ---- chapters ----
 
@@ -49,7 +50,7 @@ class WuxiaSite(Source):
 
             chapters.append(chapter)
 
-        return novel, chapters
+        return novel, chapters, metadata
 
     def chapter(self, chapter: Chapter):
         soup = self.soup(chapter.url)

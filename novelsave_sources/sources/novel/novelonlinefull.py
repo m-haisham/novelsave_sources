@@ -1,7 +1,7 @@
 from typing import Tuple, List
 
 from .source import Source
-from ...models import Novel, Chapter
+from ...models import Novel, Chapter, Metadata
 
 
 class NovelOnlineFull(Source):
@@ -12,8 +12,9 @@ class NovelOnlineFull(Source):
         r'^(\s| )+$',  # non-breaking whitespace
     ]
 
-    def novel(self, url: str) -> Tuple[Novel, List[Chapter]]:
+    def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
         soup = self.soup(url)
+        metadata = []
 
         synopsis_parent = soup.select_one('#noidungm')
         synopsis_parent.select_one('h2').extract()
@@ -29,7 +30,7 @@ class NovelOnlineFull(Source):
 
         alternative = soup.select_one('.truyen_info_wrapper .truyen_info_right > li:first-child > span')
         if alternative:
-            novel.add_meta('author', alternative.text.strip('Alternative :').strip(), others={'role': 'alternative'})
+            metadata.append(Metadata('author', alternative.text.strip('Alternative :').strip(), others={'role': 'alternative'}))
 
         for li in soup.select('.truyen_info_wrapper .truyen_info_right > li'):
             span = li.select_one('span')
@@ -41,7 +42,7 @@ class NovelOnlineFull(Source):
                 novel.author = ', '.join([a.text.strip() for a in li.select('a')])
             elif label == 'GENRES:':
                 for a in li.select('a'):
-                    novel.add_meta('subject', a.text.strip())
+                    metadata.append(Metadata('subject', a.text.strip()))
 
         chapters = []
         for i, a in enumerate(reversed(soup.select('.chapter-list > .row a'))):
@@ -53,7 +54,7 @@ class NovelOnlineFull(Source):
 
             chapters.append(chapter)
 
-        return novel, chapters
+        return novel, chapters, metadata
 
     def chapter(self, chapter: Chapter):
         soup = self.soup(chapter.url)

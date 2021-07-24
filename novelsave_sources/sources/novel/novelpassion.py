@@ -1,14 +1,15 @@
 from typing import List, Tuple
 
 from .source import Source
-from ...models import Chapter, Novel
+from ...models import Chapter, Novel, Metadata
 
 
 class NovelPassion(Source):
     base_urls = ['https://www.novelpassion.com']
 
-    def novel(self, url: str) -> Tuple[Novel, List[Chapter]]:
+    def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
         soup = self.soup(url)
+        metadata = []
 
         authors = [a.text.strip() for a in soup.select('.dns .stq[href*="author"]')]
         synopsis_paragraphs = [p.text.strip() for p in soup.select('.j_synopsis p')]
@@ -22,7 +23,7 @@ class NovelPassion(Source):
         )
 
         for a in soup.select('.dns .stq[href*="category"]'):
-            novel.add_meta('subject', a.text.strip())
+            metadata.append(Metadata('subject', a.text.strip()))
 
         chapters = []
         for i, a in enumerate(reversed(soup.select('.content-list a'))):
@@ -34,7 +35,7 @@ class NovelPassion(Source):
 
             chapters.append(chapter)
 
-        return novel, chapters
+        return novel, chapters, metadata
 
     def chapter(self, chapter: Chapter):
         soup = self.soup(chapter.url)

@@ -3,7 +3,7 @@ from typing import Tuple, List, Dict
 
 from .source import Source
 from ...exceptions import BadResponseException
-from ...models import Novel, Chapter
+from ...models import Novel, Chapter, Metadata
 from ...utils.cookies import BlockAll
 
 
@@ -15,8 +15,9 @@ class Webnovel(Source):
         super(Webnovel, self).__init__()
         self.session.cookies.set_policy(BlockAll())
 
-    def novel(self, url: str) -> Tuple[Novel, List[Chapter]]:
+    def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
         soup = self.soup(url)
+        metadata = []
         novel_id = self.parse_novel_url(url)
 
         info_elements = soup.select('._mn > *')
@@ -37,9 +38,9 @@ class Webnovel(Source):
             if label == 'author':
                 novel.author = value
             else:
-                novel.add_meta('author', value, others={'role': label})
+                metadata.append(Metadata('author', value, others={'role': label}))
 
-        return novel, self.toc(novel_id)
+        return novel, self.toc(novel_id), metadata
 
     def chapter(self, chapter: Chapter):
         novel_id, chapter_id = self.parse_chapter_url(chapter.url)
@@ -79,7 +80,7 @@ class Webnovel(Source):
                         index=chapter_json['index'],
                         title=chapter_json['name'],
                         volume=(volume['index'], volume['name']),
-                        url=f'https://www.webnovel.com/book/{novel_id}/{chapter_json["id"]}',
+                        url=f'https://www.webnovel.com/book/{novel_id}/{chapter_json["id_"]}',
                     )
 
         return chapters

@@ -1,7 +1,7 @@
 from typing import List, Tuple
 
 from .source import Source
-from ...models import Chapter, Novel
+from ...models import Chapter, Novel, Metadata
 
 
 class PeachPitting(Source):
@@ -13,8 +13,9 @@ class PeachPitting(Source):
         'button', 'input', 'amp-auto-ads', 'pirate', 'ul'
     ]
 
-    def novel(self, url: str) -> Tuple[Novel, List[Chapter]]:
+    def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
         soup = self.soup(url)
+        metadata = []
 
         details_parent, synopsis_parent, *_ = soup.select('.elementor-text-editor')
 
@@ -39,11 +40,11 @@ class PeachPitting(Source):
 
         # tags
         for subject in subjects:
-            novel.add_meta('subject', subject)
+            metadata.append(Metadata('subject', subject))
 
         # other contributors
         for a in soup.select('.pp-multiple-authors-wrapper .author'):
-            novel.add_meta('contributor', a.text.strip())
+            metadata.append(Metadata('contributor', a.text.strip()))
 
         chapters = []
         for a in soup.select('.pt-cv-page > div a'):
@@ -55,7 +56,7 @@ class PeachPitting(Source):
 
             chapters.append(chapter)
 
-        return novel, chapters
+        return novel, chapters, metadata
 
     def chapter(self, chapter: Chapter):
         soup = self.soup(chapter.url)

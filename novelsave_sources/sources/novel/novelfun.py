@@ -4,7 +4,7 @@ from typing import Tuple, List
 import requests
 
 from .source import Source
-from ...models import Novel, Chapter
+from ...models import Novel, Chapter, Metadata
 
 
 class NovelFun(Source):
@@ -29,8 +29,9 @@ class NovelFun(Source):
 }
 """
 
-    def novel(self, url: str) -> Tuple[Novel, List[Chapter]]:
+    def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
         soup = self.soup(url)
+        metadata = []
 
         novel = Novel(
             title=soup.select_one('h1').text.strip(),
@@ -42,12 +43,12 @@ class NovelFun(Source):
         novel.thumbnail_url = soup.select_one(f'img[title="{novel.title}"]')['src']
 
         for a in soup.select('td a[href*="genre"]'):
-            novel.add_meta('subject', a.text.strip())
+            metadata.append(Metadata('subject', a.text.strip()))
 
         title_slug = url.rstrip('/').split('/')[-1]
         total = int(re.match(r'(\d+)', soup.select_one('h2 ~ div').text).group(1))
         data = {
-            'id': 'chapters_NovelRefetchQuery',
+            'id_': 'chapters_NovelRefetchQuery',
             'query': self.query % total,
             'variables': {
                 'slug': title_slug,
@@ -65,7 +66,7 @@ class NovelFun(Source):
             for c in response.json()['data']['chapterListChunks'][0]['items']
         ]
 
-        return novel, chapters
+        return novel, chapters, metadata
 
     def chapter(self, chapter: Chapter):
         soup = self.soup(chapter.url)

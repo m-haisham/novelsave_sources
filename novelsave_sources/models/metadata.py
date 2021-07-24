@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 
 
 @dataclass
-class MetaData:
+class Metadata:
     DEFAULT_NAMESPACE = 'DC'
     SOURCE_INTERNAL = 'int'
     SOURCE_EXTERNAL = 'ext'

@@ -4,15 +4,16 @@ import requests
 from bs4 import BeautifulSoup
 
 from .source import Source
-from ...models import Chapter, Novel
+from ...models import Chapter, Novel, Metadata
 
 
 class NovelsRock(Source):
     __name__ = 'Novelsrock'
     base_urls = ['https://novelsrock.com']
 
-    def novel(self, url: str) -> Tuple[Novel, List[Chapter]]:
+    def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
         soup = self.soup(url)
+        metadata = []
 
         novel = Novel(
             title=soup.select_one('.breadcrumb > li:last-child').text.strip(),
@@ -23,7 +24,7 @@ class NovelsRock(Source):
         )
 
         for a in soup.select('.summary_content_wrap a[href*="genre"]'):
-            novel.add_meta('subject', a.text.strip())
+            metadata.append(Metadata('subject', a.text.strip()))
 
         novel_id = soup.select_one('.wp-manga-action-button[data-action=bookmark]')['data-post']
 
@@ -44,7 +45,7 @@ class NovelsRock(Source):
 
             chapters.append(chapter)
 
-        return novel, chapters
+        return novel, chapters, metadata
 
     def chapter(self, chapter: Chapter):
         soup = self.soup(chapter.url)

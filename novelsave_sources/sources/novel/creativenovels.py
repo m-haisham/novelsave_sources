@@ -3,15 +3,16 @@ from typing import Tuple, List
 from urllib.parse import urlparse
 
 from .source import Source
-from ...models import Novel, Chapter
+from ...models import Novel, Chapter, Metadata
 
 
 class CreativeNovels(Source):
     __name__ = 'Creative Novels'
     base_urls = ['https://creativenovels.com']
 
-    def novel(self, url: str) -> Tuple[Novel, List[Chapter]]:
+    def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
         soup = self.soup(url)
+        metadata = []
 
         novel = Novel(
             title=soup.select_one('.x-bar-container > [class*="12"]').text.strip(),
@@ -22,7 +23,7 @@ class CreativeNovels(Source):
         )
 
         for a in soup.select('.suggest_tag > a'):
-            novel.add_meta('subject', a.text.strip())
+            metadata.append(Metadata('subject', a.text.strip()))
 
 
         # ---- chapters ----
@@ -51,7 +52,7 @@ class CreativeNovels(Source):
 
         chapters = self.parse_chapter_list(response.content.decode('utf-8'))
 
-        return novel, chapters
+        return novel, chapters, metadata
 
     def parse_chapter_list(self, content: str) -> List[Chapter]:
         chapters = []

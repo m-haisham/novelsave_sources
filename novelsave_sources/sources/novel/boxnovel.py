@@ -1,14 +1,15 @@
 from typing import Tuple, List
 
 from .source import Source
-from ...models import Chapter, Novel
+from ...models import Chapter, Novel, Metadata
 
 
 class BoxNovel(Source):
     base_urls = ['https://boxnovel.com']
 
-    def novel(self, url: str) -> Tuple[Novel, List[Chapter]]:
+    def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
         soup = self.soup(url)
+        metadata = []
 
         authors = soup.select('.author-content a')
         if len(authors) == 2:
@@ -25,7 +26,7 @@ class BoxNovel(Source):
         )
 
         for a in soup.select('a[href*="genre"][rel="tag"]'):
-            novel.add_meta('subject', a.text.strip())
+            metadata.append(Metadata('subject', a.text.strip()))
 
         chapters = []
         for i, a in enumerate(reversed(soup.select('ul.main li.wp-manga-chapter a'))):
@@ -37,7 +38,7 @@ class BoxNovel(Source):
 
             chapters.append(chapter)
 
-        return novel, chapters
+        return novel, chapters, metadata
 
     def chapter(self, chapter: Chapter):
         soup = self.soup(chapter.url)

@@ -2,7 +2,7 @@ import re
 from typing import List, Tuple
 
 from .source import Source
-from ...models import Chapter, Novel
+from ...models import Chapter, Novel, Metadata
 
 
 class InsanityCave(Source):
@@ -12,7 +12,7 @@ class InsanityCave(Source):
     novel_author_regex = re.compile(r'written by(.+)\.')
     chapter_title_regex = re.compile(r'chapter[  ]([0-9]+)[  ]*.[  ](.+)', flags=re.IGNORECASE)
 
-    def novel(self, url: str) -> Tuple[Novel, List[Chapter]]:
+    def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
         soup = self.soup(url)
 
         entry_content = soup.find('div', {'class': 'entry-content'})
@@ -42,7 +42,7 @@ class InsanityCave(Source):
 
             chapters.append(chapter)
 
-        return novel, chapters
+        return novel, chapters, []
 
     def chapter(self, chapter: Chapter):
         soup = self.soup(chapter.url)
@@ -64,7 +64,6 @@ class InsanityCave(Source):
                 continue
             else:
                 paras.append(para)
-
 
         chapter.title = result.group(2).strip()
         chapter.paragraphs = paras

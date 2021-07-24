@@ -1,7 +1,7 @@
 from typing import List, Tuple
 
 from .source import Source
-from ...models import Chapter, Novel
+from ...models import Chapter, Novel, Metadata
 
 
 class NovelFull(Source):
@@ -23,7 +23,7 @@ class NovelFull(Source):
         r'If you find any errors \( broken links.*let us know < report chapter >',
     ]
 
-    def novel(self, url: str) -> Tuple[Novel, List[Chapter]]:
+    def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
         soup = self.soup(url)
 
         image_element = soup.select_one('.info-holder .book img')
@@ -50,7 +50,7 @@ class NovelFull(Source):
                 chapter.index = len(chapters)
                 chapters.append(chapter)
 
-        return novel, chapters
+        return novel, chapters, []
 
     def parse_chapter_list(self, novel_url, page):
         url = f'{novel_url.rstrip("/")}?page={page}&per-page=50'

@@ -2,7 +2,7 @@ import re
 from typing import Tuple, List
 
 from .source import Source
-from ...models import Novel, Chapter
+from ...models import Novel, Chapter, Metadata
 
 
 class Ktlchamber(Source):
@@ -10,7 +10,7 @@ class Ktlchamber(Source):
 
     chapter_regex = re.compile(r'Chapter[  ](\d+)\.[  ]?(.*)', flags=re.IGNORECASE)
 
-    def novel(self, url: str) -> Tuple[Novel, List[Chapter]]:
+    def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
         soup = self.soup(url)
 
         entry_content = soup.find('div', {'class': 'entry-content'})
@@ -59,7 +59,7 @@ class Ktlchamber(Source):
 
             chapters.append(chapter)
 
-        return novel, chapters
+        return novel, chapters, []
 
     def chapter(self, chapter: Chapter):
         soup = self.soup(chapter.url)

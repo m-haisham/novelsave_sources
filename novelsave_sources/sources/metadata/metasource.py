@@ -1,7 +1,7 @@
 from typing import List
 
 from ..crawler import Crawler
-from ...models import MetaData
+from ...models import Metadata
 
 
 class MetaSource(Crawler):
@@ -14,7 +14,7 @@ class MetaSource(Crawler):
         """
         return any([url.startswith(base_url) for base_url in cls.base_urls])
 
-    def retrieve(self, url) -> List[MetaData]:
+    def retrieve(self, url) -> List[Metadata]:
         """
         retrieves metadata from url
 

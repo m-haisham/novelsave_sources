@@ -3,14 +3,14 @@ from urllib.parse import urlparse
 
 from .source import Source
 from ...exceptions import BadResponseException
-from ...models import Chapter, Novel
+from ...models import Chapter, Novel, Metadata
 
 
 class SufficientVelocity(Source):
     __name__ = 'Sufficient Velocity'
     base_urls = ['https://forums.sufficientvelocity.com']
 
-    def novel(self, url: str) -> Tuple[Novel, List[Chapter]]:
+    def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
         threadmarks_url = f'{url.rstrip("/")}/threadmarks'
         soup = self.soup(threadmarks_url)
 
@@ -44,7 +44,7 @@ class SufficientVelocity(Source):
 
             chapters.append(chapter)
 
-        return novel, chapters
+        return novel, chapters, []
 
     def chapter(self, chapter: Chapter):
         parsed_url = urlparse(chapter.url)

@@ -4,14 +4,14 @@ import requests
 from bs4 import BeautifulSoup
 
 from .source import Source
-from ...models import Chapter, Novel
+from ...models import Chapter, Novel, Metadata
 
 
 class ScribbleHub(Source):
     __name__ = 'Scribble Hub'
     base_urls = ['https://www.scribblehub.com']
 
-    def novel(self, url: str) -> Tuple[Novel, List[Chapter]]:
+    def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
         soup = self.soup(url)
 
         synopsis_paragraphs = [element.text for element in soup.find('div', {'class': 'wi_fic_desc'}).find_all('p')]
@@ -24,10 +24,10 @@ class ScribbleHub(Source):
             url=url
         )
 
-        id = int(url.split('/')[4])
-        chapters = self.parse_toc(id)
+        id_ = int(url.split('/')[4])
+        chapters = self.parse_toc(id_)
 
-        return novel, chapters
+        return novel, chapters, []
 
     def chapter(self, chapter: Chapter):
         soup = self.soup(chapter.url)
@@ -35,13 +35,13 @@ class ScribbleHub(Source):
         chapter.title = soup.select_one('.chapter-title').text.strip()
         chapter.paragraphs = str(soup.select_one('#chp_raw'))
 
-    def parse_toc(self, id: int) -> List[Chapter]:
+    def parse_toc(self, id_: int) -> List[Chapter]:
 
         response = requests.post(
             'https://www.scribblehub.com/wp-admin/admin-ajax.php',
             data={
                 'action': 'wi_gettocchp',
-                'strSID': id,
+                'strSID': id_,
             },
         )
 

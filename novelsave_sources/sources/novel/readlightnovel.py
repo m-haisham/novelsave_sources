@@ -3,14 +3,14 @@ import unicodedata
 from typing import Tuple, List
 
 from .source import Source
-from ...models import Novel, Chapter
+from ...models import Novel, Chapter, Metadata
 
 
 class ReadLightNovel(Source):
     __name__ = 'Read Light Novel'
     base_urls = ['https://www.readlightnovel.org']
 
-    def novel(self, url: str) -> Tuple[Novel, List[Chapter]]:
+    def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
         soup = self.soup(url)
 
         # parse author
@@ -23,11 +23,7 @@ class ReadLightNovel(Source):
         novel = Novel(
             title=soup.find('div', {'class': 'block-title'}).text.strip(),
             author=author,
-            synopsis=soup
-                .find('div', {'class': 'novel-right'})
-                .find('div', {'class': 'novel-detail-item'})
-                .find('div', {'class': 'novel-detail-body'})
-                .text,
+            synopsis=soup.select_one('.novel-right .novel-detail-item .novel-detail-body').text.strip(),
             thumbnail_url=soup.find('div', {'class': 'novel-cover'}).find('img')['src'],
             url=url
         )
@@ -48,7 +44,7 @@ class ReadLightNovel(Source):
 
                 chapters.append(chapter)
 
-        return novel, chapters
+        return novel, chapters, []
 
     def chapter(self, chapter: Chapter):
         soup = self.soup(chapter.url)

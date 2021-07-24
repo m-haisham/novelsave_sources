@@ -2,7 +2,7 @@ import re
 from typing import List, Tuple
 
 from .source import Source
-from ...models import Chapter, Novel
+from ...models import Chapter, Novel, Metadata
 
 
 class Chrysanthemumgarden(Source):
@@ -18,8 +18,9 @@ class Chrysanthemumgarden(Source):
         r'^(\s| )+$',  # non-breaking whitespace
     ]
 
-    def novel(self, url: str) -> Tuple[Novel, List[Chapter]]:
+    def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
         soup = self.soup(url)
+        metadata = []
 
         synopsis = ''
         synopsis_elements = soup.select('.entry-content > p, hr')
@@ -39,10 +40,10 @@ class Chrysanthemumgarden(Source):
 
         raw_title = soup.select_one('.novel-raw-title')
         if raw_title:
-            novel.add_meta('title', raw_title.text.strip(), others={'role': 'alternative'})
+            metadata.append(Metadata('title', raw_title.text.strip(), others={'role': 'alternative'}))
 
         for a in soup.select('.series-tag'):
-            novel.add_meta('subject', a.text.strip())
+            metadata.append(Metadata('subject', a.text.strip()))
 
         chapters = []
         for i, a in enumerate(soup.select('.chapter-item > a')):
@@ -54,7 +55,7 @@ class Chrysanthemumgarden(Source):
 
             chapters.append(chapter)
 
-        return novel, chapters
+        return novel, chapters, metadata
 
     def chapter(self, chapter: Chapter):
         soup = self.soup(chapter.url)

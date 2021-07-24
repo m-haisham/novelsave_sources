@@ -2,14 +2,15 @@ import re
 from typing import List, Tuple
 
 from .source import Source
-from ...models import Chapter, Novel
+from ...models import Chapter, Novel, Metadata
 
 
 class NovelHall(Source):
     base_urls = ['https://www.novelhall.com']
 
-    def novel(self, url: str) -> Tuple[Novel, List[Chapter]]:
+    def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
         soup = self.soup(url)
+        metadata = []
 
         synopsis_element = soup.select_one('.js-close-wrap')
         synopsis_element.select_one('span').extract()
@@ -29,7 +30,7 @@ class NovelHall(Source):
                     break
 
         for a in soup.select('.booktag a[href*="genre"]'):
-            novel.add_meta('subject', a.text.strip())
+            metadata.append(Metadata('subject', a.text.strip()))
 
         chapters = []
         for i, a in enumerate(soup.select('#morelist > ul li a')):
@@ -41,7 +42,7 @@ class NovelHall(Source):
 
             chapters.append(chapter)
 
-        return novel, chapters
+        return novel, chapters, metadata
 
     def chapter(self, chapter: Chapter):
         soup = self.soup(chapter.url)

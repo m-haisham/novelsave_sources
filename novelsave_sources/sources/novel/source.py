@@ -7,7 +7,7 @@ from requests.cookies import RequestsCookieJar
 
 from ..crawler import Crawler
 from ...exceptions import UnavailableException
-from ...models import Novel, Chapter
+from ...models import Novel, Chapter, Metadata
 
 
 class Source(Crawler):
@@ -70,7 +70,7 @@ class Source(Crawler):
             raise TypeError(
                 f"Unexpected type received: {type(cookies)}; Require either 'RequestsCookieJar' or 'Tuple[dict]'")
 
-    def novel(self, url: str) -> Tuple[Novel, List[Chapter]]:
+    def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
         """
         soup novel information from url
 

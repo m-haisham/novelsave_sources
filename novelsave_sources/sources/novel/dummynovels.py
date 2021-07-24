@@ -1,15 +1,16 @@
 from typing import Tuple, List
 
 from .source import Source
-from ...models import Novel, Chapter
+from ...models import Novel, Chapter, Metadata
 
 
 class DummyNovels(Source):
     __name__ = 'Dummy novels'
     base_urls = ['https://dummynovels.com']
 
-    def novel(self, url: str) -> Tuple[Novel, List[Chapter]]:
+    def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
         soup = self.soup(url)
+        metadata = []
 
         synopsis_content = soup.select('.novel-synopsis-content > p')
         synopsis = '\n'.join([element.text.strip() for element in synopsis_content])
@@ -26,12 +27,12 @@ class DummyNovels(Source):
             if text.startswith('Author: '):
                 novel.author = text.lstrip('Author: ')
             elif text.startswith('Translator: '):
-                novel.add_meta('contributor', text.strip('Translator: '), others={'role': 'translator'})
+                metadata.append(Metadata('contributor', text.strip('Translator: '), others={'role': 'translator'}))
             elif text.startswith('Editors: '):
-                novel.add_meta('contributor', text.strip('Editors: '), others={'role': 'editor'})
+                metadata.append(Metadata('contributor', text.strip('Editors: '), others={'role': 'editor'}))
 
         for element in soup.select('.novel-term > a'):
-            novel.add_meta('subject', element.text.strip())
+            metadata.append(Metadata('subject', element.text.strip()))
 
         chapters = []
         for element in soup.select('.elementor-tab-content a[href*="novel"]:not(.elementor-accordion-title)'):
@@ -49,7 +50,7 @@ class DummyNovels(Source):
 
             chapters.append(chapter)
 
-        return novel, chapters
+        return novel, chapters, metadata
 
     def chapter(self, chapter: Chapter):
         soup = self.soup(chapter.url)

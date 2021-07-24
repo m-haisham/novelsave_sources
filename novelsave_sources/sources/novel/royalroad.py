@@ -13,7 +13,7 @@ class RoyalRoad(Source):
 
         novel = Novel(
             title=soup.find("h1", {"property": "name"}).text.strip(),
-            thumbnail=soup.find("img", {"class": "img-offset thumbnail inline-block"})['src'],
+            thumbnail_url=soup.find("img", {"class": "img-offset thumbnail_url inline-block"})['src'],
             author=soup.find("span", {"property": "name"}).text.strip(),
             url=url,
         )

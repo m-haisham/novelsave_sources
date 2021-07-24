@@ -21,7 +21,7 @@ class InsanityCave(Source):
         novel = Novel(
             title=soup.find('div', {'class': 'title-block'}).text.strip(),
             author=self.novel_author_regex.search(title_text).group(1).strip(),
-            thumbnail=soup.find('div', {'class': 'wp-block-image'}).find('img')['src'],
+            thumbnail_url=soup.find('div', {'class': 'wp-block-image'}).find('img')['src'],
             url=url,
         )
 

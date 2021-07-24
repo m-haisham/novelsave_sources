@@ -35,7 +35,7 @@ class NovelFull(Source):
 
         novel = Novel(
             title=image_element['alt'],
-            thumbnail=self.base_urls[0] + image_element['src'],
+            thumbnail_url=self.base_urls[0] + image_element['src'],
             author=author,
             url=url,
         )

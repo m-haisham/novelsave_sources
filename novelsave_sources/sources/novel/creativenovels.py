@@ -16,7 +16,7 @@ class CreativeNovels(Source):
         novel = Novel(
             title=soup.select_one('.x-bar-container > [class*="12"]').text.strip(),
             author=soup.select_one('.x-bar-container > [class*="14"]').text.strip().strip('Author: '),
-            thumbnail=soup.select_one('.x-content-area > img')['src'],
+            thumbnail_url=soup.select_one('.x-content-area > img')['src'],
             synopsis='\n'.join([p.text.strip() for p in soup.select('.novel_page_synopsis > p')]),
             url=url,
         )

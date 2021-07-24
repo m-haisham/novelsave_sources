@@ -32,7 +32,7 @@ class BetwixtedButterfly(Source):
 
         novel = Novel(
             title=soup.select_one('h2.elementor-heading-title').text.strip(),
-            thumbnail=soup.select_one('.elementor-image img')['src'],
+            thumbnail_url=soup.select_one('.elementor-image img')['src'],
             author=author,
             synopsis=synopsis,
             url=url,

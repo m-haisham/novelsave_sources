@@ -20,7 +20,7 @@ class FanFiction(Source):
             title=soup.select_one('#profile_top b.xcontrast_txt, #content b').text.strip(),
             author=soup.select_one('#profile_top, #content').select_one('a[href*="/u/"]').text.strip(),
             synopsis=soup.select_one('#profile_top > div').text.strip(),
-            thumbnail=cover,
+            thumbnail_url=cover,
             url=url,
         )
 

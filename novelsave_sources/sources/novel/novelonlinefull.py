@@ -22,7 +22,7 @@ class NovelOnlineFull(Source):
 
         novel = Novel(
             title=soup.select_one('.truyen_info_wrapper h1').text,
-            thumbnail=soup.select_one('.info_image img')['src'],
+            thumbnail_url=soup.select_one('.info_image img')['src'],
             synopsis=synopsis,
             url=url,
         )

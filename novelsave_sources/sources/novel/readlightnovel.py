@@ -28,7 +28,7 @@ class ReadLightNovel(Source):
                 .find('div', {'class': 'novel-detail-item'})
                 .find('div', {'class': 'novel-detail-body'})
                 .text,
-            thumbnail=soup.find('div', {'class': 'novel-cover'}).find('img')['src'],
+            thumbnail_url=soup.find('div', {'class': 'novel-cover'}).find('img')['src'],
             url=url
         )
 

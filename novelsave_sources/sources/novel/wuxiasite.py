@@ -28,7 +28,7 @@ class WuxiaSite(Source):
         novel = Novel(
             title=title,
             author=author,
-            thumbnail=soup.select_one('.summary_image a img')['src'],
+            thumbnail_url=soup.select_one('.summary_image a img')['src'],
             synopsis='\n'.join(p.text.strip() for p in soup.select('.summary__content > p')),
             url=url,
         )

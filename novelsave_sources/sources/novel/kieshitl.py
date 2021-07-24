@@ -23,7 +23,7 @@ class KieshiTl(Source):
         novel = Novel(
             title=soup.select_one('h1.page-title').text.strip(),
             author=author,
-            thumbnail=entry_content.find('img')['src'],
+            thumbnail_url=entry_content.find('img')['src'],
             url=url
         )
 

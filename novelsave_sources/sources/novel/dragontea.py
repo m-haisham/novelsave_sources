@@ -24,7 +24,7 @@ class DragonTea(Source):
         novel = Novel(
             title=soup.select_one('.post-title').text.strip(),
             author=soup.select_one('.author-content').text.strip(),
-            thumbnail=soup.select_one('.summary_image img')['src'],
+            thumbnail_url=soup.select_one('.summary_image img')['src'],
             synopsis='\n'.join(summary_paragraphs),
             url=url,
         )

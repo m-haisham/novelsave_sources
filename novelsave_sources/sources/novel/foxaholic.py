@@ -29,7 +29,7 @@ class Foxaholic(Source):
         novel = Novel(
             title=soup.select_one('.post-title').text.strip(),
             author=authors[0].text.strip(),
-            thumbnail=soup.select_one('.summary_image img')['src'],
+            thumbnail_url=soup.select_one('.summary_image img')['src'],
             synopsis='\n'.join((p.text.strip() for p in synopsis_paras)),
             url=url,
         )

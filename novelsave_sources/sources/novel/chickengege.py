@@ -14,7 +14,7 @@ class ChickEngege(Source):
 
         novel = Novel(
             title=soup.select_one('.entry-title').text.strip(),
-            thumbnail=thumbnail_element and thumbnail_element['src'],
+            thumbnail_url=thumbnail_element and thumbnail_element['src'],
             url=url,
         )
 

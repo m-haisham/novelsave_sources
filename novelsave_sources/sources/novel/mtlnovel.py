@@ -22,7 +22,7 @@ class MtlNovel(Source):
         novel = Novel(
             title=soup.select_one('.entry-title').text.strip(),
             author=author,
-            thumbnail=soup.select_one('.main-tmb')['src'],
+            thumbnail_url=soup.select_one('.main-tmb')['src'],
             url=url,
         )
 

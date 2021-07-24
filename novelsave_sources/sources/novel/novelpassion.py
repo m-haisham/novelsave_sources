@@ -16,7 +16,7 @@ class NovelPassion(Source):
         novel = Novel(
             title=soup.select_one('.psn h2.ddm').text.strip(),
             author=', '.join(authors),
-            thumbnail=self.base_urls[0] + soup.select_one('.g_thumb img')['src'],
+            thumbnail_url=self.base_urls[0] + soup.select_one('.g_thumb img')['src'],
             synopsis='\n'.join(synopsis_paragraphs),
             url=url,
         )

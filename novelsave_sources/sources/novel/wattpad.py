@@ -14,7 +14,7 @@ class WattPad(Source):
 
         novel = Novel(
             title=soup.select('h1')[0].text.strip(),
-            thumbnail=soup.select('div.cover.cover-lg img')[0]['src'],
+            thumbnail_url=soup.select('div.cover.cover-lg img')[0]['src'],
             author=soup.select('div.author-info strong a')[0].text,
             synopsis=soup.select('h2.description')[0].text,
             url=url,

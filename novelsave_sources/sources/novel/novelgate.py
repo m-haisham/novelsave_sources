@@ -13,7 +13,7 @@ class NovelGate(Source):
         novel = Novel(
             title=soup.select_one('.film-info .name').text.strip(),
             author=soup.select_one('a[href*="author"]').text.strip(),
-            thumbnail=soup.select_one('.film-info .book-cover')['data-original'],
+            thumbnail_url=soup.select_one('.film-info .book-cover')['data-original'],
             synopsis='\n'.join([p.text.strip() for p in soup.select('.film-content > p')]),
             url=url,
         )

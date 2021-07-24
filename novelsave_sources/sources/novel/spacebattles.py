@@ -16,7 +16,7 @@ class Spacebattles(Source):
 
         author_element = soup.select_one('.username')
 
-        # getting a thumbnail
+        # getting a thumbnail_url
         stripped_baseurl = self.base_urls[0].rstrip("/")
 
         # getting writer profile image
@@ -30,7 +30,7 @@ class Spacebattles(Source):
         novel = Novel(
             title=soup.select_one('.p-breadcrumbs > li:last-child').text.strip(),
             author=author_element.text,
-            thumbnail=thumbnail,
+            thumbnail_url=thumbnail,
             url=url,
         )
 

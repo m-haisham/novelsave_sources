@@ -33,7 +33,7 @@ class Chrysanthemumgarden(Source):
             title=soup.select_one('.novel-title').find(text=True).strip(),
             author=soup.select_one('.author-name > a').text.strip(),
             synopsis=synopsis.strip(),
-            thumbnail=soup.select_one('.novel-cover img')['src'],
+            thumbnail_url=soup.select_one('.novel-cover img')['src'],
             url=url,
         )
 

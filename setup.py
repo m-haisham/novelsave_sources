@@ -9,7 +9,7 @@ with open('requirements.txt', 'r') as f:
     requirements = f.readlines()
 
 setup(
-    name='novelsave_sources',
+    name='novelsave-sources',
     version=novelsave_sources.__version__,
     author="Schicksal",
     description="This is a collection of webnovel scrapers",

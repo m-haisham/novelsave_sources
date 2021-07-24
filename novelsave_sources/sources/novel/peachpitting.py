@@ -31,7 +31,7 @@ class PeachPitting(Source):
 
         novel = Novel(
             title=soup.select_one('h3.elementor-heading-title').text.strip(),
-            thumbnail=soup.select_one('.elementor-image img')['src'],
+            thumbnail_url=soup.select_one('.elementor-image img')['src'],
             synopsis=synopsis,
             author=author,
             url=url,

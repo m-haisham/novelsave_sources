@@ -25,7 +25,7 @@ class Webnovel(Source):
         novel = Novel(
             title=info_elements[0].text[:-len(info_elements[0].find('small').text) - 1][0],
             synopsis=soup.select_one("div[class*='j_synopsis'] > p").text,
-            thumbnail=f'https://img.webnovel.com/bookcover/{novel_id}',
+            thumbnail_url=f'https://img.webnovel.com/bookcover/{novel_id}',
             url=url,
         )
 

@@ -16,7 +16,7 @@ class WuxiaCo(Source):
             title=soup.find('div', {'class': 'book-name'}).text,
             author=soup.find('div', {'class': 'author'}).find('span', {'class': 'name'}).text,
             synopsis=soup.find('div', {'class': 'synopsis'}).find('p').text,
-            thumbnail=soup.find('div', {'class': 'book-img'}).find('img')['src'],
+            thumbnail_url=soup.find('div', {'class': 'book-img'}).find('img')['src'],
             url=url
         )
 

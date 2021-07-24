@@ -23,7 +23,7 @@ class Ktlchamber(Source):
 
         novel = Novel(
             title=soup.find('h1', {'class': 'entry-title'}).text,
-            thumbnail=entry_content.find('img')['src'],
+            thumbnail_url=entry_content.find('img')['src'],
             author=author,
             url=url,
         )

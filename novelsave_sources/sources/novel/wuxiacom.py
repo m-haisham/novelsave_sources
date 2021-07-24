@@ -24,7 +24,7 @@ class WuxiaCom(Source):
 
         novel = Novel(
             title=soup.select_one('.section-content h2').text,
-            thumbnail=soup.select_one('img.media-object').get('src'),
+            thumbnail_url=soup.select_one('img.media-object').get('src'),
             author=authors.strip().strip(';'),
             url=url,
         )

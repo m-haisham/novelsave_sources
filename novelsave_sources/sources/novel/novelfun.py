@@ -39,7 +39,7 @@ class NovelFun(Source):
             url=url,
         )
 
-        novel.thumbnail = soup.select_one(f'img[title="{novel.title}"]')['src']
+        novel.thumbnail_url = soup.select_one(f'img[title="{novel.title}"]')['src']
 
         for a in soup.select('td a[href*="genre"]'):
             novel.add_meta('subject', a.text.strip())

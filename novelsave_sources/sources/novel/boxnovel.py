@@ -20,7 +20,7 @@ class BoxNovel(Source):
             title=''.join(soup.select_one('.post-title h3').find_all(text=True, recursive=False)).strip(),
             author=author.strip(),
             synopsis=soup.select_one('.j_synopsis, #editdescription').text.strip(),
-            thumbnail=soup.select_one('.summary_image img')['src'],
+            thumbnail_url=soup.select_one('.summary_image img')['src'],
             url=url,
         )
 

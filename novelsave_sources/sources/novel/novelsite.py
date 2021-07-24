@@ -23,7 +23,7 @@ class NovelSite(Source):
         novel = Novel(
             title=soup.select_one('.post-title > h1').text.strip().rstrip(' Novel'),
             author=authors[0].text.strip(),
-            thumbnail=soup.select_one('.summary_image img')['src'],
+            thumbnail_url=soup.select_one('.summary_image img')['src'],
             synopsis=soup.select_one('.summary__content > hr + p').text.strip(),
             url=url,
         )

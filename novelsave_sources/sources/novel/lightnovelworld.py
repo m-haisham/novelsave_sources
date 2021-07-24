@@ -16,7 +16,7 @@ class LightNovelWorld(Source):
         novel = Novel(
             title=soup.find('h1', {'class': 'novel-title'}).text,
             author=soup.find('div', {'class': 'author'}).find('a').text.strip(),
-            thumbnail=soup.find('figure', {'class': 'cover'}).find('img')['src'],
+            thumbnail_url=soup.find('figure', {'class': 'cover'}).find('img')['src'],
             url=url,
         )
 

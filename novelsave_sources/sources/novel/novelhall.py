@@ -16,7 +16,7 @@ class NovelHall(Source):
 
         novel = Novel(
             title=soup.select_one('.book-info h1').text.strip(),
-            thumbnail=soup.select_one('.img-thumbnail')['src'],
+            thumbnail_url=soup.select_one('.img-thumbnail_url')['src'],
             synopsis=synopsis_element.text.strip(),
             url=url,
         )

@@ -16,7 +16,7 @@ class WuxiaOnline(Source):
         novel = Novel(
             title=soup.select_one('h1.entry-title').text.strip(),
             author=soup.select_one('a[href*="author"]').text.strip(),
-            thumbnail=self.base_urls[0] + soup.select_one('.info_image img')['src'],
+            thumbnail_url=self.base_urls[0] + soup.select_one('.info_image img')['src'],
             synopsis='\n'.join([str(element) for element in synopsis_elements]),
             url=url,
         )

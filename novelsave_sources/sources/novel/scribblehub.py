@@ -20,7 +20,7 @@ class ScribbleHub(Source):
             title=soup.find('div', {'class': 'fic_title'}).text.strip(),
             author=soup.find('span', {'class': 'auth_name_fic'}).text.strip(),
             synopsis='\n'.join(synopsis_paragraphs),
-            thumbnail=soup.find('div', {'class': 'fic_image'}).find('img')['src'],
+            thumbnail_url=soup.find('div', {'class': 'fic_image'}).find('img')['src'],
             url=url
         )
 

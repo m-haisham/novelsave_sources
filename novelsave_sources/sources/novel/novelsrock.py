@@ -17,7 +17,7 @@ class NovelsRock(Source):
         novel = Novel(
             title=soup.select_one('.breadcrumb > li:last-child').text.strip(),
             author=', '.join([a.text.strip() for a in soup.select('.author-content > a')]),
-            thumbnail=soup.select_one('.summary_image img')['src'],
+            thumbnail_url=soup.select_one('.summary_image img')['src'],
             synopsis='\n'.join([p.text.strip() for p in soup.select('.summary__content')]),
             url=url,
         )

@@ -80,7 +80,7 @@ class Webnovel(Source):
                         index=chapter_json['index'],
                         title=chapter_json['name'],
                         volume=(volume['index'], volume['name']),
-                        url=f'https://www.webnovel.com/book/{novel_id}/{chapter_json["id_"]}',
+                        url=f'https://www.webnovel.com/book/{novel_id}/{chapter_json["id"]}',
                     )
 
         return chapters

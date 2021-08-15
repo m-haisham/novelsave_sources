@@ -32,6 +32,7 @@ from .novelpassion import NovelPassion
 from .novelfun import NovelFun
 from .creativenovels import CreativeNovels
 from .wuxiasite import WuxiaSite
+from .rainofsnow import RainOfSnow
 
 sources = [
     Webnovel,
@@ -68,4 +69,5 @@ sources = [
     CreativeNovels,
     WuxiaSite,
     NovelGate,
+    RainOfSnow,
 ]

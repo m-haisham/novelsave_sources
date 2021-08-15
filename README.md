@@ -43,6 +43,7 @@ A collection of webnovel sources offering varying amounts of scraping capability
 | [creativenovels.com]            |      |  |
 | [wuxiaworld.site]               |      |  |
 | [novelgate.net]                 |      |  |
+| [rainofsnow.com]                |      |  |
 
 <!-- SOURCE LINKS -->
 
@@ -79,6 +80,7 @@ A collection of webnovel sources offering varying amounts of scraping capability
 [creativenovels.com]: https://creativenovels.com
 [wuxiaworld.site]: https://wuxiaworld.site
 [novelgate.net]: https://novelgate.net
+[rainofsnow.com]: https://rainofsnow.com
 
 ### Metadata
 

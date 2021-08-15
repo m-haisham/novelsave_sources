@@ -35,7 +35,7 @@ class Crawler:
 
         # request
         response = self.session.get(url, headers=header, **kwargs)
-        if response.status_code == 200:  # ok
+        if response.ok:
             return response
 
         raise BadResponseException(response, f'{response.status_code}: {response.url}')

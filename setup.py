@@ -12,7 +12,7 @@ setup(
     name='novelsave-sources',
     version=novelsave_sources.__version__,
     author="Schicksal",
-    description="This is a collection of webnovel scrapers",
+    description="A collection of webnovel sources offering varying amounts of scraping capability.",
     author_email='mhaisham79@gmail.com',
     long_description=long_description,
     long_description_content_type='text/markdown',

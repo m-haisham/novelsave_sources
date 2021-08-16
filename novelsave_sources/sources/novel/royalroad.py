@@ -12,11 +12,16 @@ class RoyalRoad(Source):
         soup = self.soup(url)
 
         novel = Novel(
-            title=soup.find("h1", {"property": "name"}).text.strip(),
-            thumbnail_url=soup.find("img", {"class": "img-offset thumbnail_url inline-block"})['src'],
-            author=soup.find("span", {"property": "name"}).text.strip(),
+            title=soup.select_one('h1[property="name"]').text.strip(),
+            author=soup.select_one('span[property="name"]').text.strip(),
+            thumbnail_url=soup.select_one('.page-content-inner .thumbnail')['src'],
+            synopsis=soup.select_one('.description > [property="description"]').text.strip(),
             url=url,
         )
+
+        metadata = []
+        for a in soup.select('a.label[href*="tag"]'):
+            metadata.append(Metadata('subject', a.text.strip()))
 
         chapters = []
         for a in soup.find('tbody').findAll('a', href=True):
@@ -28,7 +33,7 @@ class RoyalRoad(Source):
 
             chapters.append(chapter)
 
-        return novel, chapters, []
+        return novel, chapters, metadata
 
     def chapter(self, chapter: Chapter):
         soup = self.soup(chapter.url)

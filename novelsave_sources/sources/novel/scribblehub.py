@@ -1,3 +1,4 @@
+import select
 from typing import List, Tuple
 
 import requests
@@ -14,20 +15,25 @@ class ScribbleHub(Source):
     def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
         soup = self.soup(url)
 
-        synopsis_paragraphs = [element.text for element in soup.find('div', {'class': 'wi_fic_desc'}).find_all('p')]
-
         novel = Novel(
-            title=soup.find('div', {'class': 'fic_title'}).text.strip(),
-            author=soup.find('span', {'class': 'auth_name_fic'}).text.strip(),
-            synopsis='\n'.join(synopsis_paragraphs),
-            thumbnail_url=soup.find('div', {'class': 'fic_image'}).find('img')['src'],
-            url=url
+            title=soup.select_one('div.fic_title').text.strip(),
+            author=soup.select_one('span.auth_name_fic').text.strip(),
+            synopsis=soup.select_one('.wi_fic_desc').text.strip(),
+            thumbnail_url=soup.select_one('.fic_image img')['src'],
+            url=url,
         )
+
+        metadata = []
+        for a in soup.select('a.fic_genre'):
+            metadata.append(Metadata('subject', a.text.strip()))
+
+        for a in soup.select('a.stag'):
+            metadata.append(Metadata('tag', a.text.strip()))
 
         id_ = int(url.split('/')[4])
         chapters = self.parse_toc(id_)
 
-        return novel, chapters, []
+        return novel, chapters, metadata
 
     def chapter(self, chapter: Chapter):
         soup = self.soup(chapter.url)
@@ -36,7 +42,6 @@ class ScribbleHub(Source):
         chapter.paragraphs = str(soup.select_one('#chp_raw'))
 
     def parse_toc(self, id_: int) -> List[Chapter]:
-
         response = requests.post(
             'https://www.scribblehub.com/wp-admin/admin-ajax.php',
             data={
@@ -46,12 +51,9 @@ class ScribbleHub(Source):
         )
 
         soup = BeautifulSoup(response.content, 'lxml')
-        chapter_elements = soup.find_all('li')
 
         chapters = []
-        for i, element in enumerate(reversed(chapter_elements)):
-            a = element.find('a')
-
+        for i, a in enumerate(reversed(soup.select('li > a'))):
             chapter = Chapter(
                 index=i,
                 title=a.text.strip(),

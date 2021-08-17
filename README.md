@@ -17,7 +17,7 @@ A collection of webnovel sources offering varying amounts of scraping capability
 | https://insanitycave.poetry.blog      |        |  |
 | https://ktlchamber.wordpress.com      |        |  |
 | https://kieshitl.wordpress.com        |        |  |
-| https://www.scribblehub.com           |        |  |
+| https://www.scribblehub.com           |        | 2021-08-17 |
 | https://www.mtlnovel.com              |        |  |
 | https://novelfull.com                 |        |  |
 | https://www.wuxiaworld.com            |        |  |

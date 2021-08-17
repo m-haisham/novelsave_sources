@@ -7,8 +7,8 @@ from ...models import Chapter, Novel, Metadata
 
 
 class DragonTea(Source):
-    __name__ = 'Dragon Tea'
-    base_urls = ['https://dragontea.ink/']
+    name = 'Dragon Tea'
+    base_urls = ('https://dragontea.ink/',)
 
     bad_tags = [
         'noscript', 'script', 'iframe', 'form', 'hr', 'img', 'ins',

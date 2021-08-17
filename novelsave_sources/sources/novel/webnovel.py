@@ -8,8 +8,8 @@ from ...utils.cookies import BlockAll
 
 
 class Webnovel(Source):
-    __name__ = 'Webnovel'
-    base_urls = ['https://www.webnovel.com']
+    name = 'Webnovel'
+    base_urls = ('https://www.webnovel.com',)
 
     def __init__(self):
         super(Webnovel, self).__init__()

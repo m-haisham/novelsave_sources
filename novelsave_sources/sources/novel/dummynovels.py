@@ -5,8 +5,8 @@ from ...models import Novel, Chapter, Metadata
 
 
 class DummyNovels(Source):
-    __name__ = 'Dummy novels'
-    base_urls = ['https://dummynovels.com']
+    name = 'Dummy novels'
+    base_urls = ('https://dummynovels.com',)
 
     def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
         soup = self.soup(url)

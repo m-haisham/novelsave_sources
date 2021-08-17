@@ -6,8 +6,8 @@ from ...models import Chapter, Novel, Metadata
 
 
 class InsanityCave(Source):
-    __name__ = 'Insanity Cave'
-    base_urls = ['https://insanitycave.poetry.blog']
+    name = 'Insanity Cave'
+    base_urls = ('https://insanitycave.poetry.blog',)
 
     novel_author_regex = re.compile(r'written by(.+)\.')
     chapter_title_regex = re.compile(r'chapter[  ]([0-9]+)[  ]*.[  ](.+)', flags=re.IGNORECASE)

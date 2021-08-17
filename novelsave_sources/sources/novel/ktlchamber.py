@@ -6,7 +6,7 @@ from ...models import Novel, Chapter, Metadata
 
 
 class Ktlchamber(Source):
-    base_urls = ['https://ktlchamber.wordpress.com']
+    base_urls = ('https://ktlchamber.wordpress.com',)
 
     chapter_regex = re.compile(r'Chapter[  ](\d+)\.[  ]?(.*)', flags=re.IGNORECASE)
 

@@ -6,8 +6,8 @@ from ...models import Chapter, Novel, Metadata
 
 
 class Chrysanthemumgarden(Source):
-    __name__ = 'Chrysanthemum Garden'
-    base_urls = ['https://chrysanthemumgarden.com/']
+    name = 'Chrysanthemum Garden'
+    base_urls = ('https://chrysanthemumgarden.com/',)
 
     bad_tags = [
         'div', 'pirate', 'script',

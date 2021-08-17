@@ -11,12 +11,11 @@ from ...models import Novel, Chapter, Metadata
 
 
 class Source(Crawler):
-    __name__: str
-    __login__: bool = False
-    __search__: bool = False
+    name: str
+    login_viable: bool = False
+    search_viable: bool = False
 
-    base_urls: List[str]
-
+    base_urls: Tuple[str]
     cookie_domains = []
 
     @classmethod

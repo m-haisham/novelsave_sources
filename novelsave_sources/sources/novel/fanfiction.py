@@ -6,7 +6,7 @@ from ...models import Chapter, Novel, Metadata
 
 
 class FanFiction(Source):
-    base_urls = ['https://www.fanfiction.net']
+    base_urls = ('https://www.fanfiction.net',)
 
     def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
         soup = self.soup(url)

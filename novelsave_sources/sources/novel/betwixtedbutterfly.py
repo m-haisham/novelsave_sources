@@ -8,8 +8,8 @@ from ...exceptions import ChapterException
 
 
 class BetwixtedButterfly(Source):
-    __name__ = 'Betwixted Butterfly'
-    base_urls = ['https://betwixtedbutterfly.com']
+    name = 'Betwixted Butterfly'
+    base_urls = ('https://betwixtedbutterfly.com',)
 
     bad_tags = [
         'noscript', 'script', 'iframe', 'form', 'img', 'ins',

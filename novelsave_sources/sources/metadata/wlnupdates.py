@@ -7,7 +7,7 @@ from ...models import Metadata
 
 
 class WlnUpdates(MetaSource):
-    base_urls = ['https://www.wlnupdates.com/']
+    base_urls = ('https://www.wlnupdates.com/',)
     api_endpoint = 'https://www.wlnupdates.com/api'
 
     def retrieve(self, url) -> List[Metadata]:

@@ -8,7 +8,7 @@ from ...models import Novel, Chapter, Metadata
 
 
 class NovelFun(Source):
-    base_urls = ['https://novelfun.net']
+    base_urls = ('https://novelfun.net',)
     graphql = f'{base_urls[0]}/graphql'
 
     query = """query chapters_NovelRefetchQuery(

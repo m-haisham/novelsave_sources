@@ -7,7 +7,7 @@ from ...models import Chapter, Novel, Metadata
 
 
 class Foxaholic(Source):
-    base_urls = ['https://foxaholic.com/']
+    base_urls = ('https://foxaholic.com/',)
 
     bad_tags = [
         'noscript', 'script', 'iframe', 'form', 'hr', 'img', 'ins',

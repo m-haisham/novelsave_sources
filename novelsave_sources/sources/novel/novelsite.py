@@ -7,7 +7,7 @@ from ...models import Chapter, Novel, Metadata
 
 
 class NovelSite(Source):
-    base_urls = ['https://novelsite.net']
+    base_urls = ('https://novelsite.net',)
 
     bad_tags = [
         'noscript', 'script', 'iframe', 'form', 'hr', 'img', 'ins',

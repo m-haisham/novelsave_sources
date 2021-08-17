@@ -5,7 +5,7 @@ from ...models import Novel, Chapter, Metadata
 
 
 class ChickEngege(Source):
-    base_urls = ['https://www.chickengege.org']
+    base_urls = ('https://www.chickengege.org',)
 
     def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
         soup = self.soup(url)

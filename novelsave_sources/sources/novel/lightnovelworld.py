@@ -6,7 +6,7 @@ from ...models import Novel, Chapter, Metadata
 
 
 class LightNovelWorld(Source):
-    base_urls = ['https://www.lightnovelworld.com']
+    base_urls = ('https://www.lightnovelworld.com',)
 
     chapter_title_regex = re.compile(r'chapter (\d+\.?\d*):? ?(.+)?', flags=re.IGNORECASE)
 

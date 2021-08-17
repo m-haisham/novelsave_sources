@@ -5,7 +5,7 @@ from ...models import Novel, Chapter, Metadata
 
 
 class NovelOnlineFull(Source):
-    base_urls = ['https://novelonlinefull.com']
+    base_urls = ('https://novelonlinefull.com',)
 
     blacklist_patterns = [
         r'^[\W\D]*(volume|chapter)[\W\D]+\d+[\W\D]*$',

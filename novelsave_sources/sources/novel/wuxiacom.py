@@ -5,8 +5,8 @@ from ...models import Chapter, Novel, Metadata
 
 
 class WuxiaCom(Source):
-    __name__ = 'WuxiaWorld.com'
-    base_urls = ['https://www.wuxiaworld.com']
+    name = 'WuxiaWorld.com'
+    base_urls = ('https://www.wuxiaworld.com',)
 
     blacklist_patterns = [
         r'^<span>(...|\u2026)</span>$',

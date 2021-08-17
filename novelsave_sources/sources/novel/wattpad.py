@@ -6,8 +6,8 @@ from ...models import Chapter, Novel, Metadata
 
 
 class WattPad(Source):
-    __name__ = 'Wattpad'
-    base_urls = ['https://www.wattpad.com', 'https://my.w.tt']
+    name = 'Wattpad'
+    base_urls = ('https://www.wattpad.com', 'https://my.w.tt',)
 
     def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
         soup = self.soup(url)

@@ -5,7 +5,7 @@ from ...models import Metadata
 
 
 class NovelUpdates(MetaSource):
-    base_urls = ['https://www.novelupdates.com']
+    base_urls = ('https://www.novelupdates.com',)
 
     def retrieve(self, url) -> List[Metadata]:
         metadata = []

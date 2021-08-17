@@ -7,8 +7,8 @@ from ...models import Chapter, Novel, Metadata
 
 
 class Spacebattles(Source):
-    __name__ = 'SpaceBattles'
-    base_urls = ['https://forums.spacebattles.com']
+    name = 'SpaceBattles'
+    base_urls = ('https://forums.spacebattles.com',)
 
     def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
         threadmarks_url = f'{url.rstrip("/")}/threadmarks'

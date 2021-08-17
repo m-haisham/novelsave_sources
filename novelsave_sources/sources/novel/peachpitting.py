@@ -5,8 +5,8 @@ from ...models import Chapter, Novel, Metadata
 
 
 class PeachPitting(Source):
-    __name__ = 'Peach Pits'
-    base_urls = ['https://peachpitting.com']
+    name = 'Peach Pits'
+    base_urls = ('https://peachpitting.com',)
 
     bad_tags = [
         'noscript', 'script', 'iframe', 'form', 'img', 'ins',

@@ -9,8 +9,8 @@ from ...models import Chapter, Novel, Metadata
 
 
 class ScribbleHub(Source):
-    __name__ = 'Scribble Hub'
-    base_urls = ['https://www.scribblehub.com']
+    name = 'Scribble Hub'
+    base_urls = ('https://www.scribblehub.com',)
 
     def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
         soup = self.soup(url)

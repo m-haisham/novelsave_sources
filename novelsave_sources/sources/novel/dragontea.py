@@ -1,4 +1,5 @@
 from typing import List, Tuple
+from urllib.parse import urlparse
 
 from bs4 import BeautifulSoup
 
@@ -18,9 +19,8 @@ class DragonTea(Source):
 
     def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
         soup = self.soup(url)
-        metadata = []
 
-        summary_paragraphs = [p.text for p in soup.select('.summary__content > p')]
+        summary_paragraphs = [p.text.strip() for p in soup.select('.summary__content > p')]
 
         novel = Novel(
             title=soup.select_one('.post-title').text.strip(),
@@ -31,21 +31,28 @@ class DragonTea(Source):
         )
 
         # other metadata
+        metadata = []
         for item in soup.select('.post-content_item'):
-            if item.select_one('.summary-heading').text.strip() == 'Alternative':
-                metadata.append(Metadata('title', item.select_one('.summary-content').text.strip(),
-                                         others={'role': 'alt'}))
-                break
+            key = item.select_one('.summary-heading').text.strip()
+            value = item.select_one('.summary-content').text.strip()
+            if key == 'Alternative':
+                metadata.append(Metadata('title', value, others={'role': 'alt'}))
+            elif key == 'Type':
+                metadata.append(Metadata('type', value))
 
         for a in soup.select('.genres-content > a'):
             metadata.append(Metadata('subject', a.text.strip()))
+
+        for a in soup.select('.tags-content > a'):
+            metadata.append(Metadata('tag', a.text.strip()))
 
         artist_content = soup.select_one('.artist-content > a')
         if artist_content:
             metadata.append(Metadata('contributor', artist_content.text.strip(),
                                      others={'role': 'ill', 'link': artist_content['href']}))
 
-        novel_id = soup.select_one('.rating-post-id_')['value']
+        short_link = soup.select_one('[rel="shortlink"]')['href']
+        novel_id = int(self.parse_query(urlparse(short_link).query)['p'][0])
         response = self.session.post(
             'https://dragontea.ink/wp-admin/admin-ajax.php',
             data={
@@ -81,5 +88,5 @@ class DragonTea(Source):
 
         self.clean_contents(content)
 
-        chapter.title = soup.select_one('.breadcrumb >li.active').text.strip()
+        chapter.title = soup.select_one('.breadcrumb > li.active').text.strip()
         chapter.paragraphs = str(content)

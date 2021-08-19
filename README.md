@@ -25,7 +25,7 @@ A collection of webnovel sources offering varying amounts of scraping capability
 | https://www.wattpad.com               |        |  |
 | https://forums.spacebattles.com       |        |  |
 | https://forums.sufficientvelocity.com |        |  |
-| https://dragontea.ink                 |        |  |
+| https://dragontea.ink                 |        | 2021-08-20 |
 | https://novelsite.net                 |        |  |
 | https://foxaholic.com                 |        |  |
 | https://chrysanthemumgarden.com       |        |  |

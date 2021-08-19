@@ -25,11 +25,7 @@ class CreativeNovels(Source):
         for a in soup.select('.suggest_tag > a'):
             metadata.append(Metadata('subject', a.text.strip()))
 
-
-        # ---- chapters ----
-
         novel_id = self.parse_query(urlparse(soup.select_one('link[rel="shortlink"]')['href']).query)['p'][0]
-
         security_key = ''
         for script in soup.select('script'):
             text = script.string
@@ -37,7 +33,7 @@ class CreativeNovels(Source):
                 continue
 
             p = re.findall(r'"([^"]+)"', text)
-            if p[0] == 'ajaxurl' and p[1] == 'https:\\/\\/creativenovels.com\\/wp-admin\\/admin-ajax.php':
+            if p[0] == 'ajaxurl' and p[1] == r'https:\/\/creativenovels.com\/wp-admin\/admin-ajax.php':
                 if p[2] == 'security':
                     security_key = p[3]
 

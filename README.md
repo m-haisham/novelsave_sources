@@ -39,7 +39,7 @@ A collection of webnovel sources offering varying amounts of scraping capability
 | https://novelfun.net                  |        |  |
 | https://www.novelhall.com             |        |  |
 | https://novelsrock.com                |        |  |
-| https://creativenovels.com            |        |  |
+| https://creativenovels.com            |        | 2021-08-20 |
 | https://wuxiaworld.site               |        |  |
 | https://novelgate.net                 |        |  |
 | https://rainofsnow.com                |        | 2021-08-16 |

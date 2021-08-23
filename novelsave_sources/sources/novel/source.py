@@ -91,13 +91,18 @@ class Source(Crawler):
     # ----      And almost a perfect copy of the functions below       ----
 
     bad_tags = [
-        'noscript', 'script', 'iframe', 'form', 'hr', 'img', 'ins',
+        'noscript', 'script', 'iframe', 'form', 'hr', 'ins',
         'button', 'input', 'amp-auto-ads', 'pirate'
     ]
 
     blacklist_patterns = [
         r'^[\W\D]*(volume|chapter)[\W\D]+\d+[\W\D]*$',
     ]
+
+    preserved_attrs = {
+        'a': ('href', ),
+        'img': ('src', 'alt')
+    }
 
     def is_blacklisted(self, text):
         """
@@ -135,7 +140,8 @@ class Source(Crawler):
 
         # Remove empty elements
         elif not element.text.strip():
-            element.extract()
+            if element.name not in self.preserved_attrs and not element.find_all(recursive=False):
+                element.extract()
 
         # Remove blacklisted elements
         elif self.is_blacklisted(element.text):
@@ -144,8 +150,8 @@ class Source(Crawler):
         # Remove attributes
         elif hasattr(element, 'attrs'):
 
-            # preserve href attribute of <a>
-            if element.name == 'a':
-                element.attrs = {'href': element.get('href') or '#'}
-            else:
-                element.attrs = {}
+            try:
+                preserve_attrs = self.preserved_attrs[element.name]
+                element.attrs = {key: element.get(key) for key in preserve_attrs if key in element.attrs}
+            except KeyError:
+                pass

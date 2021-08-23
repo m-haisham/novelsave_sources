@@ -63,11 +63,6 @@ class Chrysanthemumgarden(Source):
         content = soup.select_one('#novel-content')
         self.clean_contents(content)
 
-        # initial cleaning process can leave empty paragraphs as a side effect
-        for element in content.find_all():
-            if not element.text.strip():
-                element.extract()
-
         chapter.title = soup.select_one('.chapter-title').text.strip()
         chapter.paragraphs = str(content)
 

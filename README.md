@@ -52,10 +52,10 @@ A collection of webnovel sources offering varying amounts of scraping capability
 
 ### Metadata
 
-| Metadata Source              |
-| ---------------------------- |
-| https://www.wlnupdates.com   |
-| https://www.novelupdates.com |
+| Metadata Source              | Last Checked |
+| ---------------------------- | :----------: |
+| https://www.wlnupdates.com   | 2021-08-25   |
+| https://www.novelupdates.com |  |
 
 ## Disclaimer
 

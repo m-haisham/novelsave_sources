@@ -15,7 +15,7 @@ class WlnUpdates(MetaSource):
         
         # get json data
         id = int(url.split('/')[4])
-        data = self.api_request(id, 'get-series-id_')['data']
+        data = self.api_request(id, 'get-series-id')['data']
 
         # alternate names
         for name in data['alternatenames']:
@@ -36,9 +36,9 @@ class WlnUpdates(MetaSource):
         for obj in data['genres']:
             metadata.append(Metadata('subject', obj['genre']))
 
-        # tags [tags are not needed]
-        # for obj in data['tags']:
-        #     metadata.append(Metadata('tag', obj['tag']))
+        # tags
+        for obj in data['tags']:
+            metadata.append(Metadata('tag', obj['tag']))
 
         # original language
         if data['orig_lang']:
@@ -51,4 +51,4 @@ class WlnUpdates(MetaSource):
         return metadata
 
     def api_request(self, id: int, mode: str):
-        return self.request_get(self.api_endpoint, json={'id_': id, 'mode': mode}).json()
+        return self.session.post(self.api_endpoint, json={'id': id, 'mode': mode}).json()

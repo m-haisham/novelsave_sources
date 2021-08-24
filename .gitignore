@@ -235,3 +235,4 @@ dmypy.json
 # End of https://www.toptal.com/developers/gitignore/api/pycharm,python
 
 test.py
+test_metasource.py

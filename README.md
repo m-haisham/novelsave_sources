@@ -28,7 +28,7 @@ A collection of webnovel sources offering varying amounts of scraping capability
 | https://dragontea.ink                 |        | 2021-08-20 |
 | https://novelsite.net                 |        |  |
 | https://foxaholic.com                 |        |  |
-| https://chrysanthemumgarden.com       |        |  |
+| https://chrysanthemumgarden.com       |        | 2021-08-24 |
 | https://peachpitting.com              |        |  |
 | https://betwixtedbutterfly.com        |        |  |
 | https://dummynovels.com               |        |  |

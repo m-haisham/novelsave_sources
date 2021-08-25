@@ -11,6 +11,7 @@ from ...utils.cookies import BlockAll
 book_info_url = 'https://www.webnovel.com/book/%s'
 chapter_info_url = ''
 
+
 class Webnovel(Source):
     name = 'Webnovel'
     base_urls = ('https://www.webnovel.com',)
@@ -30,8 +31,8 @@ class Webnovel(Source):
         novel_id = self.parse_novel_url(url)
         self.csrf = self.session.cookies.get('_csrfToken')
 
-        url = f'https://www.webnovel.com/apiajax/chapter/GetChapterList?_csrfToken={self.csrf}&bookId={novel_id}'
-        data = self.validate(self.request_get(url))['data']
+        chapter_list_url = f'https://www.webnovel.com/apiajax/chapter/GetChapterList?_csrfToken={self.csrf}&bookId={novel_id}'
+        data = self.validate(self.request_get(chapter_list_url))['data']
 
         synopsis = '\n'.join([
             para
@@ -77,7 +78,8 @@ class Webnovel(Source):
         response = self.validate(response)
         data = response['data']['chapterInfo']
 
-        content = BeautifulSoup('<div><p>' + '</p><p>'.join([para['content'] for para in data['contents']]) + '</p></div>', 'lxml')
+        content = BeautifulSoup(
+            '<div><p>' + '</p><p>'.join([para['content'] for para in data['contents']]) + '</p></div>', 'lxml')
         self.clean_contents(content)
 
         chapter.title = data['chapterName']
@@ -86,8 +88,7 @@ class Webnovel(Source):
     def toc(self, novel_id, data: dict) -> List[Chapter]:
         chapters = []
         if 'volumeItems' in data:
-            volumes = data['volumeItems']
-            for volume_index, volume in enumerate(volumes):
+            for volume in data['volumeItems']:
                 chapters += self.make_chapters_from_json(novel_id, volume['chapterItems'], volume)
         elif 'chapterItems' in data:
             chapters += self.make_chapters_from_json(novel_id, data['chapterItems'], None)
@@ -101,7 +102,7 @@ class Webnovel(Source):
             volume = (volume['index'], volume['name'])
 
         for chapter_json in chapter_items:
-            if chapter_json['isAuth'] > 0:
+            if not chapter_json['isAuth']:
                 continue
 
             chapter = Chapter(

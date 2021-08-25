@@ -10,7 +10,7 @@ A collection of webnovel sources offering varying amounts of scraping capability
 
 | Sources                               | Search | Last Checked |
 | ------------------------------------- | :----: | :--: |
-| https://www.webnovel.com              |        | 2021-08-20 |
+| https://www.webnovel.com              |        | 2021-08-25 |
 | https://www.wuxiaworld.co             |        |  |
 | https://www.boxnovel.co               |        |  |
 | https://www.readlightnovel.org        |        |  |

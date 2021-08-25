@@ -1,12 +1,13 @@
+from typing import List, Dict
+
 import requests
 from bs4 import BeautifulSoup
 from requests.cookies import RequestsCookieJar
-from typing import List, Dict, Set
 
 from ..exceptions import BadResponseException
 
-header = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) '
-                        'Chrome/39.0.2171.95 Safari/537.36'}
+headers = {'User-Agent': 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko)'
+                         ' Chrome/92.0.4515.159 Mobile Safari/537.36'}
 
 
 class Crawler:
@@ -14,6 +15,7 @@ class Crawler:
 
     def __init__(self):
         self.session = requests.Session()
+        self.session.headers = {**self.session.headers, **headers}
 
     def set_cookies(self, cookies: RequestsCookieJar):
         self.session.cookies = cookies
@@ -34,7 +36,7 @@ class Crawler:
             return
 
         # request
-        response = self.session.get(url, headers=header, **kwargs)
+        response = self.session.get(url, **kwargs)
         if response.ok:
             return response
 

@@ -9,16 +9,20 @@ class NovelGate(Source):
 
     def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
         soup = self.soup(url)
-        metadata = []
+
+        film_content = soup.select_one('.film-content')
+        for element in film_content.select('h3, .tags'):
+            element.extract()
 
         novel = Novel(
             title=soup.select_one('.film-info .name').text.strip(),
             author=soup.select_one('a[href*="author"]').text.strip(),
             thumbnail_url=soup.select_one('.film-info .book-cover')['data-original'],
-            synopsis='\n'.join([p.text.strip() for p in soup.select('.film-content > p')]),
+            synopsis='\n'.join([p.strip() for p in film_content.find_all(text=True, recursive=True) if p.strip()]),
             url=url,
         )
 
+        metadata = []
         for a in soup.select('.film-info a[href*="genre"]'):
             metadata.append(Metadata('subject', a.text.strip()))
 
@@ -43,5 +47,8 @@ class NovelGate(Source):
 
         contents = soup.select_one('#chapter-body')
         self.clean_contents(contents)
+
+        for element in contents.select('.language'):
+            element.extract()
 
         chapter.paragraphs = str(contents)

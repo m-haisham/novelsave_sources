@@ -41,7 +41,7 @@ A collection of webnovel sources offering varying amounts of scraping capability
 | https://novelsrock.com                |        |  |
 | https://creativenovels.com            |        | 2021-08-20 |
 | https://wuxiaworld.site               |        |  |
-| https://novelgate.net                 |        |  |
+| https://novelgate.net                 |        | 2021-08-25 |
 | https://rainofsnow.com                |        | 2021-08-16 |
 
 #### Rejected

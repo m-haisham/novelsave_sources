@@ -1,6 +1,6 @@
 import re
 from typing import Tuple, List
-from urllib.parse import urlparse
+from urllib.parse import urlparse, parse_qs
 
 from .source import Source
 from ...models import Novel, Chapter, Metadata
@@ -25,7 +25,7 @@ class CreativeNovels(Source):
         for a in soup.select('.suggest_tag > a'):
             metadata.append(Metadata('subject', a.text.strip()))
 
-        novel_id = self.parse_query(urlparse(soup.select_one('link[rel="shortlink"]')['href']).query)['p'][0]
+        novel_id = parse_qs(urlparse(soup.select_one('link[rel="shortlink"]')['href']).query)['p'][0]
         security_key = ''
         for script in soup.select('script'):
             text = script.string

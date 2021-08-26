@@ -1,5 +1,5 @@
 from typing import List, Tuple
-from urllib.parse import urlparse
+from urllib.parse import urlparse, parse_qs
 
 from bs4 import BeautifulSoup
 
@@ -52,7 +52,7 @@ class DragonTea(Source):
                                      others={'role': 'ill', 'link': artist_content['href']}))
 
         short_link = soup.select_one('[rel="shortlink"]')['href']
-        novel_id = int(self.parse_query(urlparse(short_link).query)['p'][0])
+        novel_id = int(parse_qs(urlparse(short_link).query)['p'][0])
         response = self.session.post(
             'https://dragontea.ink/wp-admin/admin-ajax.php',
             data={

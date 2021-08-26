@@ -1,6 +1,6 @@
-# Novelsave Sources
+# NovelSave Sources
 
-A collection of webnovel sources offering varying amounts of scraping capability.
+A collection of novel sources offering varying amounts of scraping capability.
 
 > Request a new source by [creating a new issue](https://github.com/mHaisham/novelsave_sources/issues/new/choose)
 
@@ -41,7 +41,7 @@ A collection of webnovel sources offering varying amounts of scraping capability
 | https://novelsrock.com                |        |  |
 | https://creativenovels.com            |        | 2021-08-20 |
 | https://wuxiaworld.site               |        |  |
-| https://novelgate.net                 |        | 2021-08-25 |
+| https://novelgate.net                 |        | 2021-08-26 |
 | https://rainofsnow.com                |        | 2021-08-16 |
 
 #### Rejected

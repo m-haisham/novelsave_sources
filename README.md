@@ -59,7 +59,8 @@ A collection of novel sources offering varying amounts of scraping capability.
 
 ## Disclaimer
 
-We are not affiliated, associated, authorized, endorsed by, or in any way officially connected with the any of the [sources](#sources) mentioned above.
+We are not affiliated, associated, authorized, endorsed by, or in any way officially
+connected with any of the [sources](#sources) mentioned above.
 
 ## License
 

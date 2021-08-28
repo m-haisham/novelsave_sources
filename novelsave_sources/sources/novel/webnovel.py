@@ -135,6 +135,7 @@ class Webnovel(Source):
         """
         :return: url of novel
         """
+        novel_url = novel_url.rstrip('/')
         try:
             return int(novel_url.split('/')[4])
         except ValueError:
@@ -145,7 +146,7 @@ class Webnovel(Source):
         """
         :return: novel_id, chapter_id
         """
-        pieces = chapter_url.split('/')
+        pieces = chapter_url.rstrip('/').split('/')
         try:
             return int(pieces[4]), int(pieces[5])
         except ValueError:

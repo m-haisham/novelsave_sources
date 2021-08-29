@@ -1,3 +1,4 @@
+import datetime
 import select
 from typing import List, Tuple
 
@@ -11,6 +12,7 @@ from ...models import Chapter, Novel, Metadata
 class ScribbleHub(Source):
     name = 'Scribble Hub'
     base_urls = ('https://www.scribblehub.com',)
+    last_updated = datetime.date(2021, 8, 17)
 
     def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
         soup = self.soup(url)

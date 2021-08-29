@@ -1,4 +1,4 @@
-from typing import List, Dict
+import datetime
 
 import requests
 from bs4 import BeautifulSoup
@@ -12,6 +12,7 @@ headers = {'User-Agent': 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N)
 
 class Crawler:
     retry_count = 5
+    last_updated: datetime.date
 
     def __init__(self):
         self.session = requests.Session()

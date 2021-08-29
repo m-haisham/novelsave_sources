@@ -1,3 +1,4 @@
+import datetime
 from typing import List, Tuple
 from urllib.parse import urlparse, parse_qs
 
@@ -10,6 +11,7 @@ from ...models import Chapter, Novel, Metadata
 class DragonTea(Source):
     name = 'Dragon Tea'
     base_urls = ('https://dragontea.ink/',)
+    last_updated = datetime.date(2021, 8, 20)
 
     bad_tags = [
         'noscript', 'script', 'iframe', 'form', 'hr', 'img', 'ins',

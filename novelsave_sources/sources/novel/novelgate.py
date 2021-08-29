@@ -1,3 +1,4 @@
+import datetime
 from typing import List, Tuple
 
 from .source import Source
@@ -6,6 +7,7 @@ from ...models import Chapter, Novel, Metadata
 
 class NovelGate(Source):
     base_urls = ('https://novelgate.net',)
+    last_updated = datetime.date(2021, 8, 26)
 
     def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
         soup = self.soup(url.rstrip('/') + '/')

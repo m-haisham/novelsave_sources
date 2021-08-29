@@ -1,3 +1,4 @@
+import datetime
 import re
 from typing import List, Tuple
 
@@ -8,6 +9,7 @@ from ...models import Chapter, Novel, Metadata
 class Chrysanthemumgarden(Source):
     name = 'Chrysanthemum Garden'
     base_urls = ('https://chrysanthemumgarden.com/',)
+    last_updated = datetime.date(2021, 8, 24)
 
     bad_tags = [
         'div', 'pirate', 'script',

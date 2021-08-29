@@ -1,3 +1,4 @@
+import datetime
 import re
 from typing import Tuple, List
 from urllib.parse import urlparse, parse_qs
@@ -9,6 +10,7 @@ from ...models import Novel, Chapter, Metadata
 class CreativeNovels(Source):
     name = 'Creative Novels'
     base_urls = ('https://creativenovels.com',)
+    last_updated = datetime.date(2021, 8, 20)
 
     def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
         soup = self.soup(url)

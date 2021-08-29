@@ -1,3 +1,4 @@
+import datetime
 from typing import Tuple, List
 
 from .source import Source
@@ -7,6 +8,7 @@ from ...models import Novel, Chapter, Metadata
 class RoyalRoad(Source):
     name = 'Royal Road'
     base_urls = ('https://www.royalroad.com',)
+    last_updated = datetime.date(2021, 8, 17)
 
     def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
         soup = self.soup(url)

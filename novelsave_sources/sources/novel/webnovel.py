@@ -1,3 +1,4 @@
+import datetime
 import json
 from typing import Tuple, List, Dict, Optional
 
@@ -15,6 +16,7 @@ chapter_info_url = ''
 class Webnovel(Source):
     name = 'Webnovel'
     base_urls = ('https://www.webnovel.com',)
+    last_updated = datetime.date(2021, 8, 25)
 
     csrf: str = None
 

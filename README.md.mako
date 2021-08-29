@@ -12,16 +12,16 @@ ${'###'} Novel
     <thead>
         <tr>
             <th>Source</th>
-            <th style="text-align: center">Search</th>
-            <th style="text-align: center">Last Checked</th>
+            <th align="center">Search</th>
+            <th align="center">Last Checked</th>
         </tr>
     </thead>
     <tbody>
         % for source in sorted(sources, key=lambda s: s.base_urls):
         <tr>
             <td>${source.base_urls[0]}</td>
-            <td style="text-align: center"></td>
-            <td style="text-align: center">${getattr(source, 'last_updated', '')}</td>
+            <td align="center"></td>
+            <td align="center">${getattr(source, 'last_updated', '')}</td>
         </tr>
         % endfor
     </tbody>
@@ -39,14 +39,14 @@ ${'###'} Metadata
     <thead>
         <tr>
             <th>Metadata Source</th>
-            <th style="text-align: center">Last Checked</th>
+            <th align="center">Last Checked</th>
         </tr>
     </thead>
     <tbody>
         % for source in sorted(metasources, key=lambda s: s.base_urls):
         <tr>
             <td>${source.base_urls[0]}</td>
-            <td style="text-align: center">${getattr(source, 'last_updated', '')}</td>
+            <td align="center">${getattr(source, 'last_updated', '')}</td>
         </tr>
         % endfor
     </tbody>

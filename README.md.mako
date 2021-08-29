@@ -43,7 +43,7 @@ ${'###'} Metadata
         </tr>
     </thead>
     <tbody>
-        % for source in sorted(metasources, key=lambda s: s.base_urls):
+        % for source in sorted(meta_sources, key=lambda s: s.base_urls):
         <tr>
             <td>${source.base_urls[0]}</td>
             <td align="center">${getattr(source, 'last_updated', '')}</td>

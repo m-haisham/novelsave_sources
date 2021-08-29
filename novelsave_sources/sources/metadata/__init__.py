@@ -1,7 +1,7 @@
-from .wlnupdates import WlnUpdates
 from .novelupdates import NovelUpdates
+from .wlnupdates import WlnUpdates
 
 meta_sources = [
-    WlnUpdates,
     NovelUpdates,
+    WlnUpdates,
 ]

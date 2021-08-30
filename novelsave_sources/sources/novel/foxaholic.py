@@ -1,3 +1,4 @@
+import datetime
 from typing import List, Tuple
 
 from bs4 import BeautifulSoup
@@ -7,7 +8,8 @@ from ...models import Chapter, Novel, Metadata
 
 
 class Foxaholic(Source):
-    base_urls = ('https://foxaholic.com/',)
+    base_urls = ('https://www.foxaholic.com',)
+    last_updated = datetime.date(2021, 8, 30)
 
     bad_tags = [
         'noscript', 'script', 'iframe', 'form', 'hr', 'img', 'ins',
@@ -22,7 +24,10 @@ class Foxaholic(Source):
 
     def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
         soup = self.get_soup(url)
-        metadata = []
+
+        hot = soup.select_one('.post-title .hot')
+        if hot:
+            hot.extract()
 
         authors = soup.select('.author-content > a')
         synopsis_paras = soup.select('.summary__content > p')
@@ -36,6 +41,7 @@ class Foxaholic(Source):
         )
 
         # other metadata
+        metadata = []
         for item in soup.select('.post-content_item'):
             if item.select_one('.summary-heading').text.strip() == 'Alternative':
                 for alt in item.select_one('.summary-content').text.strip().split(', '):
@@ -44,19 +50,20 @@ class Foxaholic(Source):
                 break
 
         for author in authors[1:]:
-            metadata.append(Metadata('contributor', author.text.strip(), others={'role': 'aut', 'link': author['href']}))
+            metadata.append(Metadata('contributor', author.text.strip(), others={'role': 'aut'}))
 
-        artists = soup.select('.artist-content a')
-        for artist in artists:
-            metadata.append(Metadata('contributor', artist.text.strip(), others={'link': artist['href']}))
+        for artist in soup.select('.artist-content a'):
+            metadata.append(Metadata('contributor', artist.text.strip()))
 
-        genres = soup.select('.genres-content > a')
-        for genre in genres:
+        for genre in soup.select('.genres-content > a'):
             metadata.append(Metadata('subject', genre.text.strip()))
+
+        for tag in soup.select('.tags-content > a'):
+            metadata.append(Metadata.custom('tag', tag.text.strip()))
 
         novel_id = soup.select_one('.wp-manga-action-button')['data-post']
         response = self.session.post(
-            'https://foxaholic.com/wp-admin/admin-ajax.php',
+            'https://www.foxaholic.com/wp-admin/admin-ajax.php',
             data={
                 'action': 'manga_get_chapters',
                 'manga': novel_id,
@@ -87,6 +94,9 @@ class Foxaholic(Source):
         text_left = content.select_one('.text-left')
         if text_left:
             content = text_left
+
+        for hidden in soup.select('[class*="foxaholic-publift"]'):
+            hidden.extract()
 
         self.clean_contents(content)
 

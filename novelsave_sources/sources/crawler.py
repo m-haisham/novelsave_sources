@@ -47,18 +47,21 @@ class Crawler:
     # ----      And almost a perfect copy of the functions below       ----
 
     bad_tags = [
-        'noscript', 'script', 'iframe', 'form', 'hr', 'ins',
-        'button', 'input', 'amp-auto-ads', 'pirate'
+        'noscript', 'script', 'style', 'iframe', 'ins', 'header', 'footer',
+        'button', 'input', 'amp-auto-ads', 'pirate', 'figcaption', 'address',
+        'tfoot', 'object', 'video', 'audio', 'source', 'nav', 'output', 'select',
+        'textarea', 'form', 'map',
     ]
 
-    blacklist_patterns = [
-        r'^[\W\D]*(volume|chapter)[\W\D]+\d+[\W\D]*$',
+    blacklist_patterns = []
+
+    notext_tags = [
+        'img',
     ]
 
-    preserved_attrs = {
-        'a': ('href',),
-        'img': ('src', 'alt')
-    }
+    preserve_attrs = [
+        'href', 'src', 'alt',
+    ]
 
     def is_blacklisted(self, text):
         """
@@ -96,7 +99,7 @@ class Crawler:
 
         # Remove empty elements
         elif not element.text.strip():
-            if element.name not in self.preserved_attrs and not element.find_all(recursive=False):
+            if element.name not in self.notext_tags and not element.find_all(recursive=False):
                 element.extract()
 
         # Remove blacklisted elements
@@ -105,9 +108,4 @@ class Crawler:
 
         # Remove attributes
         elif hasattr(element, 'attrs'):
-
-            try:
-                preserve_attrs = self.preserved_attrs[element.name]
-                element.attrs = {key: element.get(key) for key in preserve_attrs if key in element.attrs}
-            except KeyError:
-                pass
+            element.attrs = {key: element.get(key) for key in self.preserve_attrs if key in element.attrs}

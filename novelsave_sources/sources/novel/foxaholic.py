@@ -59,7 +59,7 @@ class Foxaholic(Source):
             metadata.append(Metadata('subject', genre.text.strip()))
 
         for tag in soup.select('.tags-content > a'):
-            metadata.append(Metadata.custom('tag', tag.text.strip()))
+            metadata.append(Metadata('tag', tag.text.strip()))
 
         novel_id = soup.select_one('.wp-manga-action-button')['data-post']
         response = self.session.post(

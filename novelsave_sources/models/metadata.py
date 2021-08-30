@@ -1,5 +1,10 @@
-from dataclasses import dataclass, field
-from typing import Optional
+from dataclasses import dataclass
+
+DUBLIN_CORE_TAGS = [
+    'title', 'language', 'subject',
+    'creator', 'contributor', 'publisher', 'rights',
+    'coverage', 'date', 'description',
+]
 
 
 @dataclass
@@ -29,9 +34,11 @@ class Metadata:
 
     name: str
     value: str
-    others: dict = field(default_factory=lambda: {})
-    namespace: Optional[str] = DUBLIN_CORE
+    others: dict
+    namespace: str
 
-    @classmethod
-    def custom(cls, name: str, value: str, others: dict = None):
-        return cls(name, value, others or {}, cls.CUSTOM)
+    def __init__(self, name: str, value: str, others: dict = None):
+        self.name = name
+        self.value = value
+        self.others = others or {}
+        self.namespace = self.DUBLIN_CORE if name in DUBLIN_CORE_TAGS else self.CUSTOM

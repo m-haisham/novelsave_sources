@@ -34,15 +34,15 @@ class MtlNovel(Source):
         metadata = []
         alt_title = soup.select_one('#alt')
         if alt_title:
-            metadata.append(Metadata.custom('title', alt_title.text.strip(), others={'role': 'alt'}))
+            metadata.append(Metadata('title', alt_title.text.strip(), others={'role': 'alt'}))
 
         for genre in soup.select('#genre a'):
             metadata.append(Metadata('subject', genre.text.strip()))
 
         for tag in soup.select('#tags a:not(.edit-history-button)'):
-            metadata.append(Metadata.custom('tag', tag.text.strip()))
+            metadata.append(Metadata('tag', tag.text.strip()))
 
-        metadata.append(Metadata.custom('status', soup.select_one('#status').text.strip()))
+        metadata.append(Metadata('status', soup.select_one('#status').text.strip()))
 
         # chapter list
         chapter_list_url = http_url.rstrip('/') + '/chapter-list/'

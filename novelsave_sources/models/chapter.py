@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from typing import List, Union, Tuple
+from typing import Tuple
 
 
 @dataclass

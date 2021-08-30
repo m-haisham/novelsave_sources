@@ -1,5 +1,5 @@
 class SourcesException(Exception):
-    """base_urls exception for this package"""
+    """base exception for this package"""
 
 
 class BadResponseException(SourcesException):

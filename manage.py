@@ -41,7 +41,7 @@ def get_subclasses_in_module(__pkg: str, __cls: type) -> List[type]:
             if issubclass(member, __cls) and member is not __cls:
                 sources.append(member)
 
-    return sorted(sources, key=lambda s: s.__name__)
+    return sorted(sources, key=lambda s: s.base_urls)
 
 
 def mako_dest_file(mako_file: Path) -> Path:

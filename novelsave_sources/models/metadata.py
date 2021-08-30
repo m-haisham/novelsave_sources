@@ -11,6 +11,3 @@ class Metadata:
     value: str
     others: dict = field(default_factory=lambda: {})
     namespace: str = DEFAULT_NAMESPACE
-
-    # 'int' short for internet/online
-    src: str = 'int'

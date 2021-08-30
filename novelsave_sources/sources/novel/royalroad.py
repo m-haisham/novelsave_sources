@@ -11,7 +11,7 @@ class RoyalRoad(Source):
     last_updated = datetime.date(2021, 8, 17)
 
     def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
-        soup = self.soup(url)
+        soup = self.get_soup(url)
 
         novel = Novel(
             title=soup.select_one('h1[property="name"]').text.strip(),
@@ -38,7 +38,7 @@ class RoyalRoad(Source):
         return novel, chapters, metadata
 
     def chapter(self, chapter: Chapter):
-        soup = self.soup(chapter.url)
+        soup = self.get_soup(chapter.url)
 
         contents = soup.select_one('.chapter-content')
         self.clean_contents(contents)

@@ -13,7 +13,7 @@ class InsanityCave(Source):
     chapter_title_regex = re.compile(r'chapter[  ]([0-9]+)[  ]*.[  ](.+)', flags=re.IGNORECASE)
 
     def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
-        soup = self.soup(url)
+        soup = self.get_soup(url)
 
         entry_content = soup.find('div', {'class': 'entry-content'})
         title_text = entry_content.find('p').text.strip()
@@ -45,7 +45,7 @@ class InsanityCave(Source):
         return novel, chapters, []
 
     def chapter(self, chapter: Chapter):
-        soup = self.soup(chapter.url)
+        soup = self.get_soup(chapter.url)
 
         result = self.chapter_title_regex.search(soup.find('div', {'class': 'title-block'}).text.strip())
         if not result or len(result.groups()) < 2:

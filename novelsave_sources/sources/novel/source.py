@@ -12,11 +12,9 @@ from ...models import Novel, Chapter, Metadata
 
 class Source(Crawler):
     name: str
+    lang = 'en'
     login_viable: bool = False
     search_viable: bool = False
-
-    base_urls: Tuple[str]
-    cookie_domains = []
 
     @classmethod
     def of(cls, url: str) -> bool:
@@ -24,27 +22,28 @@ class Source(Crawler):
         :param url: url to test
         :return: whether the url is from this source
         """
-        return any([url.startswith(base_url) for base_url in cls.base_urls])
+        return any(url.startswith(base_url) for base_url in cls.base_urls)
 
     def __init__(self):
         super(Source, self).__init__()
 
         # set default cookie domains
-        if not self.cookie_domains:
+        if not hasattr(self, 'cookie_domains'):
+            self.cookie_domains = []
             for url in self.base_urls:
                 netloc = urlparse(url).netloc
-                self.cookie_domains = [
+                self.cookie_domains += [
                     netloc,
                     re.search(r'.+?(\..+)', netloc).group(1),  # remove the segment before first dot
                 ]
 
     def login(self, email: str, password: str):
         """Login to the source and assign the required cookies"""
-        raise UnavailableException(f'{self.__name__} scraper does not provide login functionality.')
+        raise UnavailableException(f"'{self.__name__}' scraper does not provide login functionality.")
 
     def search(self, keyword: str, *args, **kwargs):
         """Search for a novel on the source"""
-        raise UnavailableException(f'{self.__name__} scraper does not provide search functionality.')
+        raise UnavailableException(f"'{self.__name__}' scraper does not provide search functionality.")
 
     def set_cookies(self, cookies: Union[RequestsCookieJar, Tuple[dict]]):
         """
@@ -70,20 +69,17 @@ class Source(Crawler):
                 f"Unexpected type received: {type(cookies)}; Require either 'RequestsCookieJar' or 'Tuple[dict]'")
 
     def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
-        """
-        soup novel information from url
+        """Download and parse novel information
 
-        :param url: link pointing to novel
-        :return: novel, table of content (chapters with only field no, title and url), and volumes
+        :param url: link to novel profile
+        :return: novel, table of content (chapters with only field index, title and url), and metadata
         """
         raise NotImplementedError
 
     def chapter(self, chapter: Chapter):
-        """
-        soup chapter information from url
+        """Download and parse chapter content
 
-        :param chapter: chapter to update
-        :return: chapter object
+        Replaces the existing chapter's paragraphs attribute
         """
         raise NotImplementedError
 

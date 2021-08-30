@@ -10,7 +10,7 @@ class WuxiaCo(Source):
     base_urls = ('https://www.wuxiaworld.co',)
 
     def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
-        soup = self.soup(url)
+        soup = self.get_soup(url)
 
         novel = Novel(
             title=soup.find('div', {'class': 'book-name'}).text,
@@ -40,7 +40,7 @@ class WuxiaCo(Source):
         return novel, chapters, []
 
     def chapter(self, chapter: Chapter):
-        soup = self.soup(chapter.url)
+        soup = self.get_soup(chapter.url)
 
         title = soup.find('h1', {'class': 'chapter-title'}).text
 

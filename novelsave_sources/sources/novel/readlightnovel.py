@@ -11,7 +11,7 @@ class ReadLightNovel(Source):
     base_urls = ('https://www.readlightnovel.org',)
 
     def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
-        soup = self.soup(url)
+        soup = self.get_soup(url)
 
         # parse author
         author = None
@@ -47,7 +47,7 @@ class ReadLightNovel(Source):
         return novel, chapters, []
 
     def chapter(self, chapter: Chapter):
-        soup = self.soup(chapter.url)
+        soup = self.get_soup(chapter.url)
 
         content = soup.find('div', {'class': 'chapter-content3'}).find('div', {'class': 'desc'})
 

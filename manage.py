@@ -44,15 +44,15 @@ def get_subclasses_in_module(__pkg: str, __cls: type) -> List[type]:
     return sorted(sources, key=lambda s: s.__name__)
 
 
-def mako_destination_file(mako_dir: Path) -> Path:
-    return mako_dir.parent / mako_dir.stem
+def mako_dest_file(mako_file: Path) -> Path:
+    return mako_file.parent / mako_file.stem
 
 
 def write_rendered(mako_file: Path, text: str):
-    with mako_destination_file(mako_file).open('w') as f:
+    with mako_dest_file(mako_file).open('w') as f:
         f.write(text.replace('\r', ''))
 
-    print(f'{mako_file.relative_to(BASE_DIR)} -> {mako_destination_file(mako_file).relative_to(BASE_DIR)}')
+    print(f'{mako_file.relative_to(BASE_DIR)} -> {mako_dest_file(mako_file).relative_to(BASE_DIR)}')
 
 
 @cli.command(name='compile')

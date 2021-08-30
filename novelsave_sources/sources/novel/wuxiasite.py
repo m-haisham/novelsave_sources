@@ -9,7 +9,7 @@ class WuxiaSite(Source):
     base_urls = ('https://wuxiaworld.site',)
 
     def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
-        soup = self.soup(url)
+        soup = self.get_soup(url)
         metadata = []
 
         # ---- info ----
@@ -53,7 +53,7 @@ class WuxiaSite(Source):
         return novel, chapters, metadata
 
     def chapter(self, chapter: Chapter):
-        soup = self.soup(chapter.url)
+        soup = self.get_soup(chapter.url)
 
         contents = soup.select('.text-left p, .cha-words p')
         body = [str(p) for p in contents if p.text.strip()]

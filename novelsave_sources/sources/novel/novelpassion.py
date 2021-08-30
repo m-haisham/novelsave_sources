@@ -8,7 +8,7 @@ class NovelPassion(Source):
     base_urls = ('https://www.novelpassion.com',)
 
     def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
-        soup = self.soup(url)
+        soup = self.get_soup(url)
         metadata = []
 
         authors = [a.text.strip() for a in soup.select('.dns .stq[href*="author"]')]
@@ -38,7 +38,7 @@ class NovelPassion(Source):
         return novel, chapters, metadata
 
     def chapter(self, chapter: Chapter):
-        soup = self.soup(chapter.url)
+        soup = self.get_soup(chapter.url)
 
         content = soup.select_one('.cha-words')
         self.clean_contents(content)

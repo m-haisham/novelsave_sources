@@ -9,7 +9,7 @@ class WuxiaOnline(Source):
     base_urls = ('https://wuxiaworld.online',)
 
     def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
-        soup = self.soup(url)
+        soup = self.get_soup(url)
 
         synopsis_elements = soup.select_one('#noidungm').find_all(text=True, recursive=False)
 
@@ -34,7 +34,7 @@ class WuxiaOnline(Source):
         return novel, chapters, []
 
     def chapter(self, chapter: Chapter):
-        soup = self.soup(chapter.url)
+        soup = self.get_soup(chapter.url)
 
         content = soup.select_one('#list_chapter .content-area')
 

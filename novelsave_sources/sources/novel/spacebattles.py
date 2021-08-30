@@ -12,7 +12,7 @@ class Spacebattles(Source):
 
     def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
         threadmarks_url = f'{url.rstrip("/")}/threadmarks'
-        soup = self.soup(threadmarks_url)
+        soup = self.get_soup(threadmarks_url)
 
         author_element = soup.select_one('.username')
 
@@ -21,7 +21,7 @@ class Spacebattles(Source):
 
         # getting writer profile image
         try:
-            author_soup = self.soup(f'{stripped_baseurl}{author_element["href"]}')
+            author_soup = self.get_soup(f'{stripped_baseurl}{author_element["href"]}')
             avatar = author_soup.select_one('.avatarWrapper > .avatar')
             thumbnail = f'{stripped_baseurl}{avatar["href"]}'
         except BadResponseException:
@@ -50,7 +50,7 @@ class Spacebattles(Source):
         parsed_url = urlparse(chapter.url)
         raw_url = f'{parsed_url.scheme}://{parsed_url.netloc}{parsed_url.path}'
 
-        soup = self.soup(raw_url)
+        soup = self.get_soup(raw_url)
 
         article = soup.select_one(f'.u-anchorTarget#{parsed_url.fragment}').parent
         content = article.select_one('.message-inner .message-userContent .bbWrapper')

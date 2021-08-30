@@ -11,7 +11,7 @@ class LightNovelWorld(Source):
     chapter_title_regex = re.compile(r'chapter (\d+\.?\d*):? ?(.+)?', flags=re.IGNORECASE)
 
     def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
-        soup = self.soup(url)
+        soup = self.get_soup(url)
 
         novel = Novel(
             title=soup.find('h1', {'class': 'novel-title'}).text,
@@ -34,7 +34,7 @@ class LightNovelWorld(Source):
         return novel, chapters, []
 
     def chapter(self, chapter: Chapter):
-        soup = self.soup(chapter.url)
+        soup = self.get_soup(chapter.url)
 
         title_element = soup.find('div', {'class': 'titles'}).find('h2')
         result = self.chapter_title_regex.search(title_element.text)

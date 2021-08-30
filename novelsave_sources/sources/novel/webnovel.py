@@ -29,7 +29,7 @@ class Webnovel(Source):
             self.csrf = self.session.cookies.get('_csrfToken')
 
     def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
-        soup = self.soup(url)
+        soup = self.get_soup(url)
         novel_id = self.parse_novel_url(url)
         self.csrf = self.session.cookies.get('_csrfToken')
 

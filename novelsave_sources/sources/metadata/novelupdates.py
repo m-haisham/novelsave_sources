@@ -9,7 +9,7 @@ class NovelUpdates(MetaSource):
 
     def retrieve(self, url) -> List[Metadata]:
         metadata = []
-        soup = self.soup(url)
+        soup = self.get_soup(url)
 
         # alternate titles
         for text in soup.select_one('#editassociated').find_all(text=True, recursive=False):

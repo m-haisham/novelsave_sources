@@ -14,7 +14,7 @@ class PeachPitting(Source):
     ]
 
     def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
-        soup = self.soup(url)
+        soup = self.get_soup(url)
         metadata = []
 
         details_parent, synopsis_parent, *_ = soup.select('.elementor-text-editor')
@@ -59,7 +59,7 @@ class PeachPitting(Source):
         return novel, chapters, metadata
 
     def chapter(self, chapter: Chapter):
-        soup = self.soup(chapter.url)
+        soup = self.get_soup(chapter.url)
 
         content = soup.select_one('#wtr-content')
 

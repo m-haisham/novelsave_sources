@@ -9,7 +9,7 @@ class DummyNovels(Source):
     base_urls = ('https://dummynovels.com',)
 
     def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
-        soup = self.soup(url)
+        soup = self.get_soup(url)
         metadata = []
 
         synopsis_content = soup.select('.novel-synopsis-content > p')
@@ -53,7 +53,7 @@ class DummyNovels(Source):
         return novel, chapters, metadata
 
     def chapter(self, chapter: Chapter):
-        soup = self.soup(chapter.url)
+        soup = self.get_soup(chapter.url)
 
         content = soup.select_one('.elementor-widget-theme-post-content > div')
 

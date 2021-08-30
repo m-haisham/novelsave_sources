@@ -1,4 +1,5 @@
 import datetime
+from typing import List
 
 import requests
 from bs4 import BeautifulSoup
@@ -11,7 +12,8 @@ headers = {'User-Agent': 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N)
 
 
 class Crawler:
-    retry_count = 5
+    lang: str
+    base_urls: List[str]
     last_updated: datetime.date
 
     def __init__(self):
@@ -21,25 +23,25 @@ class Crawler:
     def set_cookies(self, cookies: RequestsCookieJar):
         self.session.cookies = cookies
 
-    def soup(self, url: str) -> BeautifulSoup:
+    def get_soup(self, url: str) -> BeautifulSoup:
+        """Download website html and create a bs4 object"""
+        return BeautifulSoup(self.request_get(url).content, 'lxml')
+
+    def request(self, method: str, url: str, **kwargs):
+        """Create a request to the url and return the response if ok
+
+        :raises BadResponseException: if the response is not valid (status_code==200)
         """
-        Download website html and create a bs4 object
+        response = self.session.request(method, url, **kwargs)
+        if not response.ok:
+            raise BadResponseException(
+                response,
+                'Bad Response {}'.format({'status_code': response.status_code, 'url': response.url})
+            )
 
-        :param url: website to be downloaded
-        :return: created bs4 object
-        """
-        response = self.request_get(url)
-        return BeautifulSoup(response.content, 'lxml')
+        return response
 
-    def request_get(self, url, _tries=0, **kwargs):
-        # limiting retry requests
-        if _tries >= self.retry_count:
-            return
-
-        # request
-        response = self.session.get(url, **kwargs)
-        if response.ok:
-            return response
-
-        raise BadResponseException(response, f'{response.status_code}: {response.url}')
+    def request_get(self, url, **kwargs):
+        """Creates a get request to the specified url"""
+        return self.request('GET', url, **kwargs)
 

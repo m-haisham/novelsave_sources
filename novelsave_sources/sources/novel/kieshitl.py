@@ -9,7 +9,7 @@ class KieshiTl(Source):
     base_urls = ('https://kieshitl.wordpress.com',)
 
     def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
-        soup = self.soup(url)
+        soup = self.get_soup(url)
 
         entry_content = soup.select_one('div.entry-content')
 
@@ -39,7 +39,7 @@ class KieshiTl(Source):
         return novel, chapters, []
 
     def chapter(self, chapter: Chapter):
-        soup = self.soup(chapter.url)
+        soup = self.get_soup(chapter.url)
 
         _, no = soup.select_one('h1.entry-title').text.split('Chapter', maxsplit=1)
 

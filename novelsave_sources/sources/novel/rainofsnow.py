@@ -11,7 +11,7 @@ class RainOfSnow(Source):
     last_updated = datetime.date(2021, 8, 16)
 
     def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
-        soup = self.soup(url)
+        soup = self.get_soup(url)
         metadata = []
 
         novel = Novel(
@@ -60,7 +60,7 @@ class RainOfSnow(Source):
         return '\n'.join(paragraphs)
 
     def chapter(self, chapter: Chapter):
-        soup = self.soup(chapter.url)
+        soup = self.get_soup(chapter.url)
 
         content = soup.select_one('.bb-item[style*="block"] .content .scroller .zoomdesc-cont')
         content = self.clean_contents(content)

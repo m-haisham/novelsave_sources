@@ -11,7 +11,7 @@ class Ktlchamber(Source):
     chapter_regex = re.compile(r'Chapter[  ](\d+)\.[  ]?(.*)', flags=re.IGNORECASE)
 
     def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
-        soup = self.soup(url)
+        soup = self.get_soup(url)
 
         entry_content = soup.find('div', {'class': 'entry-content'})
 
@@ -62,7 +62,7 @@ class Ktlchamber(Source):
         return novel, chapters, []
 
     def chapter(self, chapter: Chapter):
-        soup = self.soup(chapter.url)
+        soup = self.get_soup(chapter.url)
 
         entry_content = soup.find('div', {'class': 'entry-content'})
         p_elements = entry_content.find_all('p')

@@ -15,7 +15,7 @@ class ScribbleHub(Source):
     last_updated = datetime.date(2021, 8, 17)
 
     def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
-        soup = self.soup(url)
+        soup = self.get_soup(url)
 
         novel = Novel(
             title=soup.select_one('div.fic_title').text.strip(),
@@ -38,7 +38,7 @@ class ScribbleHub(Source):
         return novel, chapters, metadata
 
     def chapter(self, chapter: Chapter):
-        soup = self.soup(chapter.url)
+        soup = self.get_soup(chapter.url)
 
         chapter.title = soup.select_one('.chapter-title').text.strip()
         chapter.paragraphs = str(soup.select_one('#chp_raw'))

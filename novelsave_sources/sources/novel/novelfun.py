@@ -30,7 +30,7 @@ class NovelFun(Source):
 """
 
     def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
-        soup = self.soup(url)
+        soup = self.get_soup(url)
         metadata = []
 
         novel = Novel(
@@ -69,7 +69,7 @@ class NovelFun(Source):
         return novel, chapters, metadata
 
     def chapter(self, chapter: Chapter):
-        soup = self.soup(chapter.url)
+        soup = self.get_soup(chapter.url)
 
         content = soup.select_one('h1 ~ div')
         self.clean_contents(content)

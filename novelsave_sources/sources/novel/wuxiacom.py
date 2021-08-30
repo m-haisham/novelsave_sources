@@ -15,7 +15,7 @@ class WuxiaCom(Source):
     ]
 
     def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
-        soup = self.soup(url)
+        soup = self.get_soup(url)
 
         authors = ''
         for d in soup.select_one('.media-body dl, .novel-body').select('dt, dd'):
@@ -42,7 +42,7 @@ class WuxiaCom(Source):
         return novel, chapters, []
 
     def chapter(self, chapter: Chapter):
-        soup = self.soup(chapter.url)
+        soup = self.get_soup(chapter.url)
 
         contents = soup.select_one('#chapterContent')
         if not contents:

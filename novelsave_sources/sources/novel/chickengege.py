@@ -8,7 +8,7 @@ class ChickEngege(Source):
     base_urls = ('https://www.chickengege.org',)
 
     def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
-        soup = self.soup(url)
+        soup = self.get_soup(url)
         metadata = []
 
         thumbnail_element = soup.select_one('.novelist-cover-image')
@@ -67,7 +67,7 @@ class ChickEngege(Source):
         return novel, chapters, metadata
 
     def chapter(self, chapter: Chapter):
-        soup = self.soup(chapter.url)
+        soup = self.get_soup(chapter.url)
 
         content = soup.select_one('.entry-wrap .entry-content')
         self.clean_contents(content)

@@ -8,7 +8,7 @@ class BoxNovel(Source):
     base_urls = ('https://boxnovel.com',)
 
     def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
-        soup = self.soup(url)
+        soup = self.get_soup(url)
         metadata = []
 
         authors = soup.select('.author-content a')
@@ -41,7 +41,7 @@ class BoxNovel(Source):
         return novel, chapters, metadata
 
     def chapter(self, chapter: Chapter):
-        soup = self.soup(chapter.url)
+        soup = self.get_soup(chapter.url)
 
         contents = soup.select_one('div.text-left')
         for element in contents.select('h1, h2, h3, .code-block, script, .adsbygoogle'):

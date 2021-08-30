@@ -12,7 +12,7 @@ class NovelsRock(Source):
     base_urls = ('https://novelsrock.com',)
 
     def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
-        soup = self.soup(url)
+        soup = self.get_soup(url)
         metadata = []
 
         novel = Novel(
@@ -48,7 +48,7 @@ class NovelsRock(Source):
         return novel, chapters, metadata
 
     def chapter(self, chapter: Chapter):
-        soup = self.soup(chapter.url)
+        soup = self.get_soup(chapter.url)
 
         contents = soup.select('div.reading-content p')
 

@@ -16,7 +16,7 @@ class NovelSite(Source):
     ]
 
     def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
-        soup = self.soup(url)
+        soup = self.get_soup(url)
         metadata = []
 
         authors = [a for a in soup.select('.author-content > a')]
@@ -74,7 +74,7 @@ class NovelSite(Source):
         return novel, chapters, metadata
 
     def chapter(self, chapter: Chapter):
-        soup = self.soup(chapter.url)
+        soup = self.get_soup(chapter.url)
 
         content = soup.select_one('.reading-content')
 

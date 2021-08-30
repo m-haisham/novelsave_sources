@@ -21,7 +21,7 @@ class Chrysanthemumgarden(Source):
     ]
 
     def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
-        soup = self.soup(url)
+        soup = self.get_soup(url)
         metadata = []
 
         synopsis = ''
@@ -60,7 +60,7 @@ class Chrysanthemumgarden(Source):
         return novel, chapters, metadata
 
     def chapter(self, chapter: Chapter):
-        soup = self.soup(chapter.url)
+        soup = self.get_soup(chapter.url)
 
         content = soup.select_one('#novel-content')
         self.clean_contents(content)

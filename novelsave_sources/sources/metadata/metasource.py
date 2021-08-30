@@ -5,7 +5,7 @@ from ...models import Metadata
 
 
 class MetaSource(Crawler):
-    base_urls: List[str]
+    lang = 'en'
 
     @classmethod
     def of(cls, url: str):

@@ -11,6 +11,7 @@ ${'###'} Novel
 <table>
     <thead>
         <tr>
+            <th align="center">Lang</th>
             <th>Source</th>
             <th align="center">Search</th>
             <th align="center">Last Checked</th>
@@ -19,6 +20,7 @@ ${'###'} Novel
     <tbody>
         % for source in sorted(sources, key=lambda s: s.base_urls):
         <tr>
+            <td align="center">${source.lang}</td>
             <td>${source.base_urls[0]}</td>
             <td align="center"></td>
             <td align="center">${getattr(source, 'last_updated', '')}</td>
@@ -38,6 +40,7 @@ ${'###'} Metadata
 <table>
     <thead>
         <tr>
+            <th align="center">Lang</th>
             <th>Metadata Source</th>
             <th align="center">Last Checked</th>
         </tr>
@@ -45,6 +48,7 @@ ${'###'} Metadata
     <tbody>
         % for source in sorted(meta_sources, key=lambda s: s.base_urls):
         <tr>
+            <td align="center">${source.lang}</td>
             <td>${source.base_urls[0]}</td>
             <td align="center">${getattr(source, 'last_updated', '')}</td>
         </tr>

@@ -24,7 +24,7 @@ class NovelFull(Source):
     ]
 
     def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
-        soup = self.soup(url)
+        soup = self.get_soup(url)
 
         image_element = soup.select_one('.info-holder .book img')
 
@@ -54,7 +54,7 @@ class NovelFull(Source):
 
     def parse_chapter_list(self, novel_url, page):
         url = f'{novel_url.rstrip("/")}?page={page}&per-page=50'
-        soup = self.soup(url)
+        soup = self.get_soup(url)
 
         chapters = []
         for a in soup.select('ul.list-chapter li a'):
@@ -68,7 +68,7 @@ class NovelFull(Source):
         return chapters
 
     def chapter(self, chapter: Chapter):
-        soup = self.soup(chapter.url)
+        soup = self.get_soup(chapter.url)
 
         content = soup.select_one('div#chapter-content')
 

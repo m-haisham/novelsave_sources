@@ -9,7 +9,7 @@ class MtlNovel(Source):
     base_urls = ('https://www.mtlnovel.com',)
 
     def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
-        soup = self.soup(url)
+        soup = self.get_soup(url)
 
         author = ''
         info_element = soup.select_one('.info > tbody')
@@ -28,7 +28,7 @@ class MtlNovel(Source):
 
         # chapter list
         chapter_list_url = '/'.join(s.strip('/') for s in (url, 'chapter-list')) + '/'
-        soup = self.soup(chapter_list_url)
+        soup = self.get_soup(chapter_list_url)
 
         chapters = []
         for i, a in enumerate(reversed(soup.select('.ch-list .ch-link'))):
@@ -44,7 +44,7 @@ class MtlNovel(Source):
         return novel, chapters, []
 
     def chapter(self, chapter: Chapter):
-        soup = self.soup(chapter.url)
+        soup = self.get_soup(chapter.url)
 
         paragraphs = soup.select_one('.par')
 

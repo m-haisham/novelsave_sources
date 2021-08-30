@@ -9,7 +9,7 @@ class FanFiction(Source):
     base_urls = ('https://www.fanfiction.net',)
 
     def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
-        soup = self.soup(url)
+        soup = self.get_soup(url)
         metadata = []
 
         cover = None
@@ -67,7 +67,7 @@ class FanFiction(Source):
         return novel, chapters, metadata
 
     def chapter(self, chapter: Chapter):
-        soup = self.soup(chapter.url)
+        soup = self.get_soup(chapter.url)
 
         chapter_select = soup.select_one('#chap_select, select#jump')
         if chapter_select:

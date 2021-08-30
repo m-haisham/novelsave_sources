@@ -13,7 +13,7 @@ class CreativeNovels(Source):
     last_updated = datetime.date(2021, 8, 20)
 
     def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
-        soup = self.soup(url)
+        soup = self.get_soup(url)
         metadata = []
 
         novel = Novel(
@@ -75,7 +75,7 @@ class CreativeNovels(Source):
         return chapters
 
     def chapter(self, chapter: Chapter):
-        soup = self.soup(chapter.url)
+        soup = self.get_soup(chapter.url)
 
         content = soup.select_one('article .entry-content')
         for tag in content.select('.announcements_crn, .support-placement, span[style*="color:transparent"]'):

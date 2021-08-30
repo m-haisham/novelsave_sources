@@ -20,7 +20,7 @@ class DragonTea(Source):
     ]
 
     def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
-        soup = self.soup(url)
+        soup = self.get_soup(url)
 
         summary_paragraphs = [p.text.strip() for p in soup.select('.summary__content > p')]
 
@@ -78,7 +78,7 @@ class DragonTea(Source):
         return novel, chapters, metadata
 
     def chapter(self, chapter: Chapter):
-        soup = self.soup(chapter.url)
+        soup = self.get_soup(chapter.url)
 
         content = soup.select_one('.reading-content')
 

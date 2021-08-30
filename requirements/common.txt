@@ -1,3 +1,4 @@
+cloudscraper~=1.2.58
 requests~=2.26.0
 BeautifulSoup4~=4.9.3
 lxml~=4.6.3

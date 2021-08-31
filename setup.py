@@ -1,7 +1,10 @@
 from setuptools import setup, find_packages
 
-with open('requirements.txt', 'r') as f:
-    requirements = f.readlines()
+requirements = []
+with open('requirements/common.txt', 'r') as f:
+    requirements += f.readlines()
+with open('requirements/prod.txt', 'r') as f:
+    requirements += [l for l in f.readlines() if not l.startswith('-r')]
 
 setup(
     install_requires=requirements,

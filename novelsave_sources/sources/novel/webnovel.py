@@ -22,23 +22,21 @@ class Webnovel(Source):
     def __init__(self):
         super(Webnovel, self).__init__()
 
-    def get_csrf(self):
-        if not self.csrf_token:
-            self.session.get(self.base_urls[0])
-            self.csrf_token = self.session.cookies.get('_csrfToken')
+    def get_csrf_token(self) -> str:
+        return self.session.cookies.get('_csrfToken', '')
 
     def novel(self, url: str) -> Novel:
         soup = self.get_soup(url)
         novel_id = self.parse_novel_url(url)
-        self.csrf_token = self.session.cookies.get('_csrfToken')
 
-        data = self.validate(self.request_get(chapter_list_url.format(csrf=self.csrf_token, id=novel_id)))['data']
+        toc_response = self.request_get(chapter_list_url.format(csrf=self.get_csrf_token(), id=novel_id))
+        data = self.validate(toc_response)['data']
 
-        synopsis = '\n'.join(
+        synopsis = [
             para.strip()
             for para in soup.select_one("div[class*='j_synopsis'] > p").find_all(text=True, recursive=False)
             if para.strip()
-        )
+        ]
 
         novel = Novel(
             title=data['bookInfo']['bookName'],
@@ -74,7 +72,8 @@ class Webnovel(Source):
 
         return volumes
 
-    def make_volume(self, novel_id, chapter_items, volume_data: Optional[dict]) -> Volume:
+    @staticmethod
+    def make_volume(novel_id, chapter_items, volume_data: Optional[dict]) -> Volume:
         volume = Volume(volume_data['volumeId'], volume_data['volumeName']) \
             if volume_data else Volume.default()
 
@@ -93,12 +92,11 @@ class Webnovel(Source):
         return volume
 
     def chapter(self, chapter: Chapter):
-        self.get_csrf()
         novel_id, chapter_id = self.parse_chapter_url(chapter.url)
         response = self.session.get(
             'https://www.webnovel.com/go/pcm/chapter/getContent',
             params={
-                '_csrfToken': self.session.cookies.get('_csrfToken', ''),
+                '_csrfToken': self.get_csrf_token(),
                 'bookId': novel_id,
                 'chapterId': chapter_id
             }

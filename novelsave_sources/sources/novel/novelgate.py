@@ -2,14 +2,14 @@ import datetime
 from typing import List, Tuple
 
 from .source import Source
-from ...models import Chapter, Novel, Metadata
+from ...models import Chapter, Volume, Novel, Metadata
 
 
 class NovelGate(Source):
     base_urls = ('https://novelgate.net',)
-    last_updated = datetime.date(2021, 8, 26)
+    last_updated = datetime.date(2021, 9, 3)
 
-    def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
+    def novel(self, url: str) -> Novel:
         soup = self.get_soup(url.rstrip('/') + '/')
 
         film_content = soup.select_one('.film-content')
@@ -20,29 +20,30 @@ class NovelGate(Source):
             title=soup.select_one('.film-info .name').text.strip(),
             author=soup.select_one('a[href*="author"]').text.strip(),
             thumbnail_url=soup.select_one('.film-info .book-cover')['data-original'],
-            synopsis='\n'.join([p.strip() for p in film_content.find_all(text=True, recursive=True) if p.strip()]),
+            synopsis=[p.strip() for p in film_content.find_all(text=True, recursive=True) if p.strip()],
             url=url,
         )
 
-        metadata = []
         for a in soup.select('.film-info a[href*="genre"]'):
-            metadata.append(Metadata('subject', a.text.strip()))
+            novel.metadata.append(Metadata('subject', a.text.strip()))
 
-        chapters = []
+        chapter_count = 0
         for i, div in enumerate(soup.select('#list-chapters > .book')):
-            volume = (i, div.select_one('.title a').text.strip())
+            volume = Volume(i, div.select_one('.title a').text.strip())
 
             for a in div.select('.list-chapters > li a'):
                 chapter = Chapter(
-                    index=len(chapters),
+                    index=chapter_count,
                     title=a.text.strip(),
-                    volume=volume,
                     url=self.base_urls[0] + a['href'],
                 )
 
-                chapters.append(chapter)
+                chapter_count += 1
+                volume.chapters.append(chapter)
 
-        return novel, chapters, metadata
+            novel.volumes.append(volume)
+
+        return novel
 
     def chapter(self, chapter: Chapter):
         soup = self.get_soup(chapter.url)

@@ -10,7 +10,7 @@ class Novel:
     title: str
     url: str
     author: Optional[str] = None
-    synopsis: str = None
+    synopsis: List[str] = field(default_factory=lambda: [])
     thumbnail_url: str = None
     lang: str = 'en'
 

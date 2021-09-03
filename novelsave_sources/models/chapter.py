@@ -1,7 +1,5 @@
 from dataclasses import dataclass
 
-from typing import Tuple
-
 
 @dataclass
 class Chapter:
@@ -9,7 +7,6 @@ class Chapter:
     no: float = None
     title: str = None
     paragraphs: str = None
-    volume: Tuple[int, str] = None
     url: str = None
 
     def __hash__(self):

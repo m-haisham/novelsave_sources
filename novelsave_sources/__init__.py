@@ -1,6 +1,6 @@
 __version__ = '0.1.1'
 
-from .models import Novel, Chapter, Metadata
+from .models import Novel, Volume, Chapter, Metadata
 
 from .exceptions import (
     SourcesException, BadResponseException, UnknownSourceException,

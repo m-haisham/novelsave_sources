@@ -1,5 +1,6 @@
 import datetime
 import re
+from abc import ABC
 from typing import List
 
 import cloudscraper
@@ -9,7 +10,7 @@ from requests.cookies import RequestsCookieJar
 from ..exceptions import BadResponseException
 
 
-class Crawler:
+class Crawler(ABC):
     lang: str
     base_urls: List[str]
     last_updated: datetime.date

@@ -1,16 +1,16 @@
 import re
-from typing import Tuple, List, Union
+from abc import ABC, abstractmethod
+from typing import Tuple, Union
 from urllib.parse import urlparse
 
-from bs4 import Comment
 from requests.cookies import RequestsCookieJar
 
 from ..crawler import Crawler
 from ...exceptions import UnavailableException
-from ...models import Novel, Chapter, Metadata
+from ...models import Novel, Chapter
 
 
-class Source(Crawler):
+class Source(Crawler, ABC):
     name: str
     lang = 'en'
     login_viable: bool = False
@@ -68,14 +68,16 @@ class Source(Crawler):
             raise TypeError(
                 f"Unexpected type received: {type(cookies)}; Require either 'RequestsCookieJar' or 'Tuple[dict]'")
 
-    def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
+    @abstractmethod
+    def novel(self, url: str) -> Novel:
         """Download and parse novel information
 
         :param url: link to novel profile
-        :return: novel, table of content (chapters with only field index, title and url), and metadata
+        :return: novel object containing volumes and metadata
         """
         raise NotImplementedError
 
+    @abstractmethod
     def chapter(self, chapter: Chapter):
         """Download and parse chapter content
 

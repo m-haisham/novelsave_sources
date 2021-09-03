@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 
 from .source import Source
 from ...exceptions import BadResponseException
-from ...models import Novel, Chapter, Metadata
+from ...models import Novel, Volume, Chapter, Metadata
 
 book_info_url = 'https://www.webnovel.com/book/%s'
 chapter_list_url = 'https://www.webnovel.com/go/pcm/chapter/get-chapter-list?_csrfToken={csrf}&bookId={id}&pageIndex=0'
@@ -27,18 +27,18 @@ class Webnovel(Source):
             self.session.get(self.base_urls[0])
             self.csrf_token = self.session.cookies.get('_csrfToken')
 
-    def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
+    def novel(self, url: str) -> Novel:
         soup = self.get_soup(url)
         novel_id = self.parse_novel_url(url)
         self.csrf_token = self.session.cookies.get('_csrfToken')
 
         data = self.validate(self.request_get(chapter_list_url.format(csrf=self.csrf_token, id=novel_id)))['data']
 
-        synopsis = '\n'.join([
-            para
+        synopsis = '\n'.join(
+            para.strip()
             for para in soup.select_one("div[class*='j_synopsis'] > p").find_all(text=True, recursive=False)
             if para.strip()
-        ])
+        )
 
         novel = Novel(
             title=data['bookInfo']['bookName'],
@@ -47,7 +47,6 @@ class Webnovel(Source):
             url=f'https://www.webnovel.com/book/{novel_id}',
         )
 
-        metadata = []
         writer_elements = soup.select('._mn > address > p > *')
         for i in range(len(writer_elements) // 2):
             label = writer_elements[i * 2].text.strip(': ').lower()
@@ -56,12 +55,42 @@ class Webnovel(Source):
             if label == 'author':
                 novel.author = value
             else:
-                metadata.append(Metadata('author', value, others={'role': label}))
+                novel.metadata.append(Metadata('author', value, others={'role': label}))
 
         for a in soup.select('.m-tags a'):
-            metadata.append(Metadata('subject', a['title']))
+            novel.metadata.append(Metadata('subject', a['title']))
 
-        return novel, self.toc(novel_id, data), metadata
+        novel.volumes = self.toc(novel_id, data)
+
+        return novel
+
+    def toc(self, novel_id, data: dict) -> List[Volume]:
+        volumes = []
+        if 'volumeItems' in data:
+            for volume_data in data['volumeItems']:
+                volumes.append(self.make_volume(novel_id, volume_data['chapterItems'], volume_data))
+        elif 'chapterItems' in data:
+            volumes.append(self.make_volume(novel_id, data['chapterItems'], None))
+
+        return volumes
+
+    def make_volume(self, novel_id, chapter_items, volume_data: Optional[dict]) -> Volume:
+        volume = Volume(volume_data['volumeId'], volume_data['volumeName']) \
+            if volume_data else Volume.default()
+
+        for chapter_data in chapter_items:
+            if not chapter_data['isAuth']:
+                continue
+
+            chapter = Chapter(
+                index=chapter_data['chapterIndex'],
+                title=f'{chapter_data["chapterIndex"]} {chapter_data["chapterName"]}',
+                url=f'https://www.webnovel.com/book/{novel_id}/{chapter_data["chapterId"]}',
+            )
+
+            volume.chapters.append(chapter)
+
+        return volume
 
     def chapter(self, chapter: Chapter):
         self.get_csrf()
@@ -84,38 +113,6 @@ class Webnovel(Source):
 
         chapter.title = data['chapterName']
         chapter.paragraphs = str(content.select_one('div'))
-
-    def toc(self, novel_id, data: dict) -> List[Chapter]:
-        chapters = []
-        if 'volumeItems' in data:
-            for volume in data['volumeItems']:
-                chapters += self.make_chapters_from_json(novel_id, volume['chapterItems'], volume)
-        elif 'chapterItems' in data:
-            chapters += self.make_chapters_from_json(novel_id, data['chapterItems'], None)
-
-        return chapters
-
-    def make_chapters_from_json(self, novel_id, chapter_items, volume_data: Optional[dict]):
-        chapters = []
-
-        volume = None
-        if volume_data:
-            volume = (volume_data['volumeId'], volume_data['volumeName'])
-
-        for chapter_data in chapter_items:
-            if not chapter_data['isAuth']:
-                continue
-
-            chapter = Chapter(
-                index=chapter_data['chapterIndex'],
-                title=f'{chapter_data["chapterIndex"]} {chapter_data["chapterName"]}',
-                volume=volume,
-                url=f'https://www.webnovel.com/book/{novel_id}/{chapter_data["chapterId"]}',
-            )
-
-            chapters.append(chapter)
-
-        return chapters
 
     @staticmethod
     def validate(response) -> Dict:

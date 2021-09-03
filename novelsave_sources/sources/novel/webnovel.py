@@ -7,34 +7,32 @@ from bs4 import BeautifulSoup
 from .source import Source
 from ...exceptions import BadResponseException
 from ...models import Novel, Chapter, Metadata
-from ...utils.cookies import BlockAll
 
 book_info_url = 'https://www.webnovel.com/book/%s'
-chapter_info_url = ''
+chapter_list_url = 'https://www.webnovel.com/go/pcm/chapter/get-chapter-list?_csrfToken={csrf}&bookId={id}&pageIndex=0'
 
 
 class Webnovel(Source):
     name = 'Webnovel'
     base_urls = ('https://www.webnovel.com',)
-    last_updated = datetime.date(2021, 8, 25)
+    last_updated = datetime.date(2021, 9, 3)
 
-    csrf: str = None
+    csrf_token: str = None
 
     def __init__(self):
         super(Webnovel, self).__init__()
 
     def get_csrf(self):
-        if not self.csrf:
+        if not self.csrf_token:
             self.session.get(self.base_urls[0])
-            self.csrf = self.session.cookies.get('_csrfToken')
+            self.csrf_token = self.session.cookies.get('_csrfToken')
 
     def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
         soup = self.get_soup(url)
         novel_id = self.parse_novel_url(url)
-        self.csrf = self.session.cookies.get('_csrfToken')
+        self.csrf_token = self.session.cookies.get('_csrfToken')
 
-        chapter_list_url = f'https://www.webnovel.com/apiajax/chapter/GetChapterList?_csrfToken={self.csrf}&bookId={novel_id}'
-        data = self.validate(self.request_get(chapter_list_url))['data']
+        data = self.validate(self.request_get(chapter_list_url.format(csrf=self.csrf_token, id=novel_id)))['data']
 
         synopsis = '\n'.join([
             para
@@ -46,7 +44,7 @@ class Webnovel(Source):
             title=data['bookInfo']['bookName'],
             synopsis=synopsis,
             thumbnail_url=f'https://img.webnovel.com/bookcover/{novel_id}',
-            url=url,
+            url=f'https://www.webnovel.com/book/{novel_id}',
         )
 
         metadata = []
@@ -97,21 +95,22 @@ class Webnovel(Source):
 
         return chapters
 
-    def make_chapters_from_json(self, novel_id, chapter_items, volume: Optional[dict]):
+    def make_chapters_from_json(self, novel_id, chapter_items, volume_data: Optional[dict]):
         chapters = []
 
-        if volume:
-            volume = (volume['index'], volume['name'])
+        volume = None
+        if volume_data:
+            volume = (volume_data['volumeId'], volume_data['volumeName'])
 
-        for chapter_json in chapter_items:
-            if not chapter_json['isAuth']:
+        for chapter_data in chapter_items:
+            if not chapter_data['isAuth']:
                 continue
 
             chapter = Chapter(
-                index=chapter_json['index'],
-                title=chapter_json['name'],
+                index=chapter_data['chapterIndex'],
+                title=f'{chapter_data["chapterIndex"]} {chapter_data["chapterName"]}',
                 volume=volume,
-                url=f'https://www.webnovel.com/book/{novel_id}/{chapter_json["id"]}',
+                url=f'https://www.webnovel.com/book/{novel_id}/{chapter_data["chapterId"]}',
             )
 
             chapters.append(chapter)

@@ -1,5 +1,4 @@
 import datetime
-from typing import List, Tuple
 
 from .source import Source
 from ...models import Chapter, Novel, Metadata
@@ -9,7 +8,7 @@ class NovelPassion(Source):
     base_urls = ('https://www.novelpassion.com',)
     last_updated = datetime.date(2021, 9, 4)
 
-    def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
+    def novel(self, url: str) -> Novel:
         soup = self.get_soup(url)
 
         authors = [a.text.strip() for a in soup.select('.dns .stq[href*="author"]')]

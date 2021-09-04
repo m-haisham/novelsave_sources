@@ -1,6 +1,6 @@
 import datetime
 import re
-from typing import Tuple, List
+from typing import List
 
 from .source import Source
 from ...models import Novel, Volume, Chapter, Metadata
@@ -10,6 +10,10 @@ class WuxiaCo(Source):
     name = 'WuxiaWorld.co'
     base_urls = ('https://www.wuxiaworld.co',)
     last_updated = datetime.date(2021, 9, 4)
+
+    @classmethod
+    def of(cls, url: str) -> bool:
+        return url.startswith(cls.base_urls[0] + '/')
 
     def novel(self, url: str) -> Novel:
         soup = self.get_soup(url)

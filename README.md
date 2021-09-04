@@ -130,7 +130,7 @@ A collection of novel sources offering varying amounts of scraping capability.
             <td align="center">en</td>
             <td>https://rainofsnow.com/</td>
             <td align="center"></td>
-            <td align="center">2021-08-16</td>
+            <td align="center">2021-09-04</td>
         </tr>
         <tr>
             <td align="center">en</td>

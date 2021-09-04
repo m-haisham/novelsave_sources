@@ -16,3 +16,11 @@ class Novel:
 
     volumes: List[Volume] = field(default_factory=lambda: [])
     metadata: List[Metadata] = field(default_factory=lambda: [])
+
+    def get_default_volume(self):
+        if self.volumes:
+            return self.volumes[0]
+
+        volume = Volume.default()
+        self.volumes.append(volume)
+        return volume

@@ -21,11 +21,11 @@ class Crawler(ABC):
     def set_cookies(self, cookies: RequestsCookieJar):
         self.session.cookies = cookies
 
-    def get_soup(self, url: str) -> BeautifulSoup:
+    def get_soup(self, url: str, **kwargs) -> BeautifulSoup:
         """Download website html and create a bs4 object"""
-        soup = BeautifulSoup(self.request_get(url).content, 'lxml')
+        soup = BeautifulSoup(self.request_get(url, **kwargs).content, 'lxml')
         if not soup.find('body'):
-            raise ConnectionError('HTML document was not loaded correctly')
+            raise ConnectionError('HTML document was not loaded correctly.')
 
         return soup
 

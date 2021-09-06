@@ -116,6 +116,12 @@ A collection of novel sources offering varying amounts of scraping capability.
         </tr>
         <tr>
             <td align="center">en</td>
+            <td>https://readlightnovels.net</td>
+            <td align="center"></td>
+            <td align="center">2021-09-06</td>
+        </tr>
+        <tr>
+            <td align="center">en</td>
             <td>https://wuxiaworld.online</td>
             <td align="center"></td>
             <td align="center"></td>
@@ -170,9 +176,9 @@ A collection of novel sources offering varying amounts of scraping capability.
         </tr>
         <tr>
             <td align="center">en</td>
-            <td>https://www.readlightnovel.org</td>
+            <td>https://www.readlightnovel.me</td>
             <td align="center"></td>
-            <td align="center"></td>
+            <td align="center">2021-09-07</td>
         </tr>
         <tr>
             <td align="center">en</td>

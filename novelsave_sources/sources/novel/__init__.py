@@ -19,7 +19,8 @@ from .novelsite import NovelSite
 from .novelsrock import NovelsRock
 from .peachpitting import PeachPitting
 from .rainofsnow import RainOfSnow
-from .readlightnovel import ReadLightNovel
+from .readlightnovelme import ReadLightNovel
+from .readlightnovelsnet import ReadLightNovelsNet
 from .royalroad import RoyalRoad
 from .scribblehub import ScribbleHub
 from .spacebattles import Spacebattles
@@ -48,6 +49,7 @@ sources = [
     NovelsRock,
     PeachPitting,
     RainOfSnow,
+    ReadLightNovelsNet,
     WuxiaOnline,
     WuxiaSite,
     ChickEngege,

@@ -1,4 +1,5 @@
-from typing import List, Tuple
+import datetime
+from urllib.parse import urlparse, parse_qs
 
 from bs4 import BeautifulSoup
 
@@ -8,24 +9,32 @@ from ...models import Chapter, Novel, Metadata
 
 class NovelSite(Source):
     base_urls = ('https://novelsite.net',)
+    last_updated = datetime.date(2021, 9, 6)
 
-    bad_tags = [
-        'noscript', 'script', 'iframe', 'form', 'hr', 'img', 'ins',
-        'button', 'input', 'amp-auto-ads', 'pirate',
-        'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
-    ]
+    def __init__(self):
+        super(NovelSite, self).__init__()
+        self.bad_tags.extend([
+            'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+        ])
 
-    def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
+    def novel(self, url: str) -> Novel:
         soup = self.get_soup(url)
-        metadata = []
 
-        authors = [a for a in soup.select('.author-content > a')]
+        authors = [a.text.strip() for a in soup.select('.author-content > a')]
+        if len(authors) == 2:
+            author = f'{authors[0]} ({authors[1]})'
+        else:
+            author = ', '.join(authors)
+
+        title = soup.select_one('.post-title > h1').text.strip()
+        if title.endswith(' Novel'):
+            title = title[:-len(' Novel')]
 
         novel = Novel(
-            title=soup.select_one('.post-title > h1').text.strip().rstrip(' Novel'),
-            author=authors[0].text.strip(),
+            title=title,
+            author=author,
             thumbnail_url=soup.select_one('.summary_image img')['src'],
-            synopsis=soup.select_one('.summary__content > hr + p').text.strip(),
+            synopsis=[p.text.strip() for p in soup.select('.summary__content > hr ~ p')],
             url=url,
         )
 
@@ -34,23 +43,17 @@ class NovelSite(Source):
             if item.select_one('.summary-heading').text.strip() == 'Alternative':
                 for alt in item.select_one('.summary-content').text.strip().split(', '):
                     if alt != novel.title:
-                        metadata.append(Metadata('title', alt, others={'role': 'alt'}))
+                        novel.metadata.append(Metadata('title', alt, others={'role': 'alt'}))
                 break
 
-        for author in authors[1:]:
-            metadata.append(Metadata('contributor', author.text.strip(),
-                                     others={'role': 'aut', 'link': author['href']}))
+        for artist in soup.select('.artist-content a'):
+            novel.metadata.append(Metadata('contributor', artist.text.strip(), others={'role': 'ill'}))
 
-        artists = soup.select('.artist-content a')
-        for artist in artists:
-            metadata.append(Metadata('contributor', artist.text.strip(),
-                                     others={'role': 'ill', 'link': artist['href']}))
+        for genre in soup.select('.genres-content > a'):
+            novel.metadata.append(Metadata('subject', genre.text.strip()))
 
-        genres = soup.select('.genres-content > a')
-        for genre in genres:
-            metadata.append(Metadata('subject', genre.text.strip()))
-
-        novel_id = soup.select_one('.rating-post-id_')['value']
+        short_link = soup.select_one('link[rel="shortlink"]')['href']
+        novel_id = parse_qs(urlparse(short_link).query).get('p')[0]
         response = self.session.post(
             'https://novelsite.net/wp-admin/admin-ajax.php',
             data={
@@ -61,17 +64,17 @@ class NovelSite(Source):
 
         soup = BeautifulSoup(response.content, 'lxml')
 
-        chapters = []
+        volume = novel.get_default_volume()
         for a in reversed(soup.select('.wp-manga-chapter > a')):
             chapter = Chapter(
-                index=len(chapters),
+                index=len(volume.chapters),
                 title=a.text.strip(),
                 url=a['href'],
             )
 
-            chapters.append(chapter)
+            volume.chapters.append(chapter)
 
-        return novel, chapters, metadata
+        return novel
 
     def chapter(self, chapter: Chapter):
         soup = self.get_soup(chapter.url)
@@ -86,5 +89,5 @@ class NovelSite(Source):
 
         self.clean_contents(content)
 
-        chapter.title = soup.select_one('.breadcrumb >li.active').text.strip(),
+        chapter.title = soup.select_one('.breadcrumb > li.active').text.strip(),
         chapter.paragraphs = str(content)

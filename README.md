@@ -68,24 +68,6 @@ A collection of novel sources offering varying amounts of scraping capability.
         </tr>
         <tr>
             <td align="center">en</td>
-            <td>https://insanitycave.poetry.blog</td>
-            <td align="center"></td>
-            <td align="center"></td>
-        </tr>
-        <tr>
-            <td align="center">en</td>
-            <td>https://kieshitl.wordpress.com</td>
-            <td align="center"></td>
-            <td align="center"></td>
-        </tr>
-        <tr>
-            <td align="center">en</td>
-            <td>https://ktlchamber.wordpress.com</td>
-            <td align="center"></td>
-            <td align="center"></td>
-        </tr>
-        <tr>
-            <td align="center">en</td>
             <td>https://novelfull.com</td>
             <td align="center"></td>
             <td align="center"></td>

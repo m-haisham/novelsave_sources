@@ -1,47 +1,61 @@
+import datetime
 import re
-from typing import List, Tuple
+from time import time
+from urllib.parse import urlparse
 
 from .source import Source
 from ...models import Chapter, Novel, Metadata
+
+chapter_info_url = 'https://www.wattpad.com/v4/parts/{id}?fields=id,title,pages,text_url&_={key}'
+story_info_url = 'https://www.wattpad.com/api/v3/stories/{id}'
 
 
 class WattPad(Source):
     name = 'Wattpad'
     base_urls = ('https://www.wattpad.com', 'https://my.w.tt',)
+    last_updated = datetime.date(2021, 9, 6)
 
-    def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
-        soup = self.get_soup(url)
+    def __init__(self):
+        super(WattPad, self).__init__()
+        self.decimal = re.compile(r'\d+')
+
+    def novel(self, url: str) -> Novel:
+        info_url = story_info_url.format(id=self.decimal.search(url).group())
+        data = self.request_get(info_url).json()
 
         novel = Novel(
-            title=soup.select('h1')[0].text.strip(),
-            thumbnail_url=soup.select('div.cover.cover-lg img')[0]['src'],
-            author=soup.select('div.author-info strong a')[0].text,
-            synopsis=soup.select('h2.description')[0].text,
+            title=data['title'],
+            thumbnail_url=data['cover'],
+            author=data['user']['name'],
+            synopsis=[t.strip() for t in data['description'].split('\n') if t.strip()],
             url=url,
         )
 
-        chapters = []
-        for a in soup.select('ul.table-of-contents a'):
+        for tag in data['tags']:
+            novel.metadata.append(Metadata('tag', tag))
+
+        novel.metadata.append(Metadata('status', 'Completed' if data['completed'] else 'Ongoing'))
+        novel.metadata.append(Metadata('date', data['createDate']))
+
+        volume = novel.get_default_volume()
+        for part in data['parts']:
             chapter = Chapter(
-                index=len(chapters),
-                url=self.base_urls[0] + a["href"],
-                title=a.text.strip() or f'Chapter {len(chapters)}'
+                index=len(volume.chapters),
+                title=part['title'],
+                url=part['url'],
             )
 
-            chapters.append(chapter)
+            volume.chapters.append(chapter)
 
-        return novel, chapters, []
+        return novel
 
     def chapter(self, chapter: Chapter):
-        soup = self.get_soup(chapter.url)
+        chapter_id = urlparse(chapter.url).path.split('-', maxsplit=1)[0].strip('/')
+        info_url = chapter_info_url.format(id=chapter_id, key=int(time() * 1000))
+        data = self.request_get(info_url).json()
 
-        pages = int(re.search('[1-9]', re.search('("pages":)([1-9])', str(soup)).group(0)).group(0))
-        contents = []
-        for i in range(1, pages + 1):
-            page_url = f'{chapter}/page/{i}'
-            soup_page = self.get_soup(page_url)
-            for p in soup_page.select('pre p'):
-                contents.append(str(self.clean_contents(p)))
+        text = self.request_get(data['text_url']['text']).content.decode('utf-8')
+        text = re.sub(r'<p data-p-id="[a-f0-9]+">', '<p>', text)
 
-        chapter.title = soup.select_one('.h2, h2').text.strip()
-        chapter.paragraphs = ''.join(contents)
+        chapter.title = data['title']
+        chapter.paragraphs = text

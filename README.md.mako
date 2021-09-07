@@ -18,7 +18,7 @@ ${'###'} Novel
         </tr>
     </thead>
     <tbody>
-        % for source in sorted(sources, key=lambda s: s.base_urls):
+        % for source in sorted(sources, key=lambda s: s.base_urls[0]):
         <tr>
             <td align="center">${source.lang}</td>
             <td>${source.base_urls[0]}</td>
@@ -46,7 +46,7 @@ ${'###'} Metadata
         </tr>
     </thead>
     <tbody>
-        % for source in sorted(meta_sources, key=lambda s: s.base_urls):
+        % for source in sorted(meta_sources, key=lambda s: s.base_urls[0]):
         <tr>
             <td align="center">${source.lang}</td>
             <td>${source.base_urls[0]}</td>

@@ -1,4 +1,4 @@
-from typing import List, Tuple
+import datetime
 
 from .source import Source
 from ...models import Chapter, Novel, Metadata
@@ -7,6 +7,7 @@ from ...models import Chapter, Novel, Metadata
 class NovelFull(Source):
     name = 'NovelFull'
     base_urls = ('https://novelfull.com',)
+    last_updated = datetime.date(2021, 9, 7)
 
     bad_tags = [
         'noscript', 'script', 'iframe', 'form', 'hr', 'img', 'ins',
@@ -23,49 +24,63 @@ class NovelFull(Source):
         r'If you find any errors \( broken links.*let us know < report chapter >',
     ]
 
-    def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
+    def novel(self, url: str) -> Novel:
         soup = self.get_soup(url)
 
         image_element = soup.select_one('.info-holder .book img')
 
-        author = ''
-        for a in soup.select('.info-holder .info a'):
-            if a['href'].startswith('/author/'):
-                author = a.text.strip()
+        authors = [a.text.strip() for a in soup.select('.info a[href*="/author"]')]
+        if len(authors) == 2:
+            author = f'{authors[0]} ({authors[1]})'
+        else:
+            author = ', '.join(authors)
 
         novel = Novel(
             title=image_element['alt'],
-            thumbnail_url=self.base_urls[0] + image_element['src'],
             author=author,
+            thumbnail_url=self.base_urls[0] + image_element['src'],
+            synopsis=[p.text.strip() for p in soup.select('.desc-text > p')],
             url=url,
         )
+
+        for a in soup.select('.info a[href*="/genre"]'):
+            novel.metadata.append(Metadata('subject', a.text.strip()))
+
+        soup.select_one('.info').smooth()
+        for div in soup.select('.info > div'):
+            heading = div.select_one('h3').text.strip()
+            value = div.find(text=True, recursive=False)
+            if heading == 'Alternative names:':
+                titles = value.split(', ')
+                for title in titles:
+                    novel.metadata.append(Metadata('title', title, others={'role': 'alt'}))
+            elif heading == 'Source:':
+                novel.metadata.append(Metadata('publisher', value))
+            elif heading == 'Status:':
+                novel.metadata.append(Metadata('status', div.select_one('a').text.strip()))
 
         last_pagination = soup.select_one('#list-chapter .pagination .last a')
         page_count = int(
             last_pagination['data-page']) if last_pagination else 0
 
-        chapters = []
+        volume = novel.get_default_volume()
         for page in range(1, page_count + 2):
-            for chapter in self.parse_chapter_list(url, page):
-                chapter.index = len(chapters)
-                chapters.append(chapter)
+            self.parse_chapter_list(volume, url, page)
 
-        return novel, chapters, []
+        return novel
 
-    def parse_chapter_list(self, novel_url, page):
+    def parse_chapter_list(self, volume, novel_url, page):
         url = f'{novel_url.rstrip("/")}?page={page}&per-page=50'
         soup = self.get_soup(url)
 
-        chapters = []
         for a in soup.select('ul.list-chapter li a'):
             chapter = Chapter(
+                index=len(volume.chapters),
                 title=a['title'].strip(),
                 url=self.base_urls[0] + a['href'],
             )
 
-            chapters.append(chapter)
-
-        return chapters
+            volume.chapters.append(chapter)
 
     def chapter(self, chapter: Chapter):
         soup = self.get_soup(chapter.url)

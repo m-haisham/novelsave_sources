@@ -1,5 +1,5 @@
 from .betwixtedbutterfly import BetwixtedButterfly
-from .boxnovel import BoxNovel
+from .boxnovel_com import BoxNovel
 from .chickengege import ChickEngege
 from .chrysagarden import Chrysanthemumgarden
 from .creativenovels import CreativeNovels
@@ -19,8 +19,8 @@ from .novelsite import NovelSite
 from .novelsrock import NovelsRock
 from .peachpitting import PeachPitting
 from .rainofsnow import RainOfSnow
-from .readlightnovelme import ReadLightNovel
-from .readlightnovelsnet import ReadLightNovelsNet
+from .readlightnovel_me import ReadLightNovel
+from .readlightnovels_net import ReadLightNovelsNet
 from .royalroad import RoyalRoad
 from .scribblehub import ScribbleHub
 from .spacebattles import Spacebattles

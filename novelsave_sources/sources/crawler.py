@@ -22,9 +22,9 @@ class Crawler(ABC):
     def set_cookies(self, cookies: RequestsCookieJar):
         self.session.cookies = cookies
 
-    def get_soup(self, url: str, **kwargs) -> BeautifulSoup:
+    def get_soup(self, url: str, method: str = 'GET', **kwargs) -> BeautifulSoup:
         """Download website html and create a bs4 object"""
-        soup = BeautifulSoup(self.request_get(url, **kwargs).content, 'lxml')
+        soup = BeautifulSoup(self.request(method, url, **kwargs).content, 'lxml')
         if not soup.find('body'):
             raise ConnectionError('HTML document was not loaded correctly.')
 
@@ -128,8 +128,7 @@ class Crawler(ABC):
         if url.startswith('http://') or url.startswith('https:'):
             return url
         if url.startswith('//'):
-            scheme = urlparse(current_url or self.base_urls[0]).scheme
-            return f'{scheme}:{url}'
+            return f'{urlparse(current_url or self.base_urls[0]).scheme}:{url}'
         elif url.startswith('/'):
             return self.base_urls[0].lstrip('/') + url
 

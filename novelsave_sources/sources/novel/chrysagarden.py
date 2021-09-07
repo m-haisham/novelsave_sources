@@ -9,7 +9,7 @@ from ...models import Chapter, Novel, Metadata
 class Chrysanthemumgarden(Source):
     name = 'Chrysanthemum Garden'
     base_urls = ('https://chrysanthemumgarden.com/',)
-    last_updated = datetime.date(2021, 8, 24)
+    last_updated = datetime.date(2021, 9, 7)
 
     bad_tags = [
         'div', 'pirate', 'script',
@@ -22,32 +22,31 @@ class Chrysanthemumgarden(Source):
 
     def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
         soup = self.get_soup(url)
-        metadata = []
 
-        synopsis = ''
+        synopsis = []
         synopsis_elements = soup.select('.entry-content > p, hr')
         for element in synopsis_elements:
             if element.tag == 'hr':
                 break
 
-            synopsis += element.text.strip() + '\n'
+            synopsis.append(element.text.strip())
 
         novel = Novel(
             title=soup.select_one('.novel-title').find(text=True).strip(),
             author=soup.select_one('.author-name > a').text.strip(),
-            synopsis=synopsis.strip(),
+            synopsis=synopsis,
             thumbnail_url=soup.select_one('.novel-cover img')['src'],
             url=url,
         )
 
         raw_title = soup.select_one('.novel-raw-title')
         if raw_title:
-            metadata.append(Metadata('title', raw_title.text.strip(), others={'role': 'alternative'}))
+            novel.metadata.append(Metadata('title', raw_title.text.strip(), others={'role': 'alt'}))
 
         for a in soup.select('.series-tag'):
-            metadata.append(Metadata('subject', a.text.strip()))
+            novel.metadata.append(Metadata('subject', a.text.strip()))
 
-        chapters = []
+        volume = novel.get_default_volume()
         for i, a in enumerate(soup.select('.chapter-item > a')):
             chapter = Chapter(
                 index=i,
@@ -55,9 +54,9 @@ class Chrysanthemumgarden(Source):
                 url=a['href'],
             )
 
-            chapters.append(chapter)
+            volume.chapters.append(chapter)
 
-        return novel, chapters, metadata
+        return novel
 
     def chapter(self, chapter: Chapter):
         soup = self.get_soup(chapter.url)

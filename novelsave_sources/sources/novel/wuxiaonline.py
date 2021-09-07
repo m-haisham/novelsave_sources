@@ -1,37 +1,49 @@
-from typing import Tuple, List
+import datetime
 
 from .source import Source
-from ...models import Novel, Chapter, Metadata
+from ...models import Novel, Chapter
 
 
 class WuxiaOnline(Source):
     name = 'WuxiaWorld.online'
     base_urls = ('https://wuxiaworld.online',)
+    last_updated = datetime.date(2021, 9, 7)
 
-    def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
+    def novel(self, url: str) -> Novel:
         soup = self.get_soup(url)
 
-        synopsis_elements = soup.select_one('#noidungm').find_all(text=True, recursive=False)
+        synopsis = []
+        for element in soup.select('#noidungm > *'):
+            if element.name == 'hr':
+                break
+            elif element.name == 'p':
+                if 'style' in element.attrs:
+                    continue
+
+                synopsis.append(element.text.strip())
 
         novel = Novel(
             title=soup.select_one('h1.entry-title').text.strip(),
-            author=soup.select_one('a[href*="author"]').text.strip(),
             thumbnail_url=self.base_urls[0] + soup.select_one('.info_image img')['src'],
-            synopsis='\n'.join([str(element) for element in synopsis_elements]),
+            synopsis=synopsis,
             url=url,
         )
 
-        chapters = []
+        author_element = soup.select_one('a[href*="author"]')
+        if author_element:
+            novel.author = author_element.text.strip()
+
+        volume = novel.get_default_volume()
         for a in reversed(soup.select('.chapter-list > .row a')):
             chapter = Chapter(
-                index=len(chapters),
+                index=len(volume.chapters),
                 title=a.text.strip(),
                 url=a['href']
             )
 
-            chapters.append(chapter)
+            volume.chapters.append(chapter)
 
-        return novel, chapters, []
+        return novel
 
     def chapter(self, chapter: Chapter):
         soup = self.get_soup(chapter.url)

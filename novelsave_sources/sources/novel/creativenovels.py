@@ -1,6 +1,6 @@
 import datetime
 import re
-from typing import Tuple, List
+from typing import List
 from urllib.parse import urlparse, parse_qs
 
 from .source import Source
@@ -10,22 +10,21 @@ from ...models import Novel, Chapter, Metadata
 class CreativeNovels(Source):
     name = 'Creative Novels'
     base_urls = ('https://creativenovels.com',)
-    last_updated = datetime.date(2021, 8, 20)
+    last_updated = datetime.date(2021, 9, 7)
 
-    def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
+    def novel(self, url: str) -> Novel:
         soup = self.get_soup(url)
-        metadata = []
 
         novel = Novel(
             title=soup.select_one('.x-bar-container > [class*="12"]').text.strip(),
             author=soup.select_one('.x-bar-container > [class*="14"]').text.strip().strip('Author: '),
-            thumbnail_url=soup.select_one('.x-content-area > img')['src'],
-            synopsis='\n'.join([p.text.strip() for p in soup.select('.novel_page_synopsis > p')]),
+            thumbnail_url=soup.select_one('img.book_cover')['src'],
+            synopsis=[p.text.strip() for p in soup.select('.novel_page_synopsis > p')],
             url=url,
         )
 
         for a in soup.select('.suggest_tag > a'):
-            metadata.append(Metadata('subject', a.text.strip()))
+            novel.metadata.append(Metadata('subject', a.text.strip()))
 
         novel_id = parse_qs(urlparse(soup.select_one('link[rel="shortlink"]')['href']).query)['p'][0]
         security_key = ''
@@ -48,9 +47,10 @@ class CreativeNovels(Source):
             )
         )
 
-        chapters = self.parse_chapter_list(response.content.decode('utf-8'))
+        volume = novel.get_default_volume()
+        volume.chapters = self.parse_chapter_list(response.content.decode('utf-8'))
 
-        return novel, chapters, metadata
+        return novel
 
     def parse_chapter_list(self, content: str) -> List[Chapter]:
         chapters = []

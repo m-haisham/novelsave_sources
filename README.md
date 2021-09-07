@@ -160,7 +160,7 @@ A collection of novel sources offering varying amounts of scraping capability.
             <td align="center">en</td>
             <td>https://www.mtlnovel.com</td>
             <td align="center"></td>
-            <td align="center">2021-08-30</td>
+            <td align="center">2021-09-07</td>
         </tr>
         <tr>
             <td align="center">en</td>

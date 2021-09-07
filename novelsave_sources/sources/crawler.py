@@ -15,6 +15,7 @@ class Crawler(ABC):
     lang: str
     base_urls: List[str]
     last_updated: datetime.date
+    rejected: str
 
     def __init__(self):
         self.session = cloudscraper.create_scraper()

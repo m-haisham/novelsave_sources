@@ -140,12 +140,6 @@ A collection of novel sources offering varying amounts of scraping capability.
         </tr>
         <tr>
             <td align="center">en</td>
-            <td>https://www.fanfiction.net</td>
-            <td align="center"></td>
-            <td align="center"></td>
-        </tr>
-        <tr>
-            <td align="center">en</td>
             <td>https://www.foxaholic.com</td>
             <td align="center"></td>
             <td align="center">2021-09-03</td>
@@ -221,9 +215,22 @@ A collection of novel sources offering varying amounts of scraping capability.
 
 #### Rejected
 
-| Sources                                   | Reason                    |
-| ----------------------------------------- | ------------------------- |
-| https://www.fanfiction.net                | Cloudflare bot protection |
+<table>
+    <thead>
+        <tr>
+            <th align="center">Lang</th>
+            <th>Source</th>
+            <th>Reason</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td align="center">en</td>
+            <td>https://www.fanfiction.net</td>
+            <td>Has cloudflare bot protection</td>
+        </tr>
+    </tbody>
+</table>
 
 ### Metadata
 

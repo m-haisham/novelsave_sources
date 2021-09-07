@@ -7,6 +7,7 @@ from ...models import Chapter, Novel, Metadata
 
 class FanFiction(Source):
     base_urls = ('https://www.fanfiction.net',)
+    rejected = 'Has cloudflare bot protection'
 
     def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
         soup = self.get_soup(url)

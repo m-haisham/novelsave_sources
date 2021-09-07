@@ -47,8 +47,8 @@ def render(mako_file: Path, **kwargs):
     text = Template(filename=str(mako_file)).render(**kwargs)
 
     rendered_file = mako_file.parent / mako_file.stem
-    with rendered_file.open('w') as f:
-        f.write(text.replace('\r', ''))
+    with rendered_file.open('wb') as f:
+        f.write(text.replace('\r', '').encode('utf-8'))
 
     print(f'{mako_file.relative_to(BASE_DIR)} -> {rendered_file.relative_to(BASE_DIR)}')
 

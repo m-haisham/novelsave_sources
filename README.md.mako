@@ -18,7 +18,7 @@ ${'###'} Novel
         </tr>
     </thead>
     <tbody>
-        % for source in sorted(sources, key=lambda s: s.base_urls[0]):
+        % for source in sorted(filter(lambda s: not getattr(s, 'rejected', ''), sources), key=lambda s: s.base_urls[0]):
         <tr>
             <td align="center">${source.lang}</td>
             <td>${source.base_urls[0]}</td>
@@ -31,9 +31,24 @@ ${'###'} Novel
 
 ${'####'} Rejected
 
-| Sources                                   | Reason                    |
-| ----------------------------------------- | ------------------------- |
-| https://www.fanfiction.net                | Cloudflare bot protection |
+<table>
+    <thead>
+        <tr>
+            <th align="center">Lang</th>
+            <th>Source</th>
+            <th>Reason</th>
+        </tr>
+    </thead>
+    <tbody>
+        % for source in sorted(filter(lambda s: getattr(s, 'rejected', None), sources), key=lambda s: s.base_urls[0]):
+        <tr>
+            <td align="center">${source.lang}</td>
+            <td>${source.base_urls[0]}</td>
+            <td>${source.rejected}</td>
+        </tr>
+        % endfor
+    </tbody>
+</table>
 
 ${'###'} Metadata
 

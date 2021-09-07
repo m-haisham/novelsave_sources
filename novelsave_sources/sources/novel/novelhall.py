@@ -1,5 +1,5 @@
+import datetime
 import re
-from typing import List, Tuple
 
 from .source import Source
 from ...models import Chapter, Novel, Metadata
@@ -7,18 +7,18 @@ from ...models import Chapter, Novel, Metadata
 
 class NovelHall(Source):
     base_urls = ('https://www.novelhall.com',)
+    last_updated = datetime.date(2021, 9, 7)
 
-    def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
+    def novel(self, url: str) -> Novel:
         soup = self.get_soup(url)
-        metadata = []
 
         synopsis_element = soup.select_one('.js-close-wrap')
         synopsis_element.select_one('span').extract()
 
         novel = Novel(
             title=soup.select_one('.book-info h1').text.strip(),
-            thumbnail_url=soup.select_one('.img-thumbnail_url')['src'],
-            synopsis=synopsis_element.text.strip(),
+            thumbnail_url=soup.select_one('.book-img img')['src'],
+            synopsis=[t.strip() for t in synopsis_element.text.splitlines() if t.strip()],
             url=url,
         )
 
@@ -30,9 +30,9 @@ class NovelHall(Source):
                     break
 
         for a in soup.select('.booktag a[href*="genre"]'):
-            metadata.append(Metadata('subject', a.text.strip()))
+            novel.metadata.append(Metadata('subject', a.text.strip()))
 
-        chapters = []
+        volume = novel.get_default_volume()
         for i, a in enumerate(soup.select('#morelist > ul li a')):
             chapter = Chapter(
                 index=i,
@@ -40,9 +40,9 @@ class NovelHall(Source):
                 url=self.base_urls[0] + a['href'],
             )
 
-            chapters.append(chapter)
+            volume.chapters.append(chapter)
 
-        return novel, chapters, metadata
+        return novel
 
     def chapter(self, chapter: Chapter):
         soup = self.get_soup(chapter.url)
@@ -50,7 +50,8 @@ class NovelHall(Source):
         content = soup.select_one('.entry-content')
         self.clean_contents(content)
 
-        content = '<p>' + re.sub(r'<br ?/?>', '</p><p>', str(content).strip('<div></div>').strip()) + '</p>'
+        content.unwrap()
+        content = '<p>' + re.sub(r'<br ?/?>', '</p><p>', str(content).strip()) + '</p>'
 
         chapter.title = soup.select_one('.single-header h1').text.strip()
         chapter.paragraphs = content

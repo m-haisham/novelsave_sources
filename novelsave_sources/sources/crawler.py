@@ -2,6 +2,7 @@ import datetime
 import re
 from abc import ABC
 from typing import List
+from urllib.parse import urlparse
 
 import cloudscraper
 from bs4 import BeautifulSoup, Comment
@@ -110,3 +111,26 @@ class Crawler(ABC):
         # Remove attributes
         elif hasattr(element, 'attrs'):
             element.attrs = {key: element.get(key) for key in self.preserve_attrs if key in element.attrs}
+
+    @staticmethod
+    def find_paragraphs(element, **kwargs) -> List[str]:
+        paragraphs = []
+        for t in element.find_all(text=True, **kwargs):
+            text = str(t).strip()
+            if not text:
+                continue
+
+            paragraphs.append(text)
+
+        return paragraphs
+
+    def to_absolute_url(self, url: str, current_url: str = None) -> str:
+        if url.startswith('http://') or url.startswith('https:'):
+            return url
+        if url.startswith('//'):
+            scheme = urlparse(current_url or self.base_urls[0]).scheme
+            return f'{scheme}:{url}'
+        elif url.startswith('/'):
+            return self.base_urls[0].lstrip('/') + url
+
+        return current_url.rstrip('/') + url

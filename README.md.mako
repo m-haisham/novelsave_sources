@@ -1,4 +1,4 @@
-${'#'} 📚 NovelSave Sources
+${'#'} 📚 Novelsave Sources
 
 A collection of novel sources offering varying amounts of scraping capability.
 

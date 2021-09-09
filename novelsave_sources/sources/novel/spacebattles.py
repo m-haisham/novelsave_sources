@@ -1,29 +1,32 @@
-from typing import List, Tuple
+import datetime
+import re
 from urllib.parse import urlparse
 
 from .source import Source
-from ...exceptions import BadResponseException
-from ...models import Chapter, Novel, Metadata
+from ... import BadResponseException
+from ...models import Chapter, Novel
 
 
 class Spacebattles(Source):
     name = 'SpaceBattles'
     base_urls = ('https://forums.spacebattles.com',)
+    last_updated = datetime.date(2021, 9, 9)
 
-    def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
-        threadmarks_url = f'{url.rstrip("/")}/threadmarks'
+    def __init__(self):
+        super(Spacebattles, self).__init__()
+        self.clear_tags = re.compile(r'(</?div>|<br ?/?>)')
+
+    def novel(self, url: str) -> Novel:
+        threadmarks_url = url.rstrip('/') + '/threadmarks/'
         soup = self.get_soup(threadmarks_url)
 
         author_element = soup.select_one('.username')
 
-        # getting a thumbnail_url
-        stripped_baseurl = self.base_urls[0].rstrip("/")
-
         # getting writer profile image
         try:
-            author_soup = self.get_soup(f'{stripped_baseurl}{author_element["href"]}')
+            author_soup = self.get_soup(self.to_absolute_url(author_element['href']))
             avatar = author_soup.select_one('.avatarWrapper > .avatar')
-            thumbnail = f'{stripped_baseurl}{avatar["href"]}'
+            thumbnail = self.to_absolute_url(avatar['href'])
         except BadResponseException:
             thumbnail = None
 
@@ -34,17 +37,17 @@ class Spacebattles(Source):
             url=url,
         )
 
-        chapters = []
+        volume = novel.get_default_volume()
         for i, a in enumerate(soup.select('.block-body--threadmarkBody.is-active > div > div > div:first-child a')):
             chapter = Chapter(
                 index=i,
                 title=a.text,
-                url=f'{stripped_baseurl}{a["href"]}'
+                url=self.to_absolute_url(a['href'])
             )
 
-            chapters.append(chapter)
+            volume.chapters.append(chapter)
 
-        return novel, chapters, []
+        return novel
 
     def chapter(self, chapter: Chapter):
         parsed_url = urlparse(chapter.url)
@@ -55,9 +58,10 @@ class Spacebattles(Source):
         article = soup.select_one(f'.u-anchorTarget#{parsed_url.fragment}').parent
         content = article.select_one('.message-inner .message-userContent .bbWrapper')
 
-        content.attrs = {}
-        paragraphs = str(content)[5:-6].split('<br/>\n<br/>')
-        paragraphs = [p.strip() for p in paragraphs]
+        content.smooth()
+        content.attrs.clear()
+
+        paragraphs = [t for t in self.clear_tags.sub('', str(content)).splitlines() if t]
 
         chapter.title = article.select_one('.message-cell--threadmark-header > span').text.strip()
         chapter.paragraphs = '<p>' + '</p><p>'.join(paragraphs) + '</p>'

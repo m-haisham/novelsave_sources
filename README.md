@@ -66,7 +66,7 @@ A collection of novel sources offering varying amounts of scraping capability.
             <td align="center">en</td>
             <td>https://forums.sufficientvelocity.com</td>
             <td align="center"></td>
-            <td align="center"></td>
+            <td align="center">2021-09-09</td>
         </tr>
         <tr>
             <td align="center">en</td>

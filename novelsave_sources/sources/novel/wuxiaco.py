@@ -1,27 +1,38 @@
+import datetime
 import re
-from typing import Tuple, List
+from typing import List
 
 from .source import Source
-from ...models import Novel, Chapter, Metadata
+from ...models import Novel, Volume, Chapter, Metadata
 
 
 class WuxiaCo(Source):
     name = 'WuxiaWorld.co'
     base_urls = ('https://www.wuxiaworld.co',)
+    last_updated = datetime.date(2021, 9, 4)
 
-    def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
+    @classmethod
+    def of(cls, url: str) -> bool:
+        return url.startswith(cls.base_urls[0] + '/')
+
+    def novel(self, url: str) -> Novel:
         soup = self.get_soup(url)
 
         novel = Novel(
-            title=soup.find('div', {'class': 'book-name'}).text,
-            author=soup.find('div', {'class': 'author'}).find('span', {'class': 'name'}).text,
-            synopsis=soup.find('div', {'class': 'synopsis'}).find('p').text,
-            thumbnail_url=soup.find('div', {'class': 'book-img'}).find('img')['src'],
+            title=soup.select_one('.book-name').text.strip(),
+            author=soup.select_one('.author span.name').text.strip(),
+            synopsis=[p.text.strip() for p in soup.select('div.synopsis p')],
+            thumbnail_url=soup.select_one('.book-img img')['src'],
             url=url
         )
 
-        chapters = []
-        for i, item in enumerate(soup.find_all('a', {'class': 'chapter-item'})):
+        catalog = soup.select_one('.book-catalog .txt')
+        if catalog:
+            novel.metadata.append(Metadata('subject', catalog.text.strip()))
+
+        volume = Volume.default()
+        novel.volumes.append(volume)
+        for i, item in enumerate(soup.select('a.chapter-item')):
             # wuxiaco uses inline styling(color) to show that chapter isn't ready yet
             # no need to download chapters without actual content
             if 'style' in item.attrs.keys():
@@ -35,9 +46,9 @@ class WuxiaCo(Source):
                 url=self.base_urls[0] + item['href'],
             )
 
-            chapters.append(chapter)
+            volume.chapters.append(chapter)
 
-        return novel, chapters, []
+        return novel
 
     def chapter(self, chapter: Chapter):
         soup = self.get_soup(chapter.url)

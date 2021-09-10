@@ -1,6 +1,8 @@
 import datetime
 import re
+from abc import ABC
 from typing import List
+from urllib.parse import urlparse
 
 import cloudscraper
 from bs4 import BeautifulSoup, Comment
@@ -9,10 +11,11 @@ from requests.cookies import RequestsCookieJar
 from ..exceptions import BadResponseException
 
 
-class Crawler:
+class Crawler(ABC):
     lang: str
     base_urls: List[str]
     last_updated: datetime.date
+    rejected: str
 
     def __init__(self):
         self.session = cloudscraper.create_scraper()
@@ -20,11 +23,11 @@ class Crawler:
     def set_cookies(self, cookies: RequestsCookieJar):
         self.session.cookies = cookies
 
-    def get_soup(self, url: str) -> BeautifulSoup:
+    def get_soup(self, url: str, method: str = 'GET', **kwargs) -> BeautifulSoup:
         """Download website html and create a bs4 object"""
-        soup = BeautifulSoup(self.request_get(url).content, 'lxml')
+        soup = BeautifulSoup(self.request(method, url, **kwargs).content, 'lxml')
         if not soup.find('body'):
-            raise ConnectionError('HTML document was not loaded correctly')
+            raise ConnectionError('HTML document was not loaded correctly.')
 
         return soup
 
@@ -109,3 +112,25 @@ class Crawler:
         # Remove attributes
         elif hasattr(element, 'attrs'):
             element.attrs = {key: element.get(key) for key in self.preserve_attrs if key in element.attrs}
+
+    @staticmethod
+    def find_paragraphs(element, **kwargs) -> List[str]:
+        paragraphs = []
+        for t in element.find_all(text=True, **kwargs):
+            text = str(t).strip()
+            if not text:
+                continue
+
+            paragraphs.append(text)
+
+        return paragraphs
+
+    def to_absolute_url(self, url: str, current_url: str = None) -> str:
+        if url.startswith('http://') or url.startswith('https:'):
+            return url
+        if url.startswith('//'):
+            return f'{urlparse(current_url or self.base_urls[0]).scheme}:{url}'
+        elif url.startswith('/'):
+            return self.base_urls[0].lstrip('/') + url
+
+        return current_url.rstrip('/') + url

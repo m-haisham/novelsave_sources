@@ -1,3 +1,4 @@
+import datetime
 from typing import List
 
 from .metasource import MetaSource
@@ -6,6 +7,7 @@ from ...models import Metadata
 
 class NovelUpdates(MetaSource):
     base_urls = ('https://www.novelupdates.com',)
+    last_updated = datetime.date(2021, 9, 3)
 
     def retrieve(self, url) -> List[Metadata]:
         metadata = []
@@ -20,10 +22,14 @@ class NovelUpdates(MetaSource):
 
         # genre
         for a in soup.select('#seriesgenre > a'):
-            metadata.append(Metadata('subject', a.text))
+            metadata.append(Metadata('subject', a.text.strip()))
+
+        # tag
+        for a in soup.select('#showtags > a'):
+            metadata.append(Metadata('tag', a.text.strip()))
 
         # og language
-        metadata.append(Metadata('lang', soup.select_one('#showlang > a').text, {'id_': 'original language'}))
+        metadata.append(Metadata('lang', soup.select_one('#showlang > a').text, {'id': 'original'}))
 
         # illustrators
         for a in soup.select('#showartists > a'):

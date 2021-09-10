@@ -1,5 +1,4 @@
 import datetime
-from typing import Tuple, List
 
 from .source import Source
 from ...models import Novel, Chapter, Metadata
@@ -8,34 +7,33 @@ from ...models import Novel, Chapter, Metadata
 class RoyalRoad(Source):
     name = 'Royal Road'
     base_urls = ('https://www.royalroad.com',)
-    last_updated = datetime.date(2021, 8, 17)
+    last_updated = datetime.date(2021, 9, 6)
 
-    def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
+    def novel(self, url: str) -> Novel:
         soup = self.get_soup(url)
 
         novel = Novel(
             title=soup.select_one('h1[property="name"]').text.strip(),
             author=soup.select_one('span[property="name"]').text.strip(),
             thumbnail_url=soup.select_one('.page-content-inner .thumbnail')['src'],
-            synopsis=soup.select_one('.description > [property="description"]').text.strip(),
+            synopsis=[p.text.strip() for p in soup.select('.description > [property="description"] > p')],
             url=url,
         )
 
-        metadata = []
         for a in soup.select('a.label[href*="tag"]'):
-            metadata.append(Metadata('subject', a.text.strip()))
+            novel.metadata.append(Metadata('subject', a.text.strip()))
 
-        chapters = []
+        volume = novel.get_default_volume()
         for a in soup.find('tbody').findAll('a', href=True):
             chapter = Chapter(
-                index=len(chapters),
+                index=len(volume.chapters),
                 title=a.text.strip(),
                 url=self.base_urls[0] + a["href"],
             )
 
-            chapters.append(chapter)
+            volume.chapters.append(chapter)
 
-        return novel, chapters, metadata
+        return novel
 
     def chapter(self, chapter: Chapter):
         soup = self.get_soup(chapter.url)

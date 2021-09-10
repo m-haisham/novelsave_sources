@@ -1,15 +1,17 @@
+import datetime
 from typing import List, Tuple
 
 from bs4 import BeautifulSoup
 
 from .source import Source
-from ...models import Chapter, Novel, Metadata
+from ...models import Chapter, Volume, Novel, Metadata
 from ...exceptions import ChapterException
 
 
 class BetwixtedButterfly(Source):
     name = 'Betwixted Butterfly'
     base_urls = ('https://betwixtedbutterfly.com',)
+    last_updated = datetime.date(2021, 9, 3)
 
     bad_tags = [
         'noscript', 'script', 'iframe', 'form', 'img', 'ins',
@@ -19,7 +21,6 @@ class BetwixtedButterfly(Source):
 
     def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
         soup = self.get_soup(url)
-        metadata = []
 
         details_parent, synopsis_parent, *_ = soup.select('.elementor-text-editor')
 
@@ -29,31 +30,30 @@ class BetwixtedButterfly(Source):
                 author = p.text.strip('Author: ')
                 break
 
-        synopsis = '\n'.join([p.text.strip() for p in synopsis_parent.select('p')])
-
         novel = Novel(
             title=soup.select_one('h2.elementor-heading-title').text.strip(),
-            thumbnail_url=soup.select_one('.elementor-image img')['src'],
             author=author,
-            synopsis=synopsis,
+            synopsis=[p.text.strip() for p in synopsis_parent.select('p')],
+            thumbnail_url=soup.select_one('.elementor-image img')['src'],
             url=url,
         )
 
         # tags
         for a in soup.select('a.elementor-button'):
-            metadata.append(Metadata('subject', a.text.strip()))
+            novel.metadata.append(Metadata('subject', a.text.strip()))
 
-        chapters = []
+        volume = Volume.default()
+        novel.volumes.append(volume)
         for a in soup.select('.elementor-tab-content > p a'):
             chapter = Chapter(
-                index=len(chapters),
+                index=len(volume.chapters),
                 title=a.text.strip(),
                 url=a['href']
             )
 
-            chapters.append(chapter)
+            volume.chapters.append(chapter)
 
-        return novel, chapters, metadata
+        return novel
 
     def chapter(self, chapter: Chapter):
         soup = self.get_soup(chapter.url)

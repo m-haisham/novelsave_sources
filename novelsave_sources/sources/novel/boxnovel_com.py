@@ -1,4 +1,4 @@
-from typing import Tuple, List
+import datetime
 
 from .source import Source
 from ...models import Chapter, Novel, Metadata
@@ -6,39 +6,40 @@ from ...models import Chapter, Novel, Metadata
 
 class BoxNovel(Source):
     base_urls = ('https://boxnovel.com',)
+    last_updated = datetime.date(2021, 9, 7)
 
-    def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
+    def novel(self, url: str) -> Novel:
         soup = self.get_soup(url)
-        metadata = []
 
         authors = soup.select('.author-content a')
         if len(authors) == 2:
-            author = authors[0].text + ' (' + authors[1].text + ')'
+            author = authors[0].text.strip() + ' (' + authors[1].text.strip() + ')'
         else:
-            author = authors[0].text
+            author = authors[0].text.strip()
 
         novel = Novel(
-            title=''.join(soup.select_one('.post-title h3').find_all(text=True, recursive=False)).strip(),
-            author=author.strip(),
-            synopsis=soup.select_one('.j_synopsis, #editdescription').text.strip(),
+            title=soup.select_one('.breadcrumb > li:last-child').text.strip(),
+            author=author,
+            synopsis=[t.strip() for t in soup.select_one('.j_synopsis, #editdescription').text.splitlines() if t.strip()],
             thumbnail_url=soup.select_one('.summary_image img')['src'],
             url=url,
         )
 
         for a in soup.select('a[href*="genre"][rel="tag"]'):
-            metadata.append(Metadata('subject', a.text.strip()))
+            novel.metadata.append(Metadata('subject', a.text.strip()))
 
-        chapters = []
-        for i, a in enumerate(reversed(soup.select('ul.main li.wp-manga-chapter a'))):
+        soup = self.get_soup(url.rstrip('/') + '/ajax/chapters', 'POST')
+        volume = novel.get_default_volume()
+        for i, a in enumerate(reversed(soup.select('li.wp-manga-chapter a'))):
             chapter = Chapter(
                 index=i,
                 title=a.text.strip(),
                 url=a['href']
             )
 
-            chapters.append(chapter)
+            volume.chapters.append(chapter)
 
-        return novel, chapters, metadata
+        return novel
 
     def chapter(self, chapter: Chapter):
         soup = self.get_soup(chapter.url)

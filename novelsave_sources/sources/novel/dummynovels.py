@@ -1,3 +1,4 @@
+import datetime
 from typing import Tuple, List
 
 from .source import Source
@@ -7,18 +8,15 @@ from ...models import Novel, Chapter, Metadata
 class DummyNovels(Source):
     name = 'Dummy novels'
     base_urls = ('https://dummynovels.com',)
+    last_updated = datetime.date(2021, 9, 7)
 
     def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
         soup = self.get_soup(url)
-        metadata = []
-
-        synopsis_content = soup.select('.novel-synopsis-content > p')
-        synopsis = '\n'.join([element.text.strip() for element in synopsis_content])
 
         novel = Novel(
             title=soup.select_one('h1.elementor-heading-title').text.strip(),
             thumbnail_url=soup.select_one('.elementor-image img')['src'],
-            synopsis=synopsis,
+            synopsis=[e.text.strip() for e in soup.select('.novel-synopsis-content > p') if e.text.strip()],
             url=url,
         )
 
@@ -27,14 +25,14 @@ class DummyNovels(Source):
             if text.startswith('Author: '):
                 novel.author = text.lstrip('Author: ')
             elif text.startswith('Translator: '):
-                metadata.append(Metadata('contributor', text.strip('Translator: '), others={'role': 'translator'}))
+                novel.metadata.append(Metadata('contributor', text.strip('Translator: '), others={'role': 'translator'}))
             elif text.startswith('Editors: '):
-                metadata.append(Metadata('contributor', text.strip('Editors: '), others={'role': 'editor'}))
+                novel.metadata.append(Metadata('contributor', text.strip('Editors: '), others={'role': 'editor'}))
 
         for element in soup.select('.novel-term > a'):
-            metadata.append(Metadata('subject', element.text.strip()))
+            novel.metadata.append(Metadata('subject', element.text.strip()))
 
-        chapters = []
+        volume = novel.get_default_volume()
         for element in soup.select('.elementor-tab-content a[href*="novel"]:not(.elementor-accordion-title)'):
 
             # this removes the text '(NEW)'
@@ -43,14 +41,14 @@ class DummyNovels(Source):
                 highlight.extract()
 
             chapter = Chapter(
-                index=len(chapters),
+                index=len(volume.chapters),
                 title=element.text.strip(),
                 url=element['href'],
             )
 
-            chapters.append(chapter)
+            volume.chapters.append(chapter)
 
-        return novel, chapters, metadata
+        return novel
 
     def chapter(self, chapter: Chapter):
         soup = self.get_soup(chapter.url)

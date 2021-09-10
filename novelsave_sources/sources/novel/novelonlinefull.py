@@ -1,4 +1,4 @@
-from typing import Tuple, List
+import datetime
 
 from .source import Source
 from ...models import Novel, Chapter, Metadata
@@ -6,31 +6,29 @@ from ...models import Novel, Chapter, Metadata
 
 class NovelOnlineFull(Source):
     base_urls = ('https://novelonlinefull.com',)
+    last_updated = datetime.date(2021, 9, 7)
 
     blacklist_patterns = [
         r'^[\W\D]*(volume|chapter)[\W\D]+\d+[\W\D]*$',
         r'^(\s| )+$',  # non-breaking whitespace
     ]
 
-    def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
+    def novel(self, url: str) -> Novel:
         soup = self.get_soup(url)
-        metadata = []
 
         synopsis_parent = soup.select_one('#noidungm')
-        synopsis_parent.select_one('h2').extract()
-        synopsis_elements = synopsis_parent.find_all(text=True, recursive=False)
-        synopsis = '\n'.join([str(element).strip() for element in synopsis_elements]).strip()
+        [e.extract() for e in synopsis_parent.select('h2, [style*="color"]')]
 
         novel = Novel(
             title=soup.select_one('.truyen_info_wrapper h1').text,
             thumbnail_url=soup.select_one('.info_image img')['src'],
-            synopsis=synopsis,
+            synopsis=self.find_paragraphs(synopsis_parent),
             url=url,
         )
 
         alternative = soup.select_one('.truyen_info_wrapper .truyen_info_right > li:first-child > span')
         if alternative:
-            metadata.append(Metadata('author', alternative.text.strip('Alternative :').strip(), others={'role': 'alternative'}))
+            novel.metadata.append(Metadata('author', alternative.text.strip('Alternative :').strip(), others={'role': 'alternative'}))
 
         for li in soup.select('.truyen_info_wrapper .truyen_info_right > li'):
             span = li.select_one('span')
@@ -42,9 +40,9 @@ class NovelOnlineFull(Source):
                 novel.author = ', '.join([a.text.strip() for a in li.select('a')])
             elif label == 'GENRES:':
                 for a in li.select('a'):
-                    metadata.append(Metadata('subject', a.text.strip()))
+                    novel.metadata.append(Metadata('subject', a.text.strip()))
 
-        chapters = []
+        volume = novel.get_default_volume()
         for i, a in enumerate(reversed(soup.select('.chapter-list > .row a'))):
             chapter = Chapter(
                 index=i,
@@ -52,9 +50,9 @@ class NovelOnlineFull(Source):
                 url=a['href'],
             )
 
-            chapters.append(chapter)
+            volume.chapters.append(chapter)
 
-        return novel, chapters, metadata
+        return novel
 
     def chapter(self, chapter: Chapter):
         soup = self.get_soup(chapter.url)

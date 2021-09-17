@@ -10,7 +10,7 @@ from ...models import Novel, Chapter, Metadata
 class CreativeNovels(Source):
     name = 'Creative Novels'
     base_urls = ('https://creativenovels.com',)
-    last_updated = datetime.date(2021, 9, 7)
+    last_updated = datetime.date(2021, 9, 17)
 
     def novel(self, url: str) -> Novel:
         soup = self.get_soup(url)
@@ -23,8 +23,11 @@ class CreativeNovels(Source):
             url=url,
         )
 
-        for a in soup.select('.suggest_tag > a'):
+        for a in soup.select('.genre_novel > a'):
             novel.metadata.append(Metadata('subject', a.text.strip()))
+
+        for a in soup.select('.suggest_tag > a'):
+            novel.metadata.append(Metadata('tag', a.text.strip()))
 
         novel_id = parse_qs(urlparse(soup.select_one('link[rel="shortlink"]')['href']).query)['p'][0]
         security_key = ''

@@ -21,7 +21,7 @@ class DragonTea(Source):
         novel = Novel(
             title=soup.select_one('.post-title').text.strip(),
             author=soup.select_one('.author-content').text.strip(),
-            thumbnail_url=soup.select_one('.summary_image img')['src'],
+            thumbnail_url=self.to_absolute_url(soup.select_one('.summary_image img')['src'], url),
             synopsis=[p.text.strip() for p in soup.select('.summary__content > p')],
             url=url,
         )
@@ -51,7 +51,7 @@ class DragonTea(Source):
             chapter = Chapter(
                 index=len(volume.chapters),
                 title=a.text.strip(),
-                url=a['href'],
+                url=self.to_absolute_url(a['href']),
             )
 
             volume.chapters.append(chapter)

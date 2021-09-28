@@ -126,11 +126,11 @@ class Crawler(ABC):
         return paragraphs
 
     def to_absolute_url(self, url: str, current_url: str = None) -> str:
-        if url.startswith('http://') or url.startswith('https:'):
+        if url.startswith('http://') or url.startswith('https://'):
             return url
         if url.startswith('//'):
             return f'{urlparse(current_url or self.base_urls[0]).scheme}:{url}'
         elif url.startswith('/'):
-            return self.base_urls[0].lstrip('/') + url
+            return self.base_urls[0].rstrip('/') + url
 
         return current_url.rstrip('/') + url

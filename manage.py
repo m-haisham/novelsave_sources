@@ -1,3 +1,4 @@
+import re
 from pathlib import Path
 
 import click
@@ -17,12 +18,27 @@ METADATA_MODULE = 'novelsave_sources.sources.metadata.'
 METADATA_INIT_MAKO = BASE_DIR / 'novelsave_sources/sources/metadata/__init__.py.mako'
 
 
-def mako_dest_file(mako_file: Path) -> Path:
-    return mako_file.parent / mako_file.stem
+def unindent(text: str) -> str:
+    start_pattern = re.compile(r'^ *% *(for|if)')
+    end_pattern = re.compile(r'^ *% *(end)')
+
+    indent = 4
+    indent_context = 0
+
+    lines = text.splitlines()
+    for i, line in enumerate(lines):
+        if start_pattern.match(line):
+            indent_context += indent
+        elif end_pattern.match(line):
+            indent_context -= indent
+        elif line.startswith(' ' * indent_context):
+            lines[i] = line[indent_context:]
+
+    return '\n'.join(lines) + '\n'
 
 
 def render(mako_file: Path, **kwargs):
-    text = Template(filename=str(mako_file)).render(**kwargs)
+    text = Template(filename=str(mako_file), preprocessor=unindent).render(**kwargs)
 
     rendered_file = mako_file.parent / mako_file.stem
     with rendered_file.open('wb') as f:

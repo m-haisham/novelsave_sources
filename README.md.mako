@@ -21,12 +21,12 @@ ${'####'} ✅ Supported
     </thead>
     <tbody>
         % for source in sorted(filter(lambda s: not getattr(s, 'rejected', ''), sources), key=lambda s: s.base_urls[0]):
-        <tr>
-            <td align="center">${source.lang}</td>
-            <td>${source.base_urls[0]}</td>
-            <td align="center"></td>
-            <td align="center">${getattr(source, 'last_updated', '')}</td>
-        </tr>
+            <tr>
+                <td align="center">${source.lang}</td>
+                <td>${source.base_urls[0]}</td>
+                <td align="center"></td>
+                <td align="center">${getattr(source, 'last_updated', '')}</td>
+            </tr>
         % endfor
     </tbody>
 </table>
@@ -43,11 +43,11 @@ ${'####'} ❌ Rejected
     </thead>
     <tbody>
         % for source in sorted(filter(lambda s: getattr(s, 'rejected', None), sources), key=lambda s: s.base_urls[0]):
-        <tr>
-            <td align="center">${source.lang}</td>
-            <td>${source.base_urls[0]}</td>
-            <td>${source.rejected}</td>
-        </tr>
+            <tr>
+                <td align="center">${source.lang}</td>
+                <td>${source.base_urls[0]}</td>
+                <td>${source.rejected}</td>
+            </tr>
         % endfor
     </tbody>
 </table>
@@ -66,11 +66,11 @@ ${'####'} ✅ Supported
     </thead>
     <tbody>
         % for source in sorted(meta_sources, key=lambda s: s.base_urls[0]):
-        <tr>
-            <td align="center">${source.lang}</td>
-            <td>${source.base_urls[0]}</td>
-            <td align="center">${getattr(source, 'last_updated', '')}</td>
-        </tr>
+            <tr>
+                <td align="center">${source.lang}</td>
+                <td>${source.base_urls[0]}</td>
+                <td align="center">${getattr(source, 'last_updated', '')}</td>
+            </tr>
         % endfor
     </tbody>
 </table>

@@ -27,15 +27,17 @@ classifiers = [
 "Documentation" = "https://github.com/mensch272/novelsave_sources/blob/master/README.md"
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.6"
 cloudscraper = "^1.2.58"
 requests = "^2.26.0"
 beautifulsoup4 = "^4.10.0"
 lxml = "^4.6.3"
+deprecation = "^2.1.0"
 
 [tool.poetry.dev-dependencies]
 Mako = "^1.1.5"
 click = "^8.0.1"
+pytest = "^6.2.5"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

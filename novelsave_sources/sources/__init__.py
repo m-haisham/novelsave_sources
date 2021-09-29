@@ -1,4 +1,5 @@
 from .crawler import Crawler
-from .novel import sources
 from .metadata import meta_sources
-
+from .metadata.metasource import MetaSource
+from .novel import sources
+from .novel.source import Source

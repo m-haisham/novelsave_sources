@@ -15,10 +15,12 @@ class CreativeNovels(Source):
     def novel(self, url: str) -> Novel:
         soup = self.get_soup(url)
 
+        thumbnail_img = soup.select_one('img.book_cover')
+
         novel = Novel(
             title=soup.select_one('.x-bar-container > [class*="12"]').text.strip(),
             author=soup.select_one('.x-bar-container > [class*="14"]').text.strip().strip('Author: '),
-            thumbnail_url=soup.select_one('img.book_cover')['src'],
+            thumbnail_url=thumbnail_img.get('src', None) or thumbnail_img.get('data-cfsrc', None),
             synopsis=[p.text.strip() for p in soup.select('.novel_page_synopsis > p')],
             url=url,
         )

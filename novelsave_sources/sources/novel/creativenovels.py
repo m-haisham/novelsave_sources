@@ -80,8 +80,13 @@ class CreativeNovels(Source):
     def chapter(self, chapter: Chapter):
         soup = self.get_soup(chapter.url)
 
+        bad_selectors = [
+            '.announcements_crn', '.support-placement', 'span[style*="color:transparent"]',
+            '.count_gloss', '.gloss_fine',
+        ]
+
         content = soup.select_one('article .entry-content')
-        for tag in content.select('.announcements_crn, .support-placement, span[style*="color:transparent"]'):
+        for tag in content.select(', '.join(bad_selectors)):
             tag.extract()
 
         self.clean_contents(content)

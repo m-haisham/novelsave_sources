@@ -5,7 +5,7 @@ from .exceptions import (
     UnavailableException, ChapterException,
 )
 
-from .models import Novel, Volume, Chapter, Metadata
+from .models import Novel, Volume, Chapter, Metadata, Asset
 
 from .sources import (
     Source, MetaSource,

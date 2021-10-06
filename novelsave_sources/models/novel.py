@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Optional, List
 
+from .asset import Asset
 from .metadata import Metadata
 from .volume import Volume
 
@@ -16,6 +17,7 @@ class Novel:
 
     volumes: List[Volume] = field(default_factory=lambda: [])
     metadata: List[Metadata] = field(default_factory=lambda: [])
+    assets: List[Asset] = field(default_factory=lambda: [])
 
     def get_default_volume(self):
         if self.volumes:

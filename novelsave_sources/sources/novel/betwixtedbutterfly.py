@@ -1,25 +1,22 @@
 import datetime
-from typing import List, Tuple
 
 from bs4 import BeautifulSoup
 
 from .source import Source
-from ...models import Chapter, Volume, Novel, Metadata
 from ...exceptions import ChapterException
+from ...models import Chapter, Volume, Novel, Metadata
 
 
 class BetwixtedButterfly(Source):
     name = 'Betwixted Butterfly'
     base_urls = ('https://betwixtedbutterfly.com',)
-    last_updated = datetime.date(2021, 9, 3)
+    last_updated = datetime.date(2021, 10, 7)
 
-    bad_tags = [
-        'noscript', 'script', 'iframe', 'form', 'img', 'ins',
-        'button', 'input', 'amp-auto-ads', 'pirate',
-        'nav', 'h1', 'h2',
-    ]
+    def __init__(self):
+        super(BetwixtedButterfly, self).__init__()
+        self.bad_tags += ['h1', 'h2']
 
-    def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
+    def novel(self, url: str) -> Novel:
         soup = self.get_soup(url)
 
         details_parent, synopsis_parent, *_ = soup.select('.elementor-text-editor')
@@ -61,7 +58,10 @@ class BetwixtedButterfly(Source):
         elements = soup.select(".entry-inner section .elementor-element:not(.elementor-widget-button, "
                                ".elementor-column)")
         if elements:
-            content = BeautifulSoup(f'<div>{"".join([str(element) for element in elements])}</div>', 'lxml').select_one('div')
+            content = BeautifulSoup(
+                f'<div>{"".join(str(element) for element in elements)}</div>',
+                'lxml',
+            ).select_one('div')
         else:
             content = soup.select_one('.entry-inner')
 

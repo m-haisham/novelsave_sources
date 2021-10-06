@@ -1,4 +1,5 @@
 import datetime
+import mimetypes
 import re
 from abc import ABC
 from typing import List
@@ -9,6 +10,7 @@ from bs4 import BeautifulSoup, Comment
 from requests.cookies import RequestsCookieJar
 
 from ..exceptions import BadResponseException
+from ..models import Asset
 
 
 class Crawler(ABC):
@@ -134,3 +136,18 @@ class Crawler(ABC):
             return self.base_urls[0].rstrip('/') + url
 
         return current_url.rstrip('/') + url
+
+    def identify_assets(self, soup: BeautifulSoup) -> List[Asset]:
+        assets = []
+
+        images = soup.select('img[src]')
+        for img in images:
+            asset = Asset(
+                img.get('alt', None),
+                img.get('src', ''),
+                mimetypes.guess_type(img.get('src', ''))[0]
+            )
+
+            assets.append(asset)
+
+        return assets

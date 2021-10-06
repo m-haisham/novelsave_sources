@@ -1,7 +1,7 @@
 import datetime
 
 from .source import Source
-from ...models import Chapter, Novel, Metadata
+from ...models import Chapter, Novel, Metadata, Asset
 
 
 class DragonTea(Source):
@@ -55,6 +55,15 @@ class DragonTea(Source):
             )
 
             volume.chapters.append(chapter)
+
+        novel.assets.append(
+            Asset(
+                name='DragonTea-Regular',
+                url='https://dragontea.ink/wp-content/themes/madara-child/font/DragonTea-Regular.woff2',
+                mimetype='application/font-woff2',
+                scope='body',
+            )
+        )
 
         return novel
 

@@ -9,7 +9,7 @@ from ...models import Chapter, Novel, Metadata
 class DragonTea(Source):
     name = 'Dragon Tea'
     base_urls = ('https://dragontea.ink/',)
-    last_updated = datetime.date(2021, 9, 7)
+    last_updated = datetime.date(2021, 10, 7)
 
     def __init__(self):
         super(DragonTea, self).__init__()

@@ -1,4 +1,6 @@
-__version__ = '0.2.2'
+import pkg_resources
+
+__version__ = pkg_resources.get_distribution('novelsave-sources').version
 
 from .exceptions import (
     SourcesException, BadResponseException, UnknownSourceException,

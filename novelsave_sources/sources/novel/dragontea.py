@@ -16,7 +16,8 @@ class DragonTea(Source):
     ]
 
     def novel(self, url: str) -> Novel:
-        soup = self.get_soup(url)
+        http_url = url.replace('https:', 'http:')
+        soup = self.get_soup(http_url)
 
         novel = Novel(
             title=soup.select_one('.post-title').text.strip(),
@@ -45,7 +46,7 @@ class DragonTea(Source):
         if artist_content:
             novel.metadata.append(Metadata('contributor', artist_content.text.strip(), others={'role': 'ill'}))
 
-        soup = self.get_soup(url.rstrip('/') + '/ajax/chapters/', method='POST')
+        soup = self.get_soup(http_url.rstrip('/') + '/ajax/chapters/', method='POST')
         volume = novel.get_default_volume()
         for a in reversed(soup.select('.wp-manga-chapter > a')):
             chapter = Chapter(

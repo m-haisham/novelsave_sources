@@ -9,9 +9,9 @@ from deprecation import deprecated
 
 from novelsave_sources.exceptions import UnknownSourceException
 from novelsave_sources.sources import sources, meta_sources
-from . import __version__
 from .sources.metadata.metasource import MetaSource
 from .sources.novel.source import Source
+from .version import __version__
 
 
 @deprecated(deprecated_in="0.2.2", removed_in="0.3.0", current_version=__version__,

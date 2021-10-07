@@ -1,15 +1,14 @@
 import datetime
 import re
-from typing import List, Tuple
 
 from .source import Source
-from ...models import Chapter, Novel, Metadata
+from ...models import Chapter, Novel, Metadata, Asset
 
 
 class Chrysanthemumgarden(Source):
     name = 'Chrysanthemum Garden'
     base_urls = ('https://chrysanthemumgarden.com/',)
-    last_updated = datetime.date(2021, 9, 7)
+    last_updated = datetime.date(2021, 10, 7)
 
     bad_tags = [
         'div', 'pirate', 'script',
@@ -20,7 +19,11 @@ class Chrysanthemumgarden(Source):
         r'^(\s| )+$',  # non-breaking whitespace
     ]
 
-    def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
+    def __init__(self):
+        super(Chrysanthemumgarden, self).__init__()
+        self.preserve_attrs += ['class']
+
+    def novel(self, url: str) -> Novel:
         soup = self.get_soup(url)
 
         synopsis = []
@@ -56,6 +59,16 @@ class Chrysanthemumgarden(Source):
 
             volume.chapters.append(chapter)
 
+        novel.assets.append(
+            Asset(
+                name='OpenSans-Jumbld2',
+                url='https://chrysanthemumgarden.com/wp-content/themes/chrys-garden-generatepress/resources/css/fonts'
+                    '/OpenSans-Jumbld2.woff2',
+                mimetype='font/woff2',
+                scope='.jum',
+            )
+        )
+
         return novel
 
     def chapter(self, chapter: Chapter):
@@ -63,6 +76,13 @@ class Chrysanthemumgarden(Source):
 
         content = soup.select_one('#novel-content')
         self.clean_contents(content)
+
+        # only keep the .jum class
+        for element in content.select('[class]'):
+            if 'jum' in element['class']:
+                element['class'] = 'jum'
+            else:
+                del element['class']
 
         chapter.title = soup.select_one('.chapter-title').text.strip()
         chapter.paragraphs = str(content)
@@ -77,24 +97,4 @@ class Chrysanthemumgarden(Source):
         except KeyError:
             pass
 
-        if 'class' in element.attrs and 'jum' in element['class']:
-            self.reorder_text(element)
-
         super(Chrysanthemumgarden, self).clean_element(element)
-
-    def reorder_text(self, element):
-        text = ''
-        for char in element.text:
-            try:
-                text += self.jumble_map[char]
-            except KeyError:
-                text += char
-
-        element.string = text
-
-    jumble_map = {'j': 'a', 'y': 'b', 'm': 'c', 'v': 'd', 'f': 'e', 'o': 'f', 'u': 'g', 't': 'h', 'l': 'i', 'p': 'j',
-                  'x': 'k', 'i': 'l', 'w': 'm', 'c': 'n', 'b': 'o', 'q': 'p', 'd': 'q', 'g': 'r', 'r': 's', 'a': 't',
-                  'e': 'u', 'n': 'v', 'k': 'w', 'z': 'x', 's': 'y', 'h': 'z', 'C': 'A', 'D': 'B', 'J': 'C', 'G': 'D',
-                  'S': 'E', 'M': 'F', 'X': 'G', 'L': 'H', 'P': 'I', 'A': 'J', 'B': 'K', 'O': 'L', 'Z': 'M', 'R': 'N',
-                  'Y': 'O', 'U': 'P', 'H': 'Q', 'E': 'R', 'V': 'S', 'K': 'T', 'F': 'U', 'N': 'V', 'Q': 'W', 'W': 'X',
-                  'T': 'Y', 'I': 'Z'}

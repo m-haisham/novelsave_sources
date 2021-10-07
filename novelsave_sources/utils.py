@@ -1,6 +1,5 @@
 import importlib
 import inspect
-from abc import ABC
 from functools import lru_cache
 from pathlib import Path
 from typing import List, TypeVar, Type
@@ -59,7 +58,7 @@ def _find_impl(r_location: str, interface: Type[_T]) -> List[Type[_T]]:
         module = importlib.import_module(f'{package}.{path.stem}', 'novelsave_sources')
         for name, member in inspect.getmembers(module, inspect.isclass):
             # the member/class must be a subclass of interface and should be an implementation
-            if issubclass(member, interface) and member is not interface and not isinstance(member, ABC):
+            if issubclass(member, interface) and member is not interface and not inspect.isabstract(member):
                 impls.append(member)
 
     return impls

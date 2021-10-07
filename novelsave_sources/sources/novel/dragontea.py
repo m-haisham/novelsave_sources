@@ -1,4 +1,6 @@
 import datetime
+from functools import lru_cache
+from typing import Dict
 
 from .source import Source
 from ...models import Chapter, Novel, Metadata
@@ -17,11 +19,13 @@ class DragonTea(Source):
         http_url = url.replace('https:', 'http:')
         soup = self.get_soup(http_url)
 
+        jumble_map = self.jumble_map()
+
         novel = Novel(
             title=soup.select_one('.post-title').text.strip(),
             author=soup.select_one('.author-content').text.strip(),
             thumbnail_url=self.to_absolute_url(soup.select_one('.summary_image img')['src'], url),
-            synopsis=[p.text.strip() for p in soup.select('.summary__content > p')],
+            synopsis=[self.reorder_text(jumble_map, p).text.strip() for p in soup.select('.summary__content > p')],
             url=url,
         )
 
@@ -58,17 +62,41 @@ class DragonTea(Source):
         return novel
 
     def chapter(self, chapter: Chapter):
-        soup = self.get_soup(chapter.url)
-
-        content = soup.select_one('.reading-content')
+        soup = self.get_soup(chapter.url.replace('https:', 'http:'))
 
         # text-left has a better collection of paragraphs...
         # however we are not taking any chances assuming its always there
-        text_left = content.select_one('.text-left')
-        if text_left:
-            content = text_left
+        content = soup.select_one('.text-left, .reading-content')
 
         self.clean_contents(content)
 
+        jumble_map = self.jumble_map()
+        for p in content.select('p'):
+            if not p.text.strip():
+                p.extract()
+                continue
+
+            self.reorder_text(jumble_map, p)
+
         chapter.title = soup.select_one('.breadcrumb > li.active').text.strip()
         chapter.paragraphs = str(content)
+
+    normal_char_set = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
+    jumble_char_set = 'ZYXWVUTSRQPONMLKJIHGFEDCBAzyxwvutsrqponmlkjihgfedcba'
+
+    @lru_cache(1)
+    def jumble_map(self) -> Dict[str, str]:
+        return {jc: nc for jc, nc in zip(self.jumble_char_set, self.normal_char_set)}
+
+    @staticmethod
+    def reorder_text(jumble_map, element):
+        text = ''
+        for char in element.text:
+            try:
+                text += jumble_map[char]
+            except KeyError:
+                text += char
+
+        element.string = text
+
+        return element

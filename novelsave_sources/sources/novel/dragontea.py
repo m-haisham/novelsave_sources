@@ -7,13 +7,11 @@ from ...models import Chapter, Novel, Metadata, Asset
 class DragonTea(Source):
     name = 'Dragon Tea'
     base_urls = ('https://dragontea.ink/',)
-    last_updated = datetime.date(2021, 9, 7)
+    last_updated = datetime.date(2021, 10, 7)
 
-    bad_tags = [
-        'noscript', 'script', 'iframe', 'form', 'hr', 'img', 'ins',
-        'button', 'input', 'amp-auto-ads', 'pirate',
-        'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
-    ]
+    def __init__(self):
+        super(DragonTea, self).__init__()
+        self.bad_tags += ['h1', 'h2', 'h3', 'h4', 'h5', 'h6']
 
     def novel(self, url: str) -> Novel:
         soup = self.get_soup(url)
@@ -61,7 +59,7 @@ class DragonTea(Source):
                 name='DragonTea-Regular',
                 url='https://dragontea.ink/wp-content/themes/madara-child/font/DragonTea-Regular.woff2',
                 mimetype='application/font-woff2',
-                scope='body',
+                scope='p',
             )
         )
 

@@ -70,11 +70,10 @@ class Crawler(ABC):
         """
         :return: whether the text is black listed
         """
-        for pattern in self.blacklist_patterns:
-            if re.search(pattern, text, re.IGNORECASE):
-                return True
-
-        return False
+        return any(
+            re.search(pattern, text, re.IGNORECASE)
+            for pattern in self.blacklist_patterns
+        )
 
     def clean_contents(self, contents):
         if not contents:

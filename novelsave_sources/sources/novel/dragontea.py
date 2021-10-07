@@ -58,7 +58,7 @@ class DragonTea(Source):
             Asset(
                 name='DragonTea-Regular',
                 url='https://dragontea.ink/wp-content/themes/madara-child/font/DragonTea-Regular.woff2',
-                mimetype='application/font-woff2',
+                mimetype='font/woff2',
                 scope='p',
             )
         )

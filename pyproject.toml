@@ -27,7 +27,7 @@ classifiers = [
 "Documentation" = "https://github.com/mensch272/novelsave_sources/blob/master/README.md"
 
 [tool.poetry.dependencies]
-python = "^3.6"
+python = "^3.8"
 cloudscraper = "^1.2.58"
 requests = "^2.26.0"
 beautifulsoup4 = "^4.10.0"

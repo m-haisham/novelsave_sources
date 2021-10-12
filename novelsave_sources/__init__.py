@@ -1,3 +1,7 @@
+from importlib.metadata import version
+
+__version__ = version('novelsave-sources')
+
 from .exceptions import (
     SourcesException, BadResponseException, UnknownSourceException,
     UnavailableException, ChapterException,

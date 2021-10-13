@@ -6,7 +6,11 @@ from typing import TypeVar, Type, List
 
 from deprecation import deprecated
 
-from novelsave_sources import __version__, sources, UnknownSourceException, meta_sources, Source, MetaSource
+from .. import __version__
+from ..exceptions import UnknownSourceException
+from ..sources import sources, meta_sources
+from ..sources.metadata.metasource import MetaSource
+from ..sources.novel.source import Source
 
 
 @deprecated(deprecated_in="0.2.2", removed_in="0.3.0", current_version=__version__,

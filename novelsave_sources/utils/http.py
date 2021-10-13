@@ -19,8 +19,14 @@ class BaseHttpGateway(ABC):
         """Aliased method to send POST request using :request method"""
         return self.request(*args, method='POST', **kwargs)
 
+    @property
     @abstractmethod
-    def set_cookies(self, cookies: RequestsCookieJar):
+    def cookies(self) -> RequestsCookieJar:
+        """Get current cookies being used in session"""
+
+    @cookies.setter
+    @abstractmethod
+    def cookies(self, cookies: RequestsCookieJar):
         """Replace the existing cookies of the client with the provided"""
 
 
@@ -32,5 +38,10 @@ class CloudScraperHttpGateway(BaseHttpGateway):
     def request(self, method: str, url: str, headers: dict = None, params: dict = None, body: dict = None) -> Response:
         return self.session.request(method, url, headers=headers, params=params, body=body)
 
-    def set_cookies(self, cookies: RequestsCookieJar):
+    @property
+    def cookies(self) -> RequestsCookieJar:
+        return self.session.cookies
+
+    @cookies.setter
+    def cookies(self, cookies: RequestsCookieJar):
         self.session.cookies = cookies

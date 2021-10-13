@@ -8,7 +8,8 @@ from requests.cookies import RequestsCookieJar
 class BaseHttpGateway(ABC):
 
     @abstractmethod
-    def request(self, method: str, url: str, headers: dict = None, params: dict = None, body: dict = None) -> Response:
+    def request(self, method: str, url: str, headers: dict = None, params: dict = None, data: dict = None,
+                json: dict = None) -> Response:
         """Send an http request to the specified url using the specified method"""
 
     def get(self, *args, **kwargs):
@@ -35,8 +36,9 @@ class CloudScraperHttpGateway(BaseHttpGateway):
     def __init__(self):
         self.session = cloudscraper.create_scraper()
 
-    def request(self, method: str, url: str, headers: dict = None, params: dict = None, body: dict = None) -> Response:
-        return self.session.request(method, url, headers=headers, params=params, body=body)
+    def request(self, method: str, url: str, headers: dict = None, params: dict = None, data: dict = None,
+                json: dict = None) -> Response:
+        return self.session.request(method, url, headers=headers, params=params, data=data)
 
     @property
     def cookies(self) -> RequestsCookieJar:

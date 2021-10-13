@@ -12,8 +12,8 @@ class BetwixtedButterfly(Source):
     base_urls = ('https://betwixtedbutterfly.com',)
     last_updated = datetime.date(2021, 10, 7)
 
-    def __init__(self):
-        super(BetwixtedButterfly, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(BetwixtedButterfly, self).__init__(*args, **kwargs)
         self.bad_tags += ['h1', 'h2']
 
     def novel(self, url: str) -> Novel:

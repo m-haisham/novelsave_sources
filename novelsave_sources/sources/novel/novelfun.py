@@ -54,7 +54,7 @@ class NovelFun(Source):
                 'startChapNum': 1,
             },
         }
-        data = self.session.get(self.graphql, json=data).json()
+        data = self.http_gateway.get(self.graphql, json=data).json()
 
         novel.get_default_volume().chapters = [
             Chapter(

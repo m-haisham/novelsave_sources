@@ -54,7 +54,7 @@ class NovelSite(Source):
 
         short_link = soup.select_one('link[rel="shortlink"]')['href']
         novel_id = parse_qs(urlparse(short_link).query).get('p')[0]
-        response = self.session.post(
+        response = self.http_gateway.post(
             'https://novelsite.net/wp-admin/admin-ajax.php',
             data={
                 'action': 'manga_get_chapters',

@@ -4,11 +4,11 @@ from abc import ABC
 from typing import List
 from urllib.parse import urlparse
 
-import cloudscraper
 from bs4 import BeautifulSoup, Comment
 from requests.cookies import RequestsCookieJar
 
 from ..exceptions import BadResponseException
+from ..utils.http import BaseHttpGateway, CloudScraperHttpGateway
 
 
 class Crawler(ABC):
@@ -17,11 +17,11 @@ class Crawler(ABC):
     last_updated: datetime.date
     rejected: str
 
-    def __init__(self):
-        self.session = cloudscraper.create_scraper()
+    def __init__(self, http_gateway: BaseHttpGateway = None):
+        self.http_gateway = http_gateway if http_gateway is not None else CloudScraperHttpGateway()
 
     def set_cookies(self, cookies: RequestsCookieJar):
-        self.session.cookies = cookies
+        self.http_gateway.cookies = cookies
 
     def get_soup(self, url: str, method: str = 'GET', **kwargs) -> BeautifulSoup:
         """Download website html and create a bs4 object"""
@@ -36,7 +36,7 @@ class Crawler(ABC):
 
         :raises BadResponseException: if the response is not valid (status_code==200)
         """
-        response = self.session.request(method, url, **kwargs)
+        response = self.http_gateway.request(method, url, **kwargs)
         if not response.ok:
             raise BadResponseException(response)
 

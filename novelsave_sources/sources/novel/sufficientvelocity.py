@@ -12,8 +12,8 @@ class SufficientVelocity(Source):
     base_urls = ('https://forums.sufficientvelocity.com',)
     last_updated = datetime.date(2021, 9, 9)
 
-    def __init__(self):
-        super(SufficientVelocity, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(SufficientVelocity, self).__init__(*args, **kwargs)
         self.clear_tags = re.compile(r'(</?div>|<br ?/?>)')
 
     def novel(self, url: str) -> Novel:

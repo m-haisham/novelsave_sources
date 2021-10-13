@@ -1,5 +1,4 @@
 import datetime
-from typing import List, Tuple
 
 from bs4 import BeautifulSoup
 
@@ -61,7 +60,7 @@ class Foxaholic(Source):
             novel.metadata.append(Metadata('tag', tag.text.strip()))
 
         novel_id = soup.select_one('.wp-manga-action-button')['data-post']
-        response = self.session.post(
+        response = self.http_gateway.post(
             'https://www.foxaholic.com/wp-admin/admin-ajax.php',
             data={
                 'action': 'manga_get_chapters',

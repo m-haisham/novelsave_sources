@@ -43,7 +43,7 @@ class CreativeNovels(Source):
                 if p[2] == 'security':
                     security_key = p[3]
 
-        response = self.session.post(
+        response = self.http_gateway.post(
             'https://creativenovels.com/wp-admin/admin-ajax.php',
             data=dict(
                 action='crn_chapter_list',

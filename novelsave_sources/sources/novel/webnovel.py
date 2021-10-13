@@ -23,7 +23,7 @@ class Webnovel(Source):
         super(Webnovel, self).__init__()
 
     def get_csrf_token(self) -> str:
-        return self.session.cookies.get('_csrfToken', '')
+        return self.http_gateway.cookies.get('_csrfToken', '')
 
     def novel(self, url: str) -> Novel:
         soup = self.get_soup(url)
@@ -93,7 +93,7 @@ class Webnovel(Source):
 
     def chapter(self, chapter: Chapter):
         novel_id, chapter_id = self.parse_chapter_url(chapter.url)
-        response = self.session.get(
+        response = self.http_gateway.get(
             'https://www.webnovel.com/go/pcm/chapter/getContent',
             params={
                 '_csrfToken': self.get_csrf_token(),

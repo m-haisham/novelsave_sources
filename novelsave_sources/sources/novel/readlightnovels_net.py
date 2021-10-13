@@ -46,7 +46,7 @@ class ReadLightNovelsNet(Source):
         return novel
 
     def chapter_page(self, volume: Volume, novel_id, page):
-        response = self.session.post(
+        response = self.http_gateway.post(
             'https://readlightnovels.net/wp-admin/admin-ajax.php',
             data={
                 'action': 'tw_ajax',

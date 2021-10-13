@@ -11,8 +11,8 @@ class DragonTea(Source):
     base_urls = ('https://dragontea.ink/',)
     last_updated = datetime.date(2021, 10, 7)
 
-    def __init__(self):
-        super(DragonTea, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(DragonTea, self).__init__(*args, **kwargs)
         self.bad_tags += ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'hr']
 
     def novel(self, url: str) -> Novel:

@@ -15,8 +15,8 @@ class WattPad(Source):
     base_urls = ('https://www.wattpad.com', 'https://my.w.tt',)
     last_updated = datetime.date(2021, 9, 6)
 
-    def __init__(self):
-        super(WattPad, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(WattPad, self).__init__(*args, **kwargs)
         self.decimal = re.compile(r'\d+')
 
     def novel(self, url: str) -> Novel:

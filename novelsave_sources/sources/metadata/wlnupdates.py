@@ -1,8 +1,6 @@
 import datetime
 from typing import List
 
-import requests
-
 from .metasource import MetaSource
 from ...models import Metadata
 
@@ -54,4 +52,4 @@ class WlnUpdates(MetaSource):
         return metadata
 
     def api_request(self, id: int, mode: str):
-        return self.session.post(self.api_endpoint, json={'id': id, 'mode': mode}).json()
+        return self.http_gateway.post(self.api_endpoint, json={'id': id, 'mode': mode}).json()

@@ -2,15 +2,15 @@ import importlib
 import inspect
 from functools import lru_cache
 from pathlib import Path
-from typing import List, TypeVar, Type
+from typing import TypeVar, Type, List
 
 from deprecation import deprecated
 
-from novelsave_sources.exceptions import UnknownSourceException
-from novelsave_sources.sources import sources, meta_sources
-from . import __version__
-from .sources.metadata.metasource import MetaSource
-from .sources.novel.source import Source
+from .. import __version__
+from ..exceptions import UnknownSourceException
+from ..sources import sources, meta_sources
+from ..sources.metadata.metasource import MetaSource
+from ..sources.novel.source import Source
 
 
 @deprecated(deprecated_in="0.2.2", removed_in="0.3.0", current_version=__version__,
@@ -55,7 +55,7 @@ def _find_impl(r_location: str, interface: Type[_T]) -> List[Type[_T]]:
         elif path.name.startswith('_'):  # private files
             continue
 
-        module = importlib.import_module(f'{package}.{path.stem}', 'novelsave_sources')
+        module = importlib.import_module(f'{package}.{path.stem}', 'novelsave_sources.utils')
         for name, member in inspect.getmembers(module, inspect.isclass):
             # the member/class must be a subclass of interface and should be an implementation
             if issubclass(member, interface) and member is not interface and not inspect.isabstract(member):
@@ -66,7 +66,7 @@ def _find_impl(r_location: str, interface: Type[_T]) -> List[Type[_T]]:
 
 def novel_source_types() -> List[Type[Source]]:
     """Locate and return all the novel source types"""
-    return _find_impl('../sources/novel', Source)
+    return _find_impl('../../sources/novel', Source)
 
 
 def locate_novel_source(url: str) -> Type[Source]:
@@ -83,7 +83,7 @@ def locate_novel_source(url: str) -> Type[Source]:
 
 def metadata_source_types() -> List[Type[MetaSource]]:
     """Locate and return all the metadata source types"""
-    return _find_impl('../sources/metadata', MetaSource)
+    return _find_impl('../../sources/metadata', MetaSource)
 
 
 def locate_metadata_source(url: str) -> Type[MetaSource]:

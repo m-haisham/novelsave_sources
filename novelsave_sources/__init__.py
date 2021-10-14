@@ -14,8 +14,9 @@ from .sources import (
     sources, meta_sources
 )
 
-from .utils import (
-    parse_source, parse_metasource,
-    novel_source_types, metadata_source_types,
-    locate_novel_source, locate_metadata_source,
+from .utils.sources import (
+    parse_source, parse_metasource, novel_source_types, locate_novel_source,
+    metadata_source_types, locate_metadata_source,
 )
+
+from .utils.http import BaseHttpGateway

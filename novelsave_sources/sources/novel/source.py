@@ -24,8 +24,8 @@ class Source(Crawler, ABC):
         """
         return any(url.startswith(base_url) for base_url in cls.base_urls)
 
-    def __init__(self):
-        super(Source, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(Source, self).__init__(*args, **kwargs)
 
         # set default cookie domains
         if not hasattr(self, 'cookie_domains'):
@@ -57,13 +57,13 @@ class Source(Crawler, ABC):
             # clear preexisting cookies associated with source
             for domain in self.cookie_domains:
                 try:
-                    self.session.cookies.clear(domain=domain)
+                    self.http_gateway.cookies.clear(domain=domain)
                 except KeyError:
                     pass
 
             # add the dict formatted cookies
             for cookie in cookies:
-                self.session.cookies.set(**cookie)
+                self.http_gateway.cookies.set(**cookie)
         else:
             raise TypeError(
                 f"Unexpected type received: {type(cookies)}; Require either 'RequestsCookieJar' or 'Tuple[dict]'")

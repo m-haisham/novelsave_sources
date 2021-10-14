@@ -1,7 +1,7 @@
 import datetime
 import re
 from abc import ABC
-from typing import List
+from typing import List, Union
 from urllib.parse import urlparse
 
 from bs4 import BeautifulSoup, Comment
@@ -25,11 +25,15 @@ class Crawler(ABC):
 
     def get_soup(self, url: str, method: str = 'GET', **kwargs) -> BeautifulSoup:
         """Download website html and create a bs4 object"""
-        soup = BeautifulSoup(self.request(method, url, **kwargs).content, 'lxml')
+        soup = self.make_soup(self.request(method, url, **kwargs).content, 'lxml')
         if not soup.find('body'):
             raise ConnectionError('HTML document was not loaded correctly.')
 
         return soup
+
+    @staticmethod
+    def make_soup(text: Union[str, bytes], parser: str = 'lxml'):
+        return BeautifulSoup(text, parser)
 
     def request(self, method: str, url: str, **kwargs):
         """Create a request to the url and return the response if ok

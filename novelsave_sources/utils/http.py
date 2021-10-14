@@ -38,7 +38,7 @@ class CloudScraperHttpGateway(BaseHttpGateway):
 
     def request(self, method: str, url: str, headers: dict = None, params: dict = None, data: dict = None,
                 json: dict = None) -> Response:
-        return self.session.request(method, url, headers=headers, params=params, data=data)
+        return self.session.request(method, url, headers=headers, params=params, data=data, json=json)
 
     @property
     def cookies(self) -> RequestsCookieJar:

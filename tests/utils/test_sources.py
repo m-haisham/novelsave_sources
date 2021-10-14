@@ -1,7 +1,7 @@
 from novelsave_sources import novel_source_types, metadata_source_types, locate_novel_source, locate_metadata_source
 from novelsave_sources.sources import Source, MetaSource
-from novelsave_sources.sources.metadata import NovelUpdates
-from novelsave_sources.sources.novel import Webnovel
+from novelsave_sources.sources.metadata.novelupdates import NovelUpdates
+from novelsave_sources.sources.novel.webnovel import Webnovel
 
 
 def test_novel_source_types():

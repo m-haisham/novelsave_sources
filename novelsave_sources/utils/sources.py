@@ -5,8 +5,7 @@ from pathlib import Path
 from typing import TypeVar, Type, List
 
 from ..exceptions import UnknownSourceException
-from ..sources.metadata.metasource import MetaSource
-from ..sources.novel.source import Source
+from ..sources import Source, MetaSource
 
 _T = TypeVar('_T')
 

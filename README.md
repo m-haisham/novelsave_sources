@@ -22,6 +22,12 @@ A collection of novel sources offering varying amounts of scraping capability.
     <tbody>
         <tr>
             <td align="center">en</td>
+            <td>https://1stkissnovel.love</td>
+            <td align="center"></td>
+            <td align="center">2021-10-14</td>
+        </tr>
+        <tr>
+            <td align="center">en</td>
             <td>https://betwixtedbutterfly.com</td>
             <td align="center"></td>
             <td align="center">2021-10-07</td>

@@ -6,6 +6,7 @@ from requests.cookies import RequestsCookieJar
 
 
 class BaseHttpGateway(ABC):
+    """Base gateway interface that defines http communication"""
 
     @abstractmethod
     def request(self, method: str, url: str, headers: dict = None, params: dict = None, data: dict = None,
@@ -32,6 +33,7 @@ class BaseHttpGateway(ABC):
 
 
 class CloudScraperHttpGateway(BaseHttpGateway):
+    """Http gateway implementation that uses cloudscraper module for http requests"""
 
     def __init__(self):
         self.session = cloudscraper.create_scraper()

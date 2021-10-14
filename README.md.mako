@@ -4,6 +4,44 @@ A collection of novel sources offering varying amounts of scraping capability.
 
 > Request a new source by [creating a new issue](https://github.com/mHaisham/novelsave_sources/issues/new/choose)
 
+${'##'} 🤖 Usage
+
+${'###'} API
+
+This package exposes 4 basic functions that can be used to interact with the provided
+sources, both of novel and metadata variety.
+
+- [`novel_source_types`](#novel_source_types) - Locate and return all the novel source types
+- [`locate_novel_source`](#locate_novel_source) - Locate and return the novel source parser for the url if it is supported
+- [`metadata_source_types`](#metadata_source_types) - Locate and return all the metadata source types
+- [`locate_metadata_source`](#locate_metadata_source) - Locate and return the metadata source parser for the url if it is supported
+
+${'####'} `novel_source_types`
+
+Finds all the novel source implementations defined by this package and returns their types.
+
+`rtype` - `List[Type[Source]]`
+
+${'####'} `locate_novel_source`
+
+Takes a url and tries to find a defined novel source that can parse the webpage.
+If found returns the source type otherwise raises a `UnknownSourceException`.
+
+`rtype` - `Type[Source]`
+
+${'####'} `metadata_source_types`
+
+Finds all the metadata source implementations defined by this package and returns their types.
+
+`rtype` - `List[Type[MetaSource]]`
+
+${'####'} `locate_metadata_source`
+
+Takes a url and tries to find a defined metadata source that can parse the webpage.
+If found returns the source type otherwise raises a `UnknownSourceException`.
+
+`rtype` - `Type[MetaSource]`
+
 ${'##'} 📒 Sources
 
 ${'###'} Novel

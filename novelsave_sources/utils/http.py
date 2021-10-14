@@ -1,8 +1,11 @@
+import ssl
+import warnings
 from abc import ABC, abstractmethod
 
 import cloudscraper
 from requests import Response
 from requests.cookies import RequestsCookieJar
+from urllib3.exceptions import InsecureRequestWarning
 
 
 class BaseHttpGateway(ABC):
@@ -15,11 +18,11 @@ class BaseHttpGateway(ABC):
 
     def get(self, *args, **kwargs):
         """Aliased method to send GET request using :request method"""
-        return self.request(*args, method='GET', **kwargs)
+        return self.request('GET', *args, **kwargs)
 
     def post(self, *args, **kwargs):
         """Aliased method to send POST request using :request method"""
-        return self.request(*args, method='POST', **kwargs)
+        return self.request('POST', *args, **kwargs)
 
     @property
     @abstractmethod
@@ -36,11 +39,22 @@ class CloudScraperHttpGateway(BaseHttpGateway):
     """Http gateway implementation that uses cloudscraper module for http requests"""
 
     def __init__(self):
-        self.session = cloudscraper.create_scraper()
+        ctx = ssl.create_default_context()
+        ctx.check_hostname = False
+        ctx.verify_mode = ssl.CERT_NONE
+
+        self.session = cloudscraper.create_scraper(
+            ssl_context=ctx,
+        )
+
+        self.session.verify = False
 
     def request(self, method: str, url: str, headers: dict = None, params: dict = None, data: dict = None,
                 json: dict = None) -> Response:
-        return self.session.request(method, url, headers=headers, params=params, data=data, json=json)
+
+        with warnings.catch_warnings():
+            warnings.simplefilter('ignore', InsecureRequestWarning)
+            return self.session.request(method, url, headers=headers, params=params, data=data, json=json)
 
     @property
     def cookies(self) -> RequestsCookieJar:

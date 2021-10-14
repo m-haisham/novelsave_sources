@@ -4,42 +4,9 @@ from functools import lru_cache
 from pathlib import Path
 from typing import TypeVar, Type, List
 
-from deprecation import deprecated
-
-from .. import __version__
 from ..exceptions import UnknownSourceException
-from ..sources import sources, meta_sources
 from ..sources.metadata.metasource import MetaSource
 from ..sources.novel.source import Source
-
-
-@deprecated(deprecated_in="0.2.2", removed_in="0.3.0", current_version=__version__,
-            details="Use 'locate_novel_source' function instead")
-def parse_source(url):
-    """Locate and create a source parser for the url if schema exists
-
-    :throws UnknownSourceException: if the url cannot be parsed by any existing source schema
-    """
-    for source in sources:
-        if source.of(url):
-            return source()
-
-    raise UnknownSourceException(f'"{url}" does not correspond to any available source')
-
-
-@deprecated(deprecated_in="0.2.2", removed_in="0.3.0", current_version=__version__,
-            details="Use 'locate_metadata_source' function instead")
-def parse_metasource(url: str):
-    """Locate and create a source parser for the url if schema exists
-
-    :throws UnknownSourceException: if the url cannot be parsed by any existing source schema
-    """
-    for source in meta_sources:
-        if source.of(url):
-            return source()
-
-    raise UnknownSourceException(f'"{url}" does not correspond to any available metadata source')
-
 
 _T = TypeVar('_T')
 

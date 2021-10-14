@@ -1,3 +1,4 @@
+import ssl
 from abc import ABC, abstractmethod
 
 import cloudscraper
@@ -36,7 +37,13 @@ class CloudScraperHttpGateway(BaseHttpGateway):
     """Http gateway implementation that uses cloudscraper module for http requests"""
 
     def __init__(self):
-        self.session = cloudscraper.create_scraper()
+        ctx = ssl.create_default_context()
+        ctx.check_hostname = False
+        ctx.verify_mode = ssl.CERT_NONE
+
+        self.session = cloudscraper.create_scraper(
+            ssl_context=ctx,
+        )
 
     def request(self, method: str, url: str, headers: dict = None, params: dict = None, data: dict = None,
                 json: dict = None) -> Response:

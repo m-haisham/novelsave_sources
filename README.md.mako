@@ -56,6 +56,14 @@ The default implementation has the following properties:
 You may override this behaviour by implementing `BaseHttpGateway` interface,
 and providing it as a dependency when sources are instantiated.
 
+${'###'} Build
+
+To update the sources segment in the README.md, run the following command:
+
+```bash
+python3 manage.py compile
+```
+
 ${'##'} 📒 Sources
 
 ${'###'} Novel

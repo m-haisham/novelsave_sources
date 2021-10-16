@@ -190,6 +190,12 @@ python3 manage.py compile
         </tr>
         <tr>
             <td align="center">en</td>
+            <td>https://readnovelfull.com/</td>
+            <td align="center"></td>
+            <td align="center">2021-10-17</td>
+        </tr>
+        <tr>
+            <td align="center">en</td>
             <td>https://wuxiaworld.online</td>
             <td align="center"></td>
             <td align="center">2021-09-07</td>

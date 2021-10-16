@@ -2,7 +2,7 @@ ${'#'} 📚 Novelsave Sources
 
 A collection of novel sources offering varying amounts of scraping capability.
 
-> Request a new source by [creating a new issue](https://github.com/mHaisham/novelsave_sources/issues/new/choose)
+> Request a new source by [creating a new issue](https://github.com/mensch272/novelsave_sources/issues/new/choose)
 
 ${'##'} 🤖 Usage
 

@@ -17,11 +17,6 @@ class Webnovel(Source):
     base_urls = ('https://www.webnovel.com',)
     last_updated = datetime.date(2021, 9, 3)
 
-    csrf_token: str = None
-
-    def __init__(self):
-        super(Webnovel, self).__init__()
-
     def get_csrf_token(self) -> str:
         return self.http_gateway.cookies.get('_csrfToken', '')
 

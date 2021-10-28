@@ -9,8 +9,3 @@ class Chapter:
     paragraphs: str = None
     url: str = None
 
-    def __hash__(self):
-        return hash(self.url)
-
-    def __eq__(self, other):
-        return self.url == other.url

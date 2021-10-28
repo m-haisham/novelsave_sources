@@ -11,8 +11,8 @@ class NovelSite(Source):
     base_urls = ('https://novelsite.net',)
     last_updated = datetime.date(2021, 9, 6)
 
-    def __init__(self):
-        super(NovelSite, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(NovelSite, self).__init__(*args, **kwargs)
         self.bad_tags.extend([
             'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
         ])

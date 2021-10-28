@@ -12,6 +12,7 @@ class Novel:
     author: Optional[str] = None
     synopsis: List[str] = field(default_factory=lambda: [])
     thumbnail_url: str = None
+    status: Optional[str] = None
     lang: str = 'en'
 
     volumes: List[Volume] = field(default_factory=lambda: [])
@@ -24,3 +25,6 @@ class Novel:
         volume = Volume.default()
         self.volumes.append(volume)
         return volume
+
+    def add_metadata(self, *args, **kwargs):
+        self.metadata.append(Metadata(*args, **kwargs))

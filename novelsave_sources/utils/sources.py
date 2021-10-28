@@ -31,7 +31,11 @@ def _find_impl(r_location: str, interface: Type[_T]) -> List[Type[_T]]:
 
 
 def novel_source_types() -> List[Type[Source]]:
-    """Locate and return all the novel source types"""
+    """Locate and return all the novel source types
+
+    The first usage may be slow as it searches for all the
+    source implementations and caches the results.
+    """
     return _find_impl('../../sources/novel', Source)
 
 
@@ -48,7 +52,11 @@ def locate_novel_source(url: str) -> Type[Source]:
 
 
 def metadata_source_types() -> List[Type[MetaSource]]:
-    """Locate and return all the metadata source types"""
+    """Locate and return all the metadata source types
+
+    The first usage may be slow as it searches for all the
+    source implementations and caches the results.
+    """
     return _find_impl('../../sources/metadata', MetaSource)
 
 

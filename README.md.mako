@@ -11,30 +11,30 @@ ${'###'} API
 This package exposes 4 basic functions that can be used to interact with the provided
 sources, both of novel and metadata variety.
 
-| Function                                            | Description                                                  | Return type              |
-| --------------------------------------------------- | ------------------------------------------------------------ | ------------------------ |
-| [`novel_source_types`](#novel_source_types)         | Locate and return all the novel source types                 | `List[Type[Source]]`     |
-| [`locate_novel_source`](#locate_novel_source)       | Locate and return the novel source parser for the url if it is supported | `Type[Source]`           |
-| [`metadata_source_types`](#metadata_source_types)   | Locate and return all the metadata source types              | `List[Type[MetaSource]]` |
-| [`locate_metadata_source`](#locate_metadata_source) | Locate and return the metadata source parser for the url if it is supported | `Type[MetaSource]`       |
+| Function                 | Description                                                  | Parameters   | Returns                  |
+| ------------------------ | ------------------------------------------------------------ | ------------ | ------------------------ |
+| `novel_source_types`     | Locate and return all the novel source types                 |              | `List[Type[Source]]`     |
+| `locate_novel_source`    | Locate and return the novel source parser for the url if it is supported | url:str | `Type[Source]`           |
+| `metadata_source_types`  | Locate and return all the metadata source types              |              | `List[Type[MetaSource]]` |
+| `locate_metadata_source` | Locate and return the metadata source parser for the url if it is supported | url:str | `Type[MetaSource]`       |
 
-${'####'} novel_source_types
+${'####'} Example
 
-Finds all the novel source implementations defined by this package and returns their types.
+Given that you have a novel url you want to parse, you may do the following
 
-${'####'} locate_novel_source
+```python
+import novelsave_sources as nss
 
-Takes a url and tries to find a defined novel source that can parse the webpage.
-If found returns the source type otherwise raises a `UnknownSourceException`.
+# url of the novel you want to parse
+url = ...
 
-${'####'} metadata_source_types
+# tries to find a source that can scrape the provided url
+# if not found throws a nss.UnknownSourceException
+source = nss.locate_novel_source(url)()
 
-Finds all the metadata source implementations defined by this package and returns their types.
-
-${'####'} locate_metadata_source
-
-Takes a url and tries to find a defined metadata source that can parse the webpage.
-If found returns the source type otherwise raises a `UnknownSourceException`.
+# scrape the website and parse the data into a novel object
+novel = source.novel(url)
+```
 
 ${'###'} Behaviour
 

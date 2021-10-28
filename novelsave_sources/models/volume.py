@@ -14,3 +14,6 @@ class Volume:
     @staticmethod
     def default():
         return Volume(-1, '_default')
+
+    def add(self, chapter: Chapter):
+        self.chapters.append(chapter)

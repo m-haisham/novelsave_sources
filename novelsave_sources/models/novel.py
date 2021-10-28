@@ -24,3 +24,6 @@ class Novel:
         volume = Volume.default()
         self.volumes.append(volume)
         return volume
+
+    def add_metadata(self, *args, **kwargs):
+        self.metadata.append(Metadata(*args, **kwargs))

@@ -10,16 +10,10 @@ class MetaSource(Crawler):
 
     @classmethod
     def of(cls, url: str):
-        """
-        :return: whether the url is from this source
-        """
-        return any([url.startswith(base_url) for base_url in cls.base_urls])
+        """Checks whether the url is from this source"""
+        return any(url.startswith(base_url) for base_url in cls.base_urls)
 
     @abstractmethod
-    def retrieve(self, url) -> List[Metadata]:
-        """
-        retrieves metadata from url
+    def retrieve(self, url: str) -> List[Metadata]:
+        """Retrieves metadata from url"""
 
-        :param url: metadata source
-        :return: list of metadata
-        """

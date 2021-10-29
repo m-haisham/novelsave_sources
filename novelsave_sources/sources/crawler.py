@@ -71,15 +71,14 @@ class Crawler(ABC):
     ]
 
     def is_blacklisted(self, text):
-        """
-        :return: whether the text is black listed
-        """
+        """Whether the text is blacklisted"""
         return any(
             re.search(pattern, text, re.IGNORECASE)
             for pattern in self.blacklist_patterns
         )
 
     def clean_contents(self, contents):
+        """Remove unnecessary elements and attributes"""
         if not contents:
             return contents
 
@@ -90,6 +89,21 @@ class Crawler(ABC):
         return contents
 
     def clean_element(self, element):
+        """
+        If the element does not add any meaningful content the element
+        is removed, this can happen on either of below conditions.
+
+        - Element is a comment
+        - Element is a <br> and the next sibling element is also a <br>
+        - Element is part of the bad tags (undesired tags that dont add content)
+        - The element has no text and has no children and is not part of notext_tags
+          (elements that doesnt need text to be meaningful)
+        - The text of the element matches one of the blacklisted patterns
+          (undesirable text such as ads and watermarks)
+
+        If none of the conditions are met, all the attributes except those marked
+        important (self.preserve_attrs) are removed from this element
+        """
         # remove comments
         if isinstance(element, Comment):
             element.extract()
@@ -118,6 +132,7 @@ class Crawler(ABC):
 
     @staticmethod
     def find_paragraphs(element, **kwargs) -> List[str]:
+        """Extract all text of the element into paragraphs"""
         paragraphs = []
         for t in element.find_all(text=True, **kwargs):
             text = str(t).strip()
@@ -129,6 +144,22 @@ class Crawler(ABC):
         return paragraphs
 
     def to_absolute_url(self, url: str, current_url: str = None) -> str:
+        """Detects the url state and converts it into the appropriate absolute url
+
+        There are several relevant states the url could be in:
+
+        - absolute: starts with either 'https://' or 'http://', in this the url
+          is returned as it without any changes.
+
+        - missing schema: schema is missing and the url starts with '//', in this
+          case the appropriate schema from either current url or base url is prefixed.
+
+        - relative absolute: the url is relative to the website and starts with '/', in
+          this case the base website location (netloc) is prefixed to the url:
+
+        - relative current: the url is relative to the current website and does not match
+          any of the above conditions, in this case the url is added to the current url provided.
+        """
         if url.startswith('http://') or url.startswith('https://'):
             return url
         if url.startswith('//'):

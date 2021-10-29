@@ -46,11 +46,7 @@ class Source(Crawler):
         raise UnavailableException(f"'{self.__name__}' scraper does not provide search functionality.")
 
     def set_cookies(self, cookies: Union[RequestsCookieJar, Tuple[dict]]):
-        """
-        Replaces current cookiejar with given cookies
-
-        :param cookies: new cookiejar
-        """
+        """Replaces current cookiejar with given cookies"""
         if type(cookies) == RequestsCookieJar:
             super(Source, self).set_cookies(cookies)
         elif type(cookies) == tuple:

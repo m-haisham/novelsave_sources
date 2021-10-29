@@ -28,7 +28,7 @@ def unindent(text: str) -> str:
         elif line.startswith(' ' * indent_context):
             lines[i] = line[indent_context:]
 
-    return '\n'.join(lines) + '\n'
+    return '\r\n'.join(lines) + '\r\n'
 
 
 def render(mako_file: Path, **kwargs):
@@ -49,8 +49,8 @@ def cli():
 @cli.command(name='compile')
 def compile_():
     """Compile all mako files"""
-    sources = sorted(novel_source_types(), key=lambda s: s.__name__)
-    meta_sources = sorted(metadata_source_types(), key=lambda s: s.__name__)
+    sources = sorted(novel_source_types(), key=lambda s: (s.lang, s.base_urls[0]))
+    meta_sources = sorted(metadata_source_types(), key=lambda s: (s.lang, s.base_urls[0]))
 
     render(README_MAKO, sources=sources, meta_sources=meta_sources)
 

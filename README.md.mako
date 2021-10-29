@@ -74,7 +74,7 @@ ${'####'} ✅ Supported
         </tr>
     </thead>
     <tbody>
-        % for source in sorted(filter(lambda s: not getattr(s, 'rejected', ''), sources), key=lambda s: s.base_urls[0]):
+        % for source in filter(lambda s: not getattr(s, 'rejected', ''), sources):
             <tr>
                 <td align="center">${source.lang}</td>
                 <td>${source.base_urls[0]}</td>
@@ -100,7 +100,7 @@ ${'####'} ❌ Rejected
         </tr>
     </thead>
     <tbody>
-        % for source in sorted(filter(lambda s: getattr(s, 'rejected', None), sources), key=lambda s: s.base_urls[0]):
+        % for source in filter(lambda s: getattr(s, 'rejected', None), sources):
             <tr>
                 <td align="center">${source.lang}</td>
                 <td>${source.base_urls[0]}</td>

@@ -1,5 +1,4 @@
 import datetime
-from typing import List, Tuple
 
 from .source import Source
 from ...models import Chapter, Volume, Novel, Metadata

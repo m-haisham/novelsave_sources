@@ -16,4 +16,4 @@ from .utils.sources import (
     metadata_source_types, locate_metadata_source,
 )
 
-from .utils.http import BaseHttpGateway
+from .utils.gateways import BaseHttpGateway

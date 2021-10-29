@@ -7,7 +7,7 @@ from ...models import Novel, Chapter, Metadata
 class RoyalRoad(Source):
     name = 'Royal Road'
     base_urls = ('https://www.royalroad.com',)
-    last_updated = datetime.date(2021, 9, 6)
+    last_updated = datetime.date(2021, 10, 29)
 
     def novel(self, url: str) -> Novel:
         soup = self.get_soup(url)
@@ -24,11 +24,14 @@ class RoyalRoad(Source):
             novel.metadata.append(Metadata('subject', a.text.strip()))
 
         volume = novel.get_default_volume()
-        for a in soup.find('tbody').findAll('a', href=True):
+        for tr in soup.select('tbody > tr'):
+            a = tr.select_one('a[href]')
+
             chapter = Chapter(
                 index=len(volume.chapters),
                 title=a.text.strip(),
                 url=self.base_urls[0] + a["href"],
+                updated=datetime.datetime.strptime(tr.select_one('time').get('title'), '%A, %B %d, %Y %I:%M %p'),
             )
 
             volume.chapters.append(chapter)

@@ -1,5 +1,5 @@
 import re
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 from typing import Tuple, Union
 from urllib.parse import urlparse
 
@@ -10,7 +10,7 @@ from ...exceptions import UnavailableException
 from ...models import Novel, Chapter
 
 
-class Source(Crawler, ABC):
+class Source(Crawler):
     name: str
     lang = 'en'
     login_viable: bool = False

@@ -1,7 +1,6 @@
 import datetime
 from typing import List
 
-import requests
 from bs4 import BeautifulSoup
 
 from .source import Source
@@ -11,7 +10,7 @@ from ...models import Chapter, Novel, Metadata
 class ScribbleHub(Source):
     name = 'Scribble Hub'
     base_urls = ('https://www.scribblehub.com',)
-    last_updated = datetime.date(2021, 9, 6)
+    last_updated = datetime.date(2021, 10, 29)
 
     def novel(self, url: str) -> Novel:
         soup = self.get_soup(url)
@@ -43,24 +42,27 @@ class ScribbleHub(Source):
         chapter.title = soup.select_one('.chapter-title').text.strip()
         chapter.paragraphs = str(soup.select_one('#chp_raw'))
 
-    @staticmethod
-    def parse_toc(id_: int) -> List[Chapter]:
-        response = requests.post(
+    def parse_toc(self, id_: int) -> List[Chapter]:
+        response = self.http_gateway.post(
             'https://www.scribblehub.com/wp-admin/admin-ajax.php',
             data={
-                'action': 'wi_gettocchp',
-                'strSID': id_,
+                'action': 'wi_getreleases_pagination',
+                'pagenum': -1,
+                'mypostid': id_,
             },
         )
 
         soup = BeautifulSoup(response.content, 'lxml')
 
         chapters = []
-        for i, a in enumerate(reversed(soup.select('li > a'))):
+        for i, li in enumerate(reversed(soup.select('li.toc_w'))):
+            a = li.select_one('a')
+
             chapter = Chapter(
                 index=i,
                 title=a.text.strip(),
-                url=a['href']
+                url=a['href'],
+                updated=datetime.datetime.strptime(li.select_one('.fic_date_pub').get('title'), '%b %d, %Y %I:%M %p')
             )
 
             chapters.append(chapter)

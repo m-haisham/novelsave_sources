@@ -258,7 +258,7 @@ python3 manage.py compile
             <td align="center">en</td>
             <td>https://www.scribblehub.com</td>
             <td align="center"></td>
-            <td align="center">2021-09-06</td>
+            <td align="center">2021-10-29</td>
         </tr>
         <tr>
             <td align="center">en</td>

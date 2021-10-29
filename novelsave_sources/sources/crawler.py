@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup, Comment
 from requests.cookies import RequestsCookieJar
 
 from ..exceptions import BadResponseException
-from ..utils.http import BaseHttpGateway, DefaultHttpGateway
+from ..utils.gateways import BaseHttpGateway, DefaultHttpGateway
 
 
 class Crawler(ABC):

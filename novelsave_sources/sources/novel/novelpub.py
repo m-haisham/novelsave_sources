@@ -45,7 +45,7 @@ class NovelPub(Source):
         soup = self.get_soup(toc_url.format(1))
         self.extract_toc(soup, volume)
 
-        pages = soup.select('.pagenav .pagination > li:not(.PagedList-skipToNext)')
+        pages = soup.select('.pagenav .pagination > li:not([class])')
         pages = range(2, int(pages[-1].text.strip()) + 1) if len(pages) > 1 else range(0, 0)
         for page in pages:
             self.extract_toc(self.get_soup(toc_url.format(page)), volume)

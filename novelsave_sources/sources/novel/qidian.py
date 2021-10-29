@@ -47,7 +47,8 @@ class Qidian(Source):
                 chapter = Chapter(
                     index=c_count,
                     title=c_node['cN'],
-                    url=self.chapter_details_url.format(c_node.get('cU'))
+                    url=self.chapter_details_url.format(c_node.get('cU')),
+                    updated=datetime.datetime.fromisoformat(c_node['uT'])
                 )
 
                 volume.add(chapter)

@@ -2,10 +2,10 @@ import datetime
 
 from .source import Source
 from ...models import Chapter, Novel, Metadata
-from ...utils import url_utils
+from ...utils.mixins import UrlMixin
 
 
-class ReadNovelFull(Source):
+class ReadNovelFull(Source, UrlMixin):
     base_urls = ('https://readnovelfull.com/',)
     last_updated = datetime.date(2021, 10, 17)
 
@@ -21,7 +21,7 @@ class ReadNovelFull(Source):
             author=", ".join(author),
             synopsis=[p.text.strip() for p in soup.select('.desc-text > p')],
             thumbnail_url=self.to_absolute_url(soup.select_one('div.book img')['src']),
-            url=url_utils.clean_url(url),
+            url=self.clean_url(url),
         )
 
         for a in soup.select('.info a[href*="genre"]'):

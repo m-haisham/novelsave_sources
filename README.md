@@ -284,6 +284,12 @@ python3 manage.py compile
             <td align="center"></td>
             <td align="center">2021-09-04</td>
         </tr>
+        <tr>
+            <td align="center">zh</td>
+            <td>https://book.qidian.com</td>
+            <td align="center"></td>
+            <td align="center">2021-10-29</td>
+        </tr>
     </tbody>
 </table>
 

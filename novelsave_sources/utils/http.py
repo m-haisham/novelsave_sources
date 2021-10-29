@@ -35,7 +35,7 @@ class BaseHttpGateway(ABC):
         """Replace the existing cookies of the client with the provided"""
 
 
-class CloudScraperHttpGateway(BaseHttpGateway):
+class DefaultHttpGateway(BaseHttpGateway):
     """Http gateway implementation that uses cloudscraper module for http requests"""
 
     def __init__(self):

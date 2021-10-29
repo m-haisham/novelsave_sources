@@ -56,10 +56,13 @@ class NovelPub(Source):
         for li in soup.select('.chapter-list > li'):
             a = li.select_one('a')
 
+            updated = li.select_one('time').get('datetime', None)
+
             chapter = Chapter(
                 index=int(li['data-orderno']),
                 title=a.select_one('.chapter-title').text.strip(),
                 url=self.to_absolute_url(a['href']),
+                updated=datetime.datetime.fromisoformat(updated) if updated else None,
             )
 
             volume.add(chapter)

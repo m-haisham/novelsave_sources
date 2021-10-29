@@ -1,4 +1,6 @@
 import datetime
+from typing import List
+from urllib.parse import quote_plus
 
 from .source import Source
 from ...models import Novel, Chapter, Metadata
@@ -8,6 +10,30 @@ class RoyalRoad(Source):
     name = 'Royal Road'
     base_urls = ('https://www.royalroad.com',)
     last_updated = datetime.date(2021, 10, 29)
+    search_viable = True
+
+    search_url_template = 'https://www.royalroad.com/fictions/search?title={0}&page={1}'
+
+    def search(self, keyword: str, *args, **kwargs) -> List[Novel]:
+        search_url = self.search_url_template.format(quote_plus(keyword), 1)
+        soup = self.get_soup(search_url)
+
+        novels = []
+        for div in soup.select('.fiction-list-item'):
+            a = soup.select_one('.fiction-title a')
+
+            novel = Novel(
+                title=a.text.strip(),
+                url=self.to_absolute_url(a.get('href')),
+                thumbnail_url=self.to_absolute_url(div.select_one('img').get('src')),
+            )
+
+            for a in div.select('.tags a'):
+                novel.add_metadata('subject', a.text.strip())
+
+            novels.append(novel)
+
+        return novels
 
     def novel(self, url: str) -> Novel:
         soup = self.get_soup(url)

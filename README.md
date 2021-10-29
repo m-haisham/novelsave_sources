@@ -251,7 +251,7 @@ python3 manage.py compile
         <tr>
             <td align="center">en</td>
             <td>https://www.royalroad.com</td>
-            <td align="center"></td>
+            <td align="center">✅</td>
             <td align="center">2021-10-29</td>
         </tr>
         <tr>

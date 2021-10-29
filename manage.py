@@ -28,7 +28,7 @@ def unindent(text: str) -> str:
         elif line.startswith(' ' * indent_context):
             lines[i] = line[indent_context:]
 
-    return '\n'.join(lines) + '\n'
+    return '\r\n'.join(lines) + '\r\n'
 
 
 def render(mako_file: Path, **kwargs):

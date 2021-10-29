@@ -12,11 +12,11 @@ class NovelPub(Source):
     last_updated = datetime.date(2021, 10, 29)
     search_viable = True
 
+    search_url_template = 'https://www.novelpub.com/lnwsearchlive?inputContent={}'
+
     def __init__(self, *args, **kwargs):
         super(NovelPub, self).__init__(*args, **kwargs)
         self.bad_tags += ['i']
-
-        self.search_url_template = 'https://www.novelpub.com/lnwsearchlive?inputContent={}'
 
     def search(self, keyword: str, *args, **kwargs) -> List[Novel]:
         search_url = self.search_url_template.format(quote_plus(keyword))

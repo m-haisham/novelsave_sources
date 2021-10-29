@@ -238,8 +238,8 @@ python3 manage.py compile
         </tr>
         <tr>
             <td align="center">en</td>
-            <td>https://www.novelpub.com/</td>
-            <td align="center"></td>
+            <td>https://www.novelpub.com</td>
+            <td align="center">✅</td>
             <td align="center">2021-10-29</td>
         </tr>
         <tr>

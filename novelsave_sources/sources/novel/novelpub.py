@@ -1,16 +1,40 @@
 import datetime
+import html
+from typing import List
+from urllib.parse import quote_plus
 
 from .source import Source
 from ...models import Chapter, Novel
 
 
 class NovelPub(Source):
-    base_urls = ('https://www.novelpub.com/',)
+    base_urls = ('https://www.novelpub.com',)
     last_updated = datetime.date(2021, 10, 29)
+    search_viable = True
 
     def __init__(self, *args, **kwargs):
         super(NovelPub, self).__init__(*args, **kwargs)
         self.bad_tags += ['i']
+
+        self.search_url_template = 'https://www.novelpub.com/lnwsearchlive?inputContent={}'
+
+    def search(self, keyword: str, *args, **kwargs) -> List[Novel]:
+        search_url = self.search_url_template.format(quote_plus(keyword))
+        response = self.http_gateway.get(search_url)
+        html_content = html.unescape(response.json().get('resultview'))
+        soup = self.make_soup(html_content)
+
+        novels = []
+        for a in soup.select('.novel-list .novel-item > a'):
+            novel = Novel(
+                title=a['title'].strip(),
+                url=self.to_absolute_url(a['href']),
+                thumbnail_url=a.select_one('img')['src'],
+            )
+
+            novels.append(novel)
+
+        return novels
 
     def novel(self, url: str) -> Novel:
         soup = self.get_soup(url)

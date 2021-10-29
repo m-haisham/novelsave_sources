@@ -14,9 +14,7 @@ class ScribbleHub(Source):
     last_updated = datetime.date(2021, 10, 29)
     search_viable = True
 
-    def __init__(self, *args, **kwargs):
-        super(ScribbleHub, self).__init__(*args, **kwargs)
-        self.search_url_template = 'https://www.scribblehub.com/?s={}&post_type=fictionposts'
+    search_url_template = 'https://www.scribblehub.com/?s={}&post_type=fictionposts'
 
     def search(self, keyword: str, *args, **kwargs) -> List[Novel]:
         search_url = self.search_url_template.format(quote_plus(keyword))

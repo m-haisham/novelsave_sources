@@ -1,6 +1,6 @@
 import re
 from abc import abstractmethod
-from typing import Tuple, Union
+from typing import Tuple, Union, List
 from urllib.parse import urlparse
 
 from requests.cookies import RequestsCookieJar
@@ -41,7 +41,7 @@ class Source(Crawler):
         """Login to the source and assign the required cookies"""
         raise UnavailableException(f"'{self.__name__}' scraper does not provide login functionality.")
 
-    def search(self, keyword: str, *args, **kwargs):
+    def search(self, keyword: str, *args, **kwargs) -> List[Novel]:
         """Search for a novel on the source"""
         raise UnavailableException(f"'{self.__name__}' scraper does not provide search functionality.")
 

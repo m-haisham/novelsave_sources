@@ -78,7 +78,11 @@ ${'####'} ✅ Supported
             <tr>
                 <td align="center">${source.lang}</td>
                 <td>${source.base_urls[0]}</td>
-                <td align="center"></td>
+                % if source.search_viable:
+                    <td align="center">✅</td>
+                % else:
+                    <td align="center"></td>
+                % endif
                 <td align="center">${getattr(source, 'last_updated', '')}</td>
             </tr>
         % endfor

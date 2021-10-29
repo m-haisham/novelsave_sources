@@ -1,5 +1,6 @@
 import datetime
 from typing import List
+from urllib.parse import quote_plus
 
 from bs4 import BeautifulSoup
 
@@ -11,6 +12,27 @@ class ScribbleHub(Source):
     name = 'Scribble Hub'
     base_urls = ('https://www.scribblehub.com',)
     last_updated = datetime.date(2021, 10, 29)
+    search_viable = True
+
+    search_url_template = 'https://www.scribblehub.com/?s={}&post_type=fictionposts'
+
+    def search(self, keyword: str, *args, **kwargs) -> List[Novel]:
+        search_url = self.search_url_template.format(quote_plus(keyword))
+        soup = self.get_soup(search_url)
+
+        novels = []
+        for div in soup.select('div.search_main_box'):
+            a = div.select_one('.search_title a')
+
+            novel = Novel(
+                title=a.text.strip(),
+                url=self.to_absolute_url(a['href']),
+                thumbnail_url=div.select_one('.search_img img').get('src'),
+            )
+
+            novels.append(novel)
+
+        return novels
 
     def novel(self, url: str) -> Novel:
         soup = self.get_soup(url)

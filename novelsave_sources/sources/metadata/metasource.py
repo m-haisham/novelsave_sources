@@ -1,3 +1,4 @@
+from abc import abstractmethod
 from typing import List
 
 from ..crawler import Crawler
@@ -14,6 +15,7 @@ class MetaSource(Crawler):
         """
         return any([url.startswith(base_url) for base_url in cls.base_urls])
 
+    @abstractmethod
     def retrieve(self, url) -> List[Metadata]:
         """
         retrieves metadata from url
@@ -21,4 +23,3 @@ class MetaSource(Crawler):
         :param url: metadata source
         :return: list of metadata
         """
-        raise NotImplementedError

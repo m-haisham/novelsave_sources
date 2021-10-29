@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup, Comment
 from requests.cookies import RequestsCookieJar
 
 from ..exceptions import BadResponseException
-from ..utils.http import BaseHttpGateway, CloudScraperHttpGateway
+from ..utils.http import BaseHttpGateway, DefaultHttpGateway
 
 
 class Crawler(ABC):
@@ -18,7 +18,7 @@ class Crawler(ABC):
     rejected: str
 
     def __init__(self, http_gateway: BaseHttpGateway = None):
-        self.http_gateway = http_gateway if http_gateway is not None else CloudScraperHttpGateway()
+        self.http_gateway = http_gateway if http_gateway is not None else DefaultHttpGateway()
 
     def set_cookies(self, cookies: RequestsCookieJar):
         self.http_gateway.cookies = cookies

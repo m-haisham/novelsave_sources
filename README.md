@@ -301,13 +301,15 @@ python3 manage.py compile
             <th align="center">Lang</th>
             <th>Source</th>
             <th>Reason</th>
+            <th>Added</th>
         </tr>
     </thead>
     <tbody>
         <tr>
-            <td align="center">en</td>
+            <td align="center">multi</td>
             <td>https://www.fanfiction.net</td>
             <td>Has cloudflare bot protection</td>
+            <td>2021-10-30</td>
         </tr>
     </tbody>
 </table>

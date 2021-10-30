@@ -36,7 +36,14 @@ class BaseHttpGateway(ABC):
 
 
 class DefaultHttpGateway(BaseHttpGateway):
-    """Http gateway implementation that uses cloudscraper module for http requests"""
+    """Default Http gateway implementation used by sources
+
+    This implementation has the following properties:
+
+    - Uses cloudscraper package, which detects Cloudflare's anti-bot pages.
+    - Disables SSL protection, as this seems to break most sites.
+      As such also disables `InsecureRequestWarning` in the request context.
+    """
 
     def __init__(self):
         ctx = ssl.create_default_context()

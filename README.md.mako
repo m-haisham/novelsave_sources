@@ -74,7 +74,7 @@ ${'####'} ✅ Supported
         </tr>
     </thead>
     <tbody>
-        % for source in filter(lambda s: not getattr(s, 'rejected', ''), sources):
+        % for source in sources:
             <tr>
                 <td align="center">${source.lang}</td>
                 <td>${source.base_urls[0]}</td>
@@ -97,14 +97,16 @@ ${'####'} ❌ Rejected
             <th align="center">Lang</th>
             <th>Source</th>
             <th>Reason</th>
+            <th>Added</th>
         </tr>
     </thead>
     <tbody>
-        % for source in filter(lambda s: getattr(s, 'rejected', None), sources):
+        % for source in rejected:
             <tr>
                 <td align="center">${source.lang}</td>
-                <td>${source.base_urls[0]}</td>
-                <td>${source.rejected}</td>
+                <td>${source.base_url}</td>
+                <td>${source.reason}</td>
+                <td>${source.added}</td>
             </tr>
         % endfor
     </tbody>

@@ -1,13 +1,12 @@
 from typing import List, Tuple
 from urllib.parse import urlparse
 
-from .source import Source
-from ...models import Chapter, Novel, Metadata
+from novelsave_sources.models import Chapter, Novel, Metadata
+from novelsave_sources.sources.novel.source import Source
 
 
 class FanFiction(Source):
     base_urls = ('https://www.fanfiction.net',)
-    rejected = 'Has cloudflare bot protection'
 
     def novel(self, url: str) -> Tuple[Novel, List[Chapter], List[Metadata]]:
         soup = self.get_soup(url)

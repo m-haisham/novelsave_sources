@@ -5,6 +5,7 @@ import click
 from mako.template import Template
 
 from novelsave_sources import novel_source_types, metadata_source_types
+from static.rejected import rejected_sources
 
 BASE_DIR = Path(__file__).parent
 
@@ -52,7 +53,7 @@ def compile_():
     sources = sorted(novel_source_types(), key=lambda s: (s.lang, s.base_urls[0]))
     meta_sources = sorted(metadata_source_types(), key=lambda s: (s.lang, s.base_urls[0]))
 
-    render(README_MAKO, sources=sources, meta_sources=meta_sources)
+    render(README_MAKO, sources=sources, meta_sources=meta_sources, rejected=rejected_sources)
 
 
 if __name__ == '__main__':

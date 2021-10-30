@@ -15,7 +15,6 @@ class Crawler(ABC):
     lang: str
     base_urls: List[str]
     last_updated: datetime.date
-    rejected: str
 
     def __init__(self, http_gateway: BaseHttpGateway = None):
         self.http_gateway = http_gateway if http_gateway is not None else DefaultHttpGateway()

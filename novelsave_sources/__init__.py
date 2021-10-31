@@ -1,19 +1,20 @@
 from importlib.metadata import version
 
-__version__ = version('novelsave-sources')
+__version__ = version("novelsave-sources")
 
 from .exceptions import (
-    SourcesException, BadResponseException, UnknownSourceException,
-    UnavailableException, ChapterException,
+    BadResponseException,
+    ChapterException,
+    SourcesException,
+    UnavailableException,
+    UnknownSourceException,
 )
-
-from .models import Novel, Volume, Chapter, Metadata
-
-from .sources import Source, MetaSource
-
-from .utils.sources import (
-    novel_source_types, locate_novel_source,
-    metadata_source_types, locate_metadata_source,
-)
-
+from .models import Chapter, Metadata, Novel, Volume
+from .sources import MetaSource, Source
 from .utils.gateways import BaseHttpGateway
+from .utils.sources import (
+    locate_metadata_source,
+    locate_novel_source,
+    metadata_source_types,
+    novel_source_types,
+)

@@ -6,7 +6,7 @@ def test_static_default():
 
 
 def test_add():
-    volume = Volume(-1, '')
+    volume = Volume(-1, "")
     assert len(volume.chapters) == 0
 
     chapter = Chapter()

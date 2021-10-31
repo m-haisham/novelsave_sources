@@ -6,7 +6,7 @@ from ...models import Metadata
 
 
 class MetaSource(Crawler):
-    lang = 'en'
+    lang = "en"
 
     @classmethod
     def of(cls, url: str):
@@ -16,4 +16,3 @@ class MetaSource(Crawler):
     @abstractmethod
     def retrieve(self, url: str) -> List[Metadata]:
         """Retrieves metadata from url"""
-

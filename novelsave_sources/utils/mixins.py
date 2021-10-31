@@ -7,4 +7,4 @@ class UrlMixin:
     def clean_url(self, url: str) -> str:
         """Remove query and other addons from url"""
         pr = urlparse(url)
-        return f'{pr.scheme}://{pr.netloc}{pr.path}'
+        return f"{pr.scheme}://{pr.netloc}{pr.path}"

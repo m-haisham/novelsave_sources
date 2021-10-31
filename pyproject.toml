@@ -1,13 +1,13 @@
 [tool.poetry]
 name = "novelsave-sources"
-version = "0.3.0"
+version = "0.3.1"
 description = "A collection of novel sources offering varying amounts of scraping capability."
 authors = ["Mensch272 <47662901+mensch272@users.noreply.github.com>"]
 maintainers = ["Mensch272 <47662901+mensch272@users.noreply.github.com>"]
 repository = "https://github.com/mensch272/novelsave_sources"
 license = "Apache-2.0"
 readme = "README.md"
-keywords = ["webnovel", "novel", "lightnovel", "scraper"]
+keywords = ["webnovel", "novel", "lightnovel", "scraper", "crawler"]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "License :: OSI Approved :: Apache Software License",

@@ -28,6 +28,6 @@ def gateway():
 
 
 @pytest.mark.parametrize("source_type", metadata_source_types())
-def test_all_metadata_sources_should_receive_http_gateway(source_type, gateway):
+def test_metadata_source_should_accept_http_gateway(source_type, gateway):
     source = source_type(gateway)
     assert source.http_gateway == gateway

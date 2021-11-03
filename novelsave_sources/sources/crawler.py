@@ -21,6 +21,15 @@ class Crawler(ABC):
             http_gateway if http_gateway is not None else DefaultHttpGateway()
         )
 
+        self.init()
+
+    def init(self):
+        """Call this method instead of __init__ for trivial purposes
+
+        The purpose can be any of:
+        - editing bad_tags or blacklist_patterns
+        """
+
     def set_cookies(self, cookies: RequestsCookieJar):
         self.http_gateway.cookies = cookies
 

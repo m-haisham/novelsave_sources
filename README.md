@@ -94,6 +94,12 @@ python3 manage.py compile
         </tr>
         <tr>
             <td align="center">en</td>
+            <td>https://cclawtranslations.home.blog/</td>
+            <td align="center"></td>
+            <td align="center">2021-11-03</td>
+        </tr>
+        <tr>
+            <td align="center">en</td>
             <td>https://chrysanthemumgarden.com/</td>
             <td align="center"></td>
             <td align="center">2021-09-07</td>
@@ -283,6 +289,12 @@ python3 manage.py compile
             <td>https://www.wuxiaworld.com</td>
             <td align="center"></td>
             <td align="center">2021-09-04</td>
+        </tr>
+        <tr>
+            <td align="center">es</td>
+            <td>https://domentranslations.wordpress.com/</td>
+            <td align="center"></td>
+            <td align="center">2021-11-03</td>
         </tr>
         <tr>
             <td align="center">zh</td>

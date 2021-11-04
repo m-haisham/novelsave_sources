@@ -37,7 +37,7 @@ def _find_impl(r_location: str, interface: Type[_T]) -> List[Type[_T]]:
 
 
 def novel_source_types() -> List[Type[Source]]:
-    """Locate and return all the novel source types
+    """Return all the available novel source types
 
     The first usage may be slow as it searches for all the
     source implementations and caches the results.

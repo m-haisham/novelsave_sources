@@ -1,5 +1,15 @@
 ${'#'} 📚 Novelsave Sources
 
+![PyPI](https://img.shields.io/pypi/v/novelsave_sources)
+![Python Version](https://img.shields.io/badge/Python-v3.8-blue)
+![Repo Size](https://img.shields.io/github/repo-size/mensch272/novelsave_sources)
+[![Contributors](https://img.shields.io/github/contributors/mensch272/novelsave_sources)](https://github.com/mensch272/novelsave_sources/graphs/contributors)
+![Last Commit](https://img.shields.io/github/last-commit/mensch272/novelsave_sources/main)
+![Issues](https://img.shields.io/github/issues/mensch272/novelsave_sources)
+![Pull Requests](https://img.shields.io/github/issues-pr/mensch272/novelsave_sources)
+[![License](https://img.shields.io/github/license/mensch272/novelsave_sources)](LICENSE)
+[![Documentation Status](https://readthedocs.org/projects/novelsave-sources/badge/?version=latest)](https://novelsave-sources.readthedocs.io/en/latest/?badge=latest)
+
 A collection of novel sources offering varying amounts of scraping capability.
 
 > Request a new source by [creating a new issue](https://github.com/mensch272/novelsave_sources/issues/new/choose)

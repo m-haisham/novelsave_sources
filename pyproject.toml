@@ -37,6 +37,8 @@ Mako = "^1.1.5"
 click = "^8.0.1"
 pytest = "^6.2.5"
 pre-commit = "^2.15.0"
+sphinx_rtd_theme = "^1.0.0"
+myst_parser = "^0.15.2"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

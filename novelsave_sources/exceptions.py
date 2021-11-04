@@ -1,5 +1,5 @@
 class SourcesException(Exception):
-    """base exception for this package"""
+    """Base exception of this package from which all other exceptions are derived from."""
 
 
 class BadResponseException(SourcesException):

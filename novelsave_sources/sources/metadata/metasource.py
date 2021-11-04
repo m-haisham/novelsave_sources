@@ -13,6 +13,9 @@ class MetaSource(Crawler):
         """Checks whether the url is from this source"""
         return any(url.startswith(base_url) for base_url in cls.base_urls)
 
+    def __init__(self, *args, **kwargs):
+        super(MetaSource, self).__init__(*args, **kwargs)
+
     @abstractmethod
     def retrieve(self, url: str) -> List[Metadata]:
         """Retrieves metadata from url"""

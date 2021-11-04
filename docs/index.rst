@@ -19,12 +19,13 @@ This is a collection of novel sources offering varying amounts of scraping capab
 
 .. toctree::
    :maxdepth: 1
-   :caption: How to use:
+   :caption: API:
 
-   how_to/access_point_functions
-   how_to/sources
-   how_to/gateways
-   how_to/exceptions
+   api/access_point_functions
+   api/sources
+   api/models
+   api/gateways
+   api/exceptions
 
 .. toctree::
    :maxdepth: 1

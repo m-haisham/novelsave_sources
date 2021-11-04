@@ -16,6 +16,24 @@ class Crawler(ABC):
     base_urls: List[str]
     last_updated: datetime.date
 
+    @classmethod
+    def of(cls, url: str) -> bool:
+        """Check whether the url is from the this source
+
+        The source implementations may override this method to provide
+        custom matching functionality.
+
+        The default implementation checks if the hostname of the
+        url matches any of the base urls of the source.
+
+        :param url: The url to test if it belongs to this source
+        :type url: str
+
+        :return: Whether the url is from this source
+        :rtype: bool
+        """
+        return any(url.startswith(base_url) for base_url in cls.base_urls)
+
     def __init__(self, http_gateway: BaseHttpGateway = None):
         self.http_gateway = (
             http_gateway if http_gateway is not None else DefaultHttpGateway()

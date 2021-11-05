@@ -29,6 +29,14 @@ This is a collection of novel sources offering varying amounts of scraping capab
 
 .. toctree::
    :maxdepth: 1
+   :caption: Support:
+
+   support/supported_novel_sources
+   support/supported_metadata_sources
+   support/rejected_sources
+
+.. toctree::
+   :maxdepth: 1
    :caption: Community:
 
    community/contributing

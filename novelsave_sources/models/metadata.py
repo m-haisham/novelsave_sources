@@ -30,8 +30,10 @@ class Metadata:
         namespace (str): The namespace of the metadata. This is either Dublin Core (DC)
             or OPF.
 
-            **DC:** title, language, subject, creator, contributor, publisher, rights,
-            coverage, date, description
+            Dublin Core (DC) has the following tags:
+
+                ``title``, ``language``, ``subject``, ``creator``, ``contributor``, ``publisher``,
+                ``rights``, ``coverage``, ``date``, ``description``
 
             The :meth:`__init__` method automatically identifies the namespace.
     """

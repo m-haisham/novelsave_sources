@@ -19,8 +19,8 @@ class Crawler(ABC):
     when parsing html content
 
     Attributes:
-        lang (str): The language of the crawler. This is specified ``multi``
-            if the crawler supports multiple languages.
+        lang (str): The language of the content available through the source.
+            It is specified ``multi`` if the source supports multiple languages.
 
         base_urls (List[str]): The hostnames of the websites that this crawler
             supports.

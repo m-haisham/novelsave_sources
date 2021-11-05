@@ -22,4 +22,4 @@ Metadata
 ********
 
 .. autoclass:: novelsave_sources.Metadata
-    :members: __init__
+    :special-members: __init__

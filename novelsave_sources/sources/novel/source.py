@@ -23,9 +23,6 @@ class Source(Crawler):
 
                 name = getattr(Source, 'name', Source.__name__)
 
-        lang (str): The language of the content available through the source.
-            It is specified ``multi`` if the source supports multiple languages.
-
         login_viable (bool): Specifies if the source has login functionality
             implemented.
 

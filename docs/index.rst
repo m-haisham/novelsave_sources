@@ -16,6 +16,7 @@ This is a collection of novel sources offering varying amounts of scraping capab
 
    usage/installation
    usage/basic_usage
+   usage/examples
 
 .. toctree::
    :maxdepth: 1

@@ -1,5 +1,5 @@
-Access point functions
-######################
+Utilities
+#########
 
 This package provides two sets of utility functions for each source type.
 
@@ -9,16 +9,22 @@ the source instantiating is left to you.
 This gives you the opportunity to inject your own http gateway and override the default behaviour.
 Check out the :doc:`gateways` section for more information.
 
-Novel
-*****
+Retrieve all novel sources
+**************************
 
 .. autofunction:: novelsave_sources.novel_source_types
 
+Find the novel source that can parse a specific url
+***************************************************
+
 .. autofunction:: novelsave_sources.locate_novel_source
 
-MetaData
-********
+Retrieve all metadata sources
+*****************************
 
 .. autofunction:: novelsave_sources.metadata_source_types
+
+Find the metadata source that can parse a specific url
+******************************************************
 
 .. autofunction:: novelsave_sources.locate_metadata_source

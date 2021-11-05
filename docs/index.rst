@@ -21,9 +21,10 @@ This is a collection of novel sources offering varying amounts of scraping capab
    :maxdepth: 1
    :caption: API:
 
-   api/access_point_functions
+   api/crawler
    api/sources
    api/models
+   api/utilities
    api/gateways
    api/exceptions
 

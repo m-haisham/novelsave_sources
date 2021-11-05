@@ -73,7 +73,7 @@ Great, now we have our scraper. let's search for umm... "solo".
 
     novels = source.search('solo')
 
-``search`` returns a list of novel objects with minimal
+:ref:`search <novel source>` returns a list of novel objects with minimal
 information. You will need to do further scraping for chapter list.
 
 Retrieve metadata

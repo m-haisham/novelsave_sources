@@ -24,11 +24,11 @@ class BaseHttpGateway(ABC):
         """Send an http request to the specified url using the specified method"""
 
     def get(self, *args, **kwargs):
-        """Aliased method to send GET request using :request method"""
+        """Aliased method to send GET request using :meth:`request` method"""
         return self.request("GET", *args, **kwargs)
 
     def post(self, *args, **kwargs):
-        """Aliased method to send POST request using :request method"""
+        """Aliased method to send POST request using :meth:`request` method"""
         return self.request("POST", *args, **kwargs)
 
     @property
@@ -47,9 +47,25 @@ class DefaultHttpGateway(BaseHttpGateway):
 
     This implementation has the following properties:
 
-    - Uses cloudscraper package, which detects Cloudflare's anti-bot pages.
-    - Disables SSL protection, as this seems to break most sites.
-      As such also disables `InsecureRequestWarning` in the request context.
+    - Uses cloudscraper package, which detects Cloudflare's anti-bot pages. ::
+
+        self.session = cloudscraper.create_scraper(ssl_context=ctx)
+
+    - Disables SSL protection, as this seems to break most sites. ::
+
+        ctx = ssl.create_default_context()
+        ctx.check_hostname = False
+        ctx.verify_mode = ssl.CERT_NONE
+
+        self.session = ... # initialize scraper session
+
+        self.session.verify = False
+
+      As such also disables :exc:`InsecureRequestWarning` in the request context. ::
+
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", InsecureRequestWarning)
+            # logic
     """
 
     def __init__(self):

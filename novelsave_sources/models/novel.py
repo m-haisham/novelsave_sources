@@ -45,9 +45,7 @@ class Novel:
         """Get or create the default volume for the novel
 
         If the novel already has volumes, this method returns the
-        first volume.
-
-        Otherwise, creates and adds the default volume to novel
+        first volume, otherwise creates and adds the default volume to novel
         and returns that volume.
         """
         if self.volumes:

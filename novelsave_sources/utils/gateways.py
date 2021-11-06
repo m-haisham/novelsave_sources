@@ -21,7 +21,26 @@ class BaseHttpGateway(ABC):
         data: dict = None,
         json: dict = None,
     ) -> Response:
-        """Send an http request to the specified url using the specified method"""
+        """Send an http request to the specified url using the specified options
+
+        :param method: The method of request to send. ex: GET, POST, PUT
+        :type method: str
+        :param url: The endpoint to which the request to be made
+        :type url: str
+        :param headers: The headers to be send with the request.
+            If not specified sends default headers from requests module.
+        :type headers: dict
+        :param params: The query parameters to be send with the request.
+        :type params: dict
+        :param data: 'x-www-form-urlencoded' to be send with the request.
+        :type data: dict
+        :param json: json to be sent in the request body.
+        :type json: dict
+
+        :return: The :class:`response <requests.Response>` resulting from
+            the request
+        :rtype: requests.Response
+        """
 
     def get(self, *args, **kwargs):
         """Aliased method to send GET request using :meth:`request` method"""
@@ -34,7 +53,13 @@ class BaseHttpGateway(ABC):
     @property
     @abstractmethod
     def cookies(self) -> RequestsCookieJar:
-        """Get current cookies being used in session"""
+        """Get current cookies being used in session
+
+        The setter for this property must also be implemented.
+
+        :return: The cookies in the session
+        :rtype: RequestsCookieJar
+        """
 
     @cookies.setter
     @abstractmethod

@@ -4,9 +4,9 @@ Sources
 Sources are divided into the groups:
 
 * :ref:`Novel <novel source>`
-    Actual novel content scrapers
+    Interface to be implemented by primary novel content scrapers
 * :ref:`MetaData <metadata source>`
-    Supplementary metadata scrapers
+    Interface to be implemented by supplementary metadata scrapers
 
 .. _novel source:
 
@@ -14,7 +14,7 @@ Novel source interface
 **********************
 
 .. autoclass:: novelsave_sources.Source
-    :members: of, search, login, novel, chapter
+    :members: search, login, novel, chapter
     :special-members: __init__
     :show-inheritance:
 

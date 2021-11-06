@@ -37,7 +37,6 @@ extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.viewcode",
     "sphinx.ext.coverage",
-    "myst_parser",
     "nss.ext.source_list",
 ]
 

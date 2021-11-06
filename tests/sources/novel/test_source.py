@@ -49,4 +49,4 @@ def test_novel_source_should_mark_search_viable(source_type, gateway):
     else:
         did_search = True
 
-    assert source.search_viable == did_search
+    assert did_search == source.search_viable

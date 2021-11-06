@@ -2,10 +2,13 @@ import pytest
 from requests import Response
 from requests.cookies import RequestsCookieJar
 
-from novelsave_sources import BaseHttpGateway, novel_source_types
+from novelsave_sources import BaseHttpGateway, novel_source_types, UnavailableException
 
 
 class MockGateway(BaseHttpGateway):
+    class RequestException(Exception):
+        pass
+
     def request(
         self,
         method: str,
@@ -15,7 +18,7 @@ class MockGateway(BaseHttpGateway):
         data: dict = None,
         json: dict = None,
     ) -> Response:
-        pass
+        raise self.RequestException()
 
     @property
     def cookies(self) -> RequestsCookieJar:
@@ -31,3 +34,19 @@ def gateway():
 def test_novel_source_should_accept_http_gateway(source_type, gateway):
     source = source_type(gateway)
     assert source.http_gateway == gateway
+
+
+@pytest.mark.parametrize("source_type", novel_source_types())
+def test_novel_source_should_mark_search_viable(source_type, gateway):
+    source = source_type(gateway)
+
+    try:
+        source.search("query")
+    except MockGateway.RequestException:
+        did_search = True
+    except UnavailableException:
+        did_search = False
+    else:
+        did_search = True
+
+    assert did_search == source.search_viable

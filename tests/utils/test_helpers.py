@@ -1,11 +1,6 @@
 import pytest
 
-from novelsave_sources.utils.mixins import UrlMixin
-
-
-@pytest.fixture
-def url_mixin():
-    return UrlMixin()
+from novelsave_sources.utils import helpers
 
 
 @pytest.mark.parametrize(
@@ -16,5 +11,5 @@ def url_mixin():
         ("http://website.net#place?query", "http://website.net"),
     ],
 )
-def test_clean_url(url_mixin, url, expected_result):
-    assert url_mixin.clean_url(url) == expected_result
+def test_clean_url(url, expected_result):
+    assert helpers.clean_url(url) == expected_result

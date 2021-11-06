@@ -17,7 +17,7 @@ class Source(Crawler):
 
     Attributes:
         name (Optional[str]): Alternative name for the source,
-            otherwise use the class name Source.__name__ magic attribute.
+            otherwise use the class name ``Source.__name__`` magic attribute.
 
             For example::
 
@@ -72,7 +72,7 @@ class Source(Crawler):
         :type password: str
         """
         raise UnavailableException(
-            f"'{self.__name__}' scraper does not provide login functionality."
+            f"'{type(self).__name__}' scraper does not provide login functionality."
         )
 
     def search(self, keyword: str, *args, **kwargs) -> List[Novel]:
@@ -93,7 +93,7 @@ class Source(Crawler):
         :rtype: List[Novel]
         """
         raise UnavailableException(
-            f"'{self.__name__}' scraper does not provide search functionality."
+            f"'{type(self).__name__}' scraper does not provide search functionality."
         )
 
     def set_cookies(self, cookies: Union[RequestsCookieJar, Tuple[dict]]):

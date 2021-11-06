@@ -12,53 +12,9 @@ ${'#'} 📚 Novelsave Sources
 
 A collection of novel sources offering varying amounts of scraping capability.
 
+Read the [docs](https://novelsave-sources.readthedocs.io/en/latest/) for more information.
+
 > Request a new source by [creating a new issue](https://github.com/mensch272/novelsave_sources/issues/new/choose)
-
-${'##'} 🤖 Usage
-
-${'###'} API
-
-This package exposes 4 basic functions that can be used to interact with the provided
-sources, both of novel and metadata variety.
-
-| Function                 | Description                                                  | Parameters   | Returns                  |
-| ------------------------ | ------------------------------------------------------------ | ------------ | ------------------------ |
-| `novel_source_types`     | Locate and return all the novel source types                 |              | `List[Type[Source]]`     |
-| `locate_novel_source`    | Locate and return the novel source parser for the url if it is supported | url:str | `Type[Source]`           |
-| `metadata_source_types`  | Locate and return all the metadata source types              |              | `List[Type[MetaSource]]` |
-| `locate_metadata_source` | Locate and return the metadata source parser for the url if it is supported | url:str | `Type[MetaSource]`       |
-
-${'####'} Example
-
-Given that you have a novel url you want to parse, you may do the following
-
-```python
-import novelsave_sources as nss
-
-# url of the novel you want to parse
-url = ...
-
-# tries to find a source that can scrape the provided url
-# if not found throws a nss.UnknownSourceException
-source = nss.locate_novel_source(url)()
-
-# scrape the website and parse the data into a novel object
-novel = source.novel(url)
-```
-
-${'###'} Behaviour
-
-${'####'} HttpGateway
-
-`Crawler` type which `Source` extends from takes a `BaseHttpGateway` as a dependency.
-
-The default implementation has the following properties:
-
-- Uses `cloudscraper` package, which detects Cloudflare's anti-bot pages.
-- Disables SSL protection, as this seems to break most sites.
-
-You may override this behaviour by implementing `BaseHttpGateway` interface,
-and providing it as a dependency when sources are instantiated.
 
 ${'###'} Build
 

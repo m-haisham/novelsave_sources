@@ -1,11 +1,11 @@
 Basic usage
 ###########
 
-Eager to start? This package provides scraping support for a multitude
+This package provides scraping support for a multitude
 of light novel sources.
 
-Each scraper has support for scraping novel information and chapter content.
-Also provides optional support for search.
+Each scraper has support for scraping novel information and chapter content,
+while providing optional support for search.
 
 You can check which sources are supported at:
 
@@ -37,7 +37,7 @@ Now let's get a crawler instance that works with the url above:
 
 In this instance, we arent worried it won't find a matching crawler.
 
-Now that we have a scraper, lets get finally get to scraping the novel.
+Now that we have a scraper, lets finally get to scraping the novel.
 
 .. code-block:: python
 
@@ -52,7 +52,10 @@ in them for that we need to use another method.
         for chapter in volume.chapters:
             source.chapter(chapter)
 
-Keep in mind that this can take a lot of time. That's it, it's that simple.
+Keep in mind that scraping chapters can take a lot of time depending on the
+amount of chapters since it will be downloading each chapter page.
+
+That's it, it's that simple.
 
 Find a novel
 ************
@@ -73,8 +76,9 @@ Great, now we have our scraper. let's search for umm... "solo".
 
     novels = source.search('solo')
 
-:ref:`search <novel source>` returns a list of novel objects with minimal
-information. You will need to do further scraping for chapter list.
+:meth:`search <novelsave_sources.Source.search>` returns a list of novel
+objects with minimal information. You will need to do further scraping to
+get the chapter list.
 
 Retrieve metadata
 *********************
@@ -86,8 +90,8 @@ metadata source.
 
     url = ...
 
-At the start, it is similar to scraping a novel. We must
-first find a the correct crawler for the url.
+To start, it is similar to scraping a novel. We must
+first find the correct crawler for the url.
 
 .. code-block:: python
 

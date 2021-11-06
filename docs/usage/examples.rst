@@ -1,6 +1,8 @@
 Examples
 ########
 
+Below are a collection of examples that you may find useful.
+
 Scraping a novel
 ****************
 
@@ -27,8 +29,8 @@ Scraping a novel
         for chapter in volume.chapters:
             source.chapter(chapter)
 
-Searching in specific source
-****************************
+Searching in a specific source
+******************************
 
 .. code-block:: python
 

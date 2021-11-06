@@ -16,9 +16,28 @@ Read the [docs](https://novelsave-sources.readthedocs.io/en/latest/) for more in
 
 > Request a new source by [creating a new issue](https://github.com/mensch272/novelsave_sources/issues/new/choose)
 
-${'###'} Build
+${'###'} Development
 
-To update the sources segment in the README.md, run the following command:
+Make sure you complete the following before you start development:
+
+1. Install poetry as described in their [documentation](https://python-poetry.org/docs/#installation).
+
+2. Install all project dependencies
+
+    ```bash
+    poetry install
+    ```
+
+3. And setup git hooks by running
+
+    ```bash
+    pre-commit install
+    ```
+
+___
+
+If you have updated a source make sure to update the
+sources segment in the README.md by running the following command:
 
 ```bash
 python3 manage.py compile

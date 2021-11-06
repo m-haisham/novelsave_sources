@@ -4,8 +4,11 @@ from pathlib import Path
 import click
 from mako.template import Template
 
-from novelsave_sources import metadata_source_types, novel_source_types
-from static.rejected import rejected_sources
+from novelsave_sources import (
+    metadata_source_types,
+    novel_source_types,
+    rejected_sources,
+)
 
 BASE_DIR = Path(__file__).parent
 

@@ -13,6 +13,8 @@
 import os
 import sys
 
+import novelsave_sources
+
 sys.path.insert(0, os.path.abspath("."))
 
 # -- Project information -----------------------------------------------------
@@ -22,7 +24,7 @@ copyright = "2021, Mensch272"
 author = "Mensch272"
 
 # The full version, including alpha/beta/rc tags
-release = "0.3.1"
+release = novelsave_sources.__version__
 
 
 # -- General configuration ---------------------------------------------------

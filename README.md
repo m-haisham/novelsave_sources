@@ -1,54 +1,20 @@
 # 📚 Novelsave Sources
 
+![PyPI](https://img.shields.io/pypi/v/novelsave_sources)
+![Python Version](https://img.shields.io/badge/Python-v3.8-blue)
+![Repo Size](https://img.shields.io/github/repo-size/mensch272/novelsave_sources)
+[![Contributors](https://img.shields.io/github/contributors/mensch272/novelsave_sources)](https://github.com/mensch272/novelsave_sources/graphs/contributors)
+![Last Commit](https://img.shields.io/github/last-commit/mensch272/novelsave_sources/main)
+![Issues](https://img.shields.io/github/issues/mensch272/novelsave_sources)
+![Pull Requests](https://img.shields.io/github/issues-pr/mensch272/novelsave_sources)
+[![License](https://img.shields.io/github/license/mensch272/novelsave_sources)](LICENSE)
+[![Documentation Status](https://readthedocs.org/projects/novelsave-sources/badge/?version=latest)](https://novelsave-sources.readthedocs.io/en/latest/?badge=latest)
+
 A collection of novel sources offering varying amounts of scraping capability.
 
+Read the [docs](https://novelsave-sources.readthedocs.io/en/latest/) for more information.
+
 > Request a new source by [creating a new issue](https://github.com/mensch272/novelsave_sources/issues/new/choose)
-
-## 🤖 Usage
-
-### API
-
-This package exposes 4 basic functions that can be used to interact with the provided
-sources, both of novel and metadata variety.
-
-| Function                 | Description                                                  | Parameters   | Returns                  |
-| ------------------------ | ------------------------------------------------------------ | ------------ | ------------------------ |
-| `novel_source_types`     | Locate and return all the novel source types                 |              | `List[Type[Source]]`     |
-| `locate_novel_source`    | Locate and return the novel source parser for the url if it is supported | url:str | `Type[Source]`           |
-| `metadata_source_types`  | Locate and return all the metadata source types              |              | `List[Type[MetaSource]]` |
-| `locate_metadata_source` | Locate and return the metadata source parser for the url if it is supported | url:str | `Type[MetaSource]`       |
-
-#### Example
-
-Given that you have a novel url you want to parse, you may do the following
-
-```python
-import novelsave_sources as nss
-
-# url of the novel you want to parse
-url = ...
-
-# tries to find a source that can scrape the provided url
-# if not found throws a nss.UnknownSourceException
-source = nss.locate_novel_source(url)()
-
-# scrape the website and parse the data into a novel object
-novel = source.novel(url)
-```
-
-### Behaviour
-
-#### HttpGateway
-
-`Crawler` type which `Source` extends from takes a `BaseHttpGateway` as a dependency.
-
-The default implementation has the following properties:
-
-- Uses `cloudscraper` package, which detects Cloudflare's anti-bot pages.
-- Disables SSL protection, as this seems to break most sites.
-
-You may override this behaviour by implementing `BaseHttpGateway` interface,
-and providing it as a dependency when sources are instantiated.
 
 ### Build
 

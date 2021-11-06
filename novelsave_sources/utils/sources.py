@@ -37,16 +37,26 @@ def _find_impl(r_location: str, interface: Type[_T]) -> List[Type[_T]]:
 
 
 def novel_source_types() -> List[Type[Source]]:
-    """Locate and return all the novel source types
+    """Return all the available novel source types
 
     The first usage may be slow as it searches for all the
     source implementations and caches the results.
+
+    :return: All the novel source scraper implementations
+    :rtype: List[Type[Source]]
     """
     return _find_impl("../../sources/novel", Source)
 
 
 def locate_novel_source(url: str) -> Type[Source]:
     """Locate and return the novel source parser for the url if it is supported
+
+    :param url: Url pointing to the novel or the chapter needing to be
+        scraped.
+    :type url: str
+
+    :return: Specific novel scraper that supports the url provided.
+    :rtype: Type[Source]
 
     :raises UnknownSourceException: if the url cannot be parsed by any existing source schema
     """
@@ -62,12 +72,21 @@ def metadata_source_types() -> List[Type[MetaSource]]:
 
     The first usage may be slow as it searches for all the
     source implementations and caches the results.
+
+    :return: All the metadata source scraper implementations
+    :rtype: List[Type[MetaSource]]
     """
     return _find_impl("../../sources/metadata", MetaSource)
 
 
 def locate_metadata_source(url: str) -> Type[MetaSource]:
     """Locate and return the metadata source parser for the url if it is supported
+
+    :param url: Url pointing to the metadata profile.
+    :type url: str
+
+    :return: Specific metadata scraper that supports the url provided.
+    :rtype: Type[MetaSource]
 
     :raises UnknownSourceException: if the url cannot be parsed by any existing source schema
     """

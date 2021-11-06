@@ -6,13 +6,26 @@ from ...models import Metadata
 
 
 class MetaSource(Crawler):
+    """MetaData source interface
+
+    All metadata sources must implement this interface.
+    """
+
     lang = "en"
 
-    @classmethod
-    def of(cls, url: str):
-        """Checks whether the url is from this source"""
-        return any(url.startswith(base_url) for base_url in cls.base_urls)
+    def __init__(self, *args, **kwargs):
+        super(MetaSource, self).__init__(*args, **kwargs)
 
     @abstractmethod
     def retrieve(self, url: str) -> List[Metadata]:
-        """Retrieves metadata from url"""
+        """Retrieves metadata from url
+
+        An implementation might retrieve the metadata by requesting
+        from an api endpoint or from scraping a website.
+
+        :param url: Url pointing to the metadata
+        :type url: str
+
+        :return: List of metadata retrieved for the page.
+        :rtype: List[Metadata]
+        """

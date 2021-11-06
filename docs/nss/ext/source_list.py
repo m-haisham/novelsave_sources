@@ -1,13 +1,7 @@
 from typing import List
 
-
-try:
-    from StringIO import StringIO
-except ImportError:
-    from io import StringIO
-
-from docutils.parsers.rst import Directive, directives
 from docutils import nodes
+from docutils.parsers.rst import Directive, directives
 
 from novelsave_sources import (
     novel_source_types,

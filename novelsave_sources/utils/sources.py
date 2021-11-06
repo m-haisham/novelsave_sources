@@ -15,7 +15,7 @@ def _find_impl(r_location: str, interface: Type[_T]) -> List[Type[_T]]:
     """Finds the implementations of the interface in the provided package location"""
     impls = []
     package = r_location.replace("../", ".").replace("/", ".").rstrip(".")
-    for path in (Path(__file__) / r_location).glob("*.py"):
+    for path in (Path(__file__) / r_location).resolve().glob("*.py"):
         if not path.is_file():
             continue
         elif path.name.startswith("_"):  # private files

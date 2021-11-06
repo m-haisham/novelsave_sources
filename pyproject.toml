@@ -43,6 +43,7 @@ pre-commit = "^2.15.0"
 sphinx_rtd_theme = "^1.0.0"
 sphinx = "^4.2.0"
 pytest-cov = "^3.0.0"
+tox = "^3.24.4"
 
 [tool.poetry.extras]
 docs = ["sphinx", "sphinx_rtd_theme", "myst_parser"]

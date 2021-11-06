@@ -11,7 +11,7 @@ Welcome to novelsave-sources's documentation!
 This is a collection of novel sources offering varying amounts of scraping capability.
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
    :caption: Usage:
 
    usage/installation
@@ -19,7 +19,7 @@ This is a collection of novel sources offering varying amounts of scraping capab
    usage/examples
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
    :caption: API:
 
    api/crawler
@@ -30,7 +30,7 @@ This is a collection of novel sources offering varying amounts of scraping capab
    api/exceptions
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
    :caption: Support:
 
    support/supported_novel_sources
@@ -38,7 +38,7 @@ This is a collection of novel sources offering varying amounts of scraping capab
    support/rejected_sources
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
    :caption: Community:
 
    community/contributing

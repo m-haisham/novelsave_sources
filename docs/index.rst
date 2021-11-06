@@ -6,7 +6,7 @@
 Welcome to novelsave-sources's documentation!
 =============================================
 
-|pypi| |python-version| |repo-size| |contrib| |last-commit| |issues| |pull-requests| |license| |tests| |doc-status|
+|pypi| |python-version| |repo-size| |contrib| |last-commit| |issues| |pull-requests| |license| |tests| |pre-commit| |doc-status|
 
 This is a collection of novel sources offering varying amounts of scraping capability.
 
@@ -84,6 +84,10 @@ Indices and tables
 .. |tests| image:: https://github.com/mensch272/novelsave_sources/actions/workflows/tests.yml/badge.svg
    :alt: Tests
    :target: https://github.com/mensch272/novelsave_sources/actions/workflows/tests.yml
+
+.. |pre-commit| image:: https://results.pre-commit.ci/badge/github/mensch272/novelsave_sources/main.svg
+   :target: https://results.pre-commit.ci/latest/github/mensch272/novelsave_sources/main
+   :alt: pre-commit.ci status
 
 .. |doc-status| image:: https://readthedocs.org/projects/novelsave-sources/badge/?version=latest
    :alt: Documentation Status

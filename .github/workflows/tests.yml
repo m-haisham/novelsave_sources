@@ -1,15 +1,19 @@
-name: Automated Tests
+name: Tests
 
 on:
-  - push
-  - pull_request
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
   test:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        is: [ ubuntu-latest, windows-latest ]
+        os: [ ubuntu-latest, windows-latest ]
         python-version: [ '3.8', '3.9', '3.10' ]
 
     steps:
@@ -25,7 +29,7 @@ jobs:
       - name: Install poetry
         uses: abatilo/actions-poetry@v2.0.0
         with:
-          poetry-version: 1.1.10
+          poetry-version: 1.0.8
       - name: Install requirements
         run: |
           poetry install

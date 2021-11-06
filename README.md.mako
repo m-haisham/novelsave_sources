@@ -8,6 +8,7 @@ ${'#'} 📚 Novelsave Sources
 ![Issues](https://img.shields.io/github/issues/mensch272/novelsave_sources)
 ![Pull Requests](https://img.shields.io/github/issues-pr/mensch272/novelsave_sources)
 [![License](https://img.shields.io/github/license/mensch272/novelsave_sources)](LICENSE)
+[![Tests](https://github.com/mensch272/novelsave_sources/actions/workflows/tests.yml/badge.svg)](https://github.com/mensch272/novelsave_sources/actions/workflows/tests.yml)
 [![Documentation Status](https://readthedocs.org/projects/novelsave-sources/badge/?version=latest)](https://novelsave-sources.readthedocs.io/en/latest/?badge=latest)
 
 A collection of novel sources offering varying amounts of scraping capability.

@@ -9,8 +9,11 @@ except ImportError:
 from docutils.parsers.rst import Directive, directives
 from docutils import nodes
 
-from novelsave_sources import novel_source_types, metadata_source_types
-from static.rejected import rejected_sources
+from novelsave_sources import (
+    novel_source_types,
+    metadata_source_types,
+    rejected_sources,
+)
 
 
 class SourceListDirective(Directive):

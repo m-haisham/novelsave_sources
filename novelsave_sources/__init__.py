@@ -10,7 +10,7 @@ from .exceptions import (
     UnknownSourceException,
 )
 from .models import Chapter, Metadata, Novel, Volume
-from .sources import MetaSource, Source
+from .sources import MetaSource, Source, Rejected, rejected_sources
 from .utils.gateways import BaseHttpGateway
 from .utils.sources import (
     locate_metadata_source,

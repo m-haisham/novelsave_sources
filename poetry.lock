@@ -173,7 +173,7 @@ description = "File identification library for Python"
 name = "identify"
 optional = false
 python-versions = ">=3.6.1"
-version = "2.3.3"
+version = "2.3.4"
 
 [package.extras]
 license = ["editdistance-s"]
@@ -375,8 +375,8 @@ category = "dev"
 description = "library with cross-python path, ini-parsing, io, code, log facilities"
 name = "py"
 optional = false
-python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
-version = "1.10.0"
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
+version = "1.11.0"
 
 [[package]]
 category = "dev"
@@ -721,8 +721,8 @@ filelock = [
     {file = "filelock-3.3.2.tar.gz", hash = "sha256:7afc856f74fa7006a289fd10fa840e1eebd8bbff6bffb69c26c54a0512ea8cf8"},
 ]
 identify = [
-    {file = "identify-2.3.3-py2.py3-none-any.whl", hash = "sha256:ffab539d9121b386ffdea84628ff3eefda15f520f392ce11b393b0a909632cdf"},
-    {file = "identify-2.3.3.tar.gz", hash = "sha256:b9ffbeb7ed87e96ce017c66b80ca04fda3adbceb5c74e54fc7d99281d27d0859"},
+    {file = "identify-2.3.4-py2.py3-none-any.whl", hash = "sha256:4de55a93e0ba72bf917c840b3794eb1055a67272a1732351c557c88ec42011b1"},
+    {file = "identify-2.3.4.tar.gz", hash = "sha256:595283a1c3a078ac5774ad4dc4d1bdd0c1602f60bcf11ae673b64cb2b1945762"},
 ]
 idna = [
     {file = "idna-3.3-py3-none-any.whl", hash = "sha256:84d9dd047ffa80596e0f246e2eab0b391788b0503584e8945f2368256d2735ff"},
@@ -895,8 +895,8 @@ pre-commit = [
     {file = "pre_commit-2.15.0.tar.gz", hash = "sha256:3c25add78dbdfb6a28a651780d5c311ac40dd17f160eb3954a0c59da40a505a7"},
 ]
 py = [
-    {file = "py-1.10.0-py2.py3-none-any.whl", hash = "sha256:3b80836aa6d1feeaa108e046da6423ab8f6ceda6468545ae8d02d9d58d18818a"},
-    {file = "py-1.10.0.tar.gz", hash = "sha256:21b81bda15b66ef5e1a777a21c4dcd9c20ad3efd0b3f817e7a809035269e1bd3"},
+    {file = "py-1.11.0-py2.py3-none-any.whl", hash = "sha256:607c53218732647dff4acdfcd50cb62615cedf612e72d1724fb1a0cc6405b378"},
+    {file = "py-1.11.0.tar.gz", hash = "sha256:51c75c4126074b472f746a24399ad32f6053d1b34b68d2fa41e558e6f4a98719"},
 ]
 pygments = [
     {file = "Pygments-2.10.0-py3-none-any.whl", hash = "sha256:b8e67fe6af78f492b3c4b3e2970c0624cbf08beb1e493b2c99b9fa1b67a20380"},

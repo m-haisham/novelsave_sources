@@ -30,8 +30,5 @@ jobs:
         uses: abatilo/actions-poetry@v2.0.0
         with:
           poetry-version: 1.0.8
-      - name: Install requirements
-        run: |
-          poetry install
       - name: Test with Tox
         run: tox

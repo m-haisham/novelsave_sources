@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Optional, List
+from typing import List, Optional
 
 from .metadata import Metadata
 from .volume import Volume
@@ -11,9 +11,9 @@ class Novel:
     url: str
     author: Optional[str] = None
     synopsis: List[str] = field(default_factory=lambda: [])
-    thumbnail_url: str = None
+    thumbnail_url: Optional[str] = None
     status: Optional[str] = None
-    lang: str = 'en'
+    lang: str = "en"
 
     volumes: List[Volume] = field(default_factory=lambda: [])
     metadata: List[Metadata] = field(default_factory=lambda: [])

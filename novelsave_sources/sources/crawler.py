@@ -17,21 +17,32 @@ class Crawler(ABC):
     last_updated: datetime.date
 
     def __init__(self, http_gateway: BaseHttpGateway = None):
-        self.http_gateway = http_gateway if http_gateway is not None else DefaultHttpGateway()
+        self.http_gateway = (
+            http_gateway if http_gateway is not None else DefaultHttpGateway()
+        )
+
+        self.init()
+
+    def init(self):
+        """Call this method instead of __init__ for trivial purposes
+
+        The purpose can be any of:
+        - editing bad_tags or blacklist_patterns
+        """
 
     def set_cookies(self, cookies: RequestsCookieJar):
         self.http_gateway.cookies = cookies
 
-    def get_soup(self, url: str, method: str = 'GET', **kwargs) -> BeautifulSoup:
+    def get_soup(self, url: str, method: str = "GET", **kwargs) -> BeautifulSoup:
         """Download website html and create a bs4 object"""
-        soup = self.make_soup(self.request(method, url, **kwargs).content, 'lxml')
-        if not soup.find('body'):
-            raise ConnectionError('HTML document was not loaded correctly.')
+        soup = self.make_soup(self.request(method, url, **kwargs).content, "lxml")
+        if not soup.find("body"):
+            raise ConnectionError("HTML document was not loaded correctly.")
 
         return soup
 
     @staticmethod
-    def make_soup(text: Union[str, bytes], parser: str = 'lxml'):
+    def make_soup(text: Union[str, bytes], parser: str = "lxml"):
         return BeautifulSoup(text, parser)
 
     def request(self, method: str, url: str, **kwargs):
@@ -47,26 +58,48 @@ class Crawler(ABC):
 
     def request_get(self, url, **kwargs):
         """Creates a get request to the specified url"""
-        return self.request('GET', url, **kwargs)
+        return self.request("GET", url, **kwargs)
 
     # ---- Inspired from https://github.com/dipu-bd/lightnovel-crawler ----
     # ----      And almost a perfect copy of the functions below       ----
 
     bad_tags = [
-        'noscript', 'script', 'style', 'iframe', 'ins', 'header', 'footer',
-        'button', 'input', 'amp-auto-ads', 'pirate', 'figcaption', 'address',
-        'tfoot', 'object', 'video', 'audio', 'source', 'nav', 'output', 'select',
-        'textarea', 'form', 'map',
+        "noscript",
+        "script",
+        "style",
+        "iframe",
+        "ins",
+        "header",
+        "footer",
+        "button",
+        "input",
+        "amp-auto-ads",
+        "pirate",
+        "figcaption",
+        "address",
+        "tfoot",
+        "object",
+        "video",
+        "audio",
+        "source",
+        "nav",
+        "output",
+        "select",
+        "textarea",
+        "form",
+        "map",
     ]
 
     blacklist_patterns = []
 
     notext_tags = [
-        'img',
+        "img",
     ]
 
     preserve_attrs = [
-        'href', 'src', 'alt',
+        "href",
+        "src",
+        "alt",
     ]
 
     def is_blacklisted(self, text):
@@ -107,9 +140,9 @@ class Crawler(ABC):
         if isinstance(element, Comment):
             element.extract()
 
-        elif element.name == 'br':
-            next_element = getattr(element, 'next_sibling')
-            if next_element and next_element.name == 'br':
+        elif element.name == "br":
+            next_element = getattr(element, "next_sibling")
+            if next_element and next_element.name == "br":
                 element.extract()
 
         # Remove bad tags
@@ -118,7 +151,9 @@ class Crawler(ABC):
 
         # Remove empty elements
         elif not element.text.strip():
-            if element.name not in self.notext_tags and not element.find_all(recursive=False):
+            if element.name not in self.notext_tags and not element.find_all(
+                recursive=False
+            ):
                 element.extract()
 
         # Remove blacklisted elements
@@ -126,8 +161,12 @@ class Crawler(ABC):
             element.extract()
 
         # Remove attributes
-        elif hasattr(element, 'attrs'):
-            element.attrs = {key: element.get(key) for key in self.preserve_attrs if key in element.attrs}
+        elif hasattr(element, "attrs"):
+            element.attrs = {
+                key: element.get(key)
+                for key in self.preserve_attrs
+                if key in element.attrs
+            }
 
     @staticmethod
     def find_paragraphs(element, **kwargs) -> List[str]:
@@ -159,11 +198,11 @@ class Crawler(ABC):
         - relative current: the url is relative to the current website and does not match
           any of the above conditions, in this case the url is added to the current url provided.
         """
-        if url.startswith('http://') or url.startswith('https://'):
+        if url.startswith("http://") or url.startswith("https://"):
             return url
-        if url.startswith('//'):
-            return f'{urlparse(current_url or self.base_urls[0]).scheme}:{url}'
-        elif url.startswith('/'):
-            return self.base_urls[0].rstrip('/') + url
+        if url.startswith("//"):
+            return f"{urlparse(current_url or self.base_urls[0]).scheme}:{url}"
+        elif url.startswith("/"):
+            return self.base_urls[0].rstrip("/") + url
 
-        return current_url.rstrip('/') + url
+        return current_url.rstrip("/") + url

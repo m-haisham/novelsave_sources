@@ -1,30 +1,30 @@
 import datetime
 
 from .source import Source
-from ...models import Novel, Chapter
+from ...models import Chapter, Novel
 
 
 class WuxiaOnline(Source):
-    name = 'WuxiaWorld.online'
-    base_urls = ('https://wuxiaworld.online',)
+    name = "WuxiaWorld.online"
+    base_urls = ("https://wuxiaworld.online",)
     last_updated = datetime.date(2021, 9, 7)
 
     def novel(self, url: str) -> Novel:
         soup = self.get_soup(url)
 
         synopsis = []
-        for element in soup.select('#noidungm > *'):
-            if element.name == 'hr':
+        for element in soup.select("#noidungm > *"):
+            if element.name == "hr":
                 break
-            elif element.name == 'p':
-                if 'style' in element.attrs:
+            elif element.name == "p":
+                if "style" in element.attrs:
                     continue
 
                 synopsis.append(element.text.strip())
 
         novel = Novel(
-            title=soup.select_one('h1.entry-title').text.strip(),
-            thumbnail_url=self.base_urls[0] + soup.select_one('.info_image img')['src'],
+            title=soup.select_one("h1.entry-title").text.strip(),
+            thumbnail_url=self.base_urls[0] + soup.select_one(".info_image img")["src"],
             synopsis=synopsis,
             url=url,
         )
@@ -34,11 +34,9 @@ class WuxiaOnline(Source):
             novel.author = author_element.text.strip()
 
         volume = novel.get_default_volume()
-        for a in reversed(soup.select('.chapter-list > .row a')):
+        for a in reversed(soup.select(".chapter-list > .row a")):
             chapter = Chapter(
-                index=len(volume.chapters),
-                title=a.text.strip(),
-                url=a['href']
+                index=len(volume.chapters), title=a.text.strip(), url=a["href"]
             )
 
             volume.chapters.append(chapter)
@@ -48,7 +46,7 @@ class WuxiaOnline(Source):
     def chapter(self, chapter: Chapter):
         soup = self.get_soup(chapter.url)
 
-        content = soup.select_one('#list_chapter .content-area')
+        content = soup.select_one("#list_chapter .content-area")
 
         for h2 in content.select('h2[style="font-weight:bold"]'):
             h2.extract()
@@ -57,7 +55,7 @@ class WuxiaOnline(Source):
             hidden.extract()
 
         first_element = next(content.children)
-        if first_element.name == 'br':
+        if first_element.name == "br":
             first_element.extract()
 
         self.clean_contents(content)
@@ -68,16 +66,16 @@ class WuxiaOnline(Source):
 
         try:
             # hidden anti-scraping content
-            if 'display:none' in element['style']:
+            if "display:none" in element["style"]:
                 element.extract()
                 return
         except KeyError:
             pass
 
         try:
-            if element.name == 'h2' and 'font-weight:bold' in element['style']:
+            if element.name == "h2" and "font-weight:bold" in element["style"]:
                 next_sibling = element.nextSibling()
-                if next_sibling.name == 'br':
+                if next_sibling.name == "br":
                     next_sibling.extract()
 
                 element.extract()

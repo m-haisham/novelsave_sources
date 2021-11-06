@@ -1,9 +1,16 @@
 from dataclasses import dataclass
 
 DUBLIN_CORE_TAGS = [
-    'title', 'language', 'subject',
-    'creator', 'contributor', 'publisher', 'rights',
-    'coverage', 'date', 'description',
+    "title",
+    "language",
+    "subject",
+    "creator",
+    "contributor",
+    "publisher",
+    "rights",
+    "coverage",
+    "date",
+    "description",
 ]
 
 
@@ -29,8 +36,8 @@ class Metadata:
     - DC:description
     """
 
-    DUBLIN_CORE = 'DC'
-    CUSTOM = 'OPF'
+    DUBLIN_CORE = "DC"
+    CUSTOM = "OPF"
 
     name: str
     value: str

@@ -1,8 +1,8 @@
-from novelsave_sources import Novel, Volume, Metadata
+from novelsave_sources import Metadata, Novel, Volume
 
 
 def test_get_default_volume_inital_empty():
-    novel = Novel('', '')
+    novel = Novel("", "")
     assert len(novel.volumes) == 0
 
     volume = novel.get_default_volume()
@@ -13,8 +13,8 @@ def test_get_default_volume_inital_empty():
 
 
 def test_get_default_volume_with_volume():
-    novel = Novel('', '')
-    volume = Volume(0, '')
+    novel = Novel("", "")
+    volume = Volume(0, "")
 
     novel.volumes = [volume]
     assert len(novel.volumes) == 1
@@ -24,8 +24,8 @@ def test_get_default_volume_with_volume():
 
 
 def test_add_metadata():
-    novel = Novel('', '')
-    novel.add_metadata('name', 'value', {'role': 'none'})
+    novel = Novel("", "")
+    novel.add_metadata("name", "value", {"role": "none"})
 
     assert len(novel.metadata) == 1
-    assert novel.metadata[0] == Metadata('name', 'value', {'role': 'none'})
+    assert novel.metadata[0] == Metadata("name", "value", {"role": "none"})

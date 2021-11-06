@@ -1,18 +1,18 @@
 import re
 from abc import abstractmethod
-from typing import Tuple, Union, List
+from typing import List, Tuple, Union
 from urllib.parse import urlparse
 
 from requests.cookies import RequestsCookieJar
 
 from ..crawler import Crawler
 from ...exceptions import UnavailableException
-from ...models import Novel, Chapter
+from ...models import Chapter, Novel
 
 
 class Source(Crawler):
     name: str
-    lang = 'en'
+    lang = "en"
     login_viable: bool = False
     search_viable: bool = False
 
@@ -28,22 +28,28 @@ class Source(Crawler):
         super(Source, self).__init__(*args, **kwargs)
 
         # set default cookie domains
-        if not hasattr(self, 'cookie_domains'):
+        if not hasattr(self, "cookie_domains"):
             self.cookie_domains = []
             for url in self.base_urls:
                 netloc = urlparse(url).netloc
                 self.cookie_domains += [
                     netloc,
-                    re.search(r'.+?(\..+)', netloc).group(1),  # remove the segment before first dot
+                    re.search(r".+?(\..+)", netloc).group(
+                        1
+                    ),  # remove the segment before first dot
                 ]
 
     def login(self, email: str, password: str):
         """Login to the source and assign the required cookies"""
-        raise UnavailableException(f"'{self.__name__}' scraper does not provide login functionality.")
+        raise UnavailableException(
+            f"'{self.__name__}' scraper does not provide login functionality."
+        )
 
     def search(self, keyword: str, *args, **kwargs) -> List[Novel]:
         """Search for a novel on the source"""
-        raise UnavailableException(f"'{self.__name__}' scraper does not provide search functionality.")
+        raise UnavailableException(
+            f"'{self.__name__}' scraper does not provide search functionality."
+        )
 
     def set_cookies(self, cookies: Union[RequestsCookieJar, Tuple[dict]]):
         """Replaces current cookiejar with given cookies"""
@@ -62,7 +68,8 @@ class Source(Crawler):
                 self.http_gateway.cookies.set(**cookie)
         else:
             raise TypeError(
-                f"Unexpected type received: {type(cookies)}; Require either 'RequestsCookieJar' or 'Tuple[dict]'")
+                f"Unexpected type received: {type(cookies)}; Require either 'RequestsCookieJar' or 'Tuple[dict]'"
+            )
 
     @abstractmethod
     def novel(self, url: str) -> Novel:

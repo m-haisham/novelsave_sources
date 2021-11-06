@@ -12,17 +12,24 @@ class BaseHttpGateway(ABC):
     """Base gateway interface that defines http communication"""
 
     @abstractmethod
-    def request(self, method: str, url: str, headers: dict = None, params: dict = None, data: dict = None,
-                json: dict = None) -> Response:
+    def request(
+        self,
+        method: str,
+        url: str,
+        headers: dict = None,
+        params: dict = None,
+        data: dict = None,
+        json: dict = None,
+    ) -> Response:
         """Send an http request to the specified url using the specified method"""
 
     def get(self, *args, **kwargs):
         """Aliased method to send GET request using :request method"""
-        return self.request('GET', *args, **kwargs)
+        return self.request("GET", *args, **kwargs)
 
     def post(self, *args, **kwargs):
         """Aliased method to send POST request using :request method"""
-        return self.request('POST', *args, **kwargs)
+        return self.request("POST", *args, **kwargs)
 
     @property
     @abstractmethod
@@ -56,12 +63,21 @@ class DefaultHttpGateway(BaseHttpGateway):
 
         self.session.verify = False
 
-    def request(self, method: str, url: str, headers: dict = None, params: dict = None, data: dict = None,
-                json: dict = None) -> Response:
+    def request(
+        self,
+        method: str,
+        url: str,
+        headers: dict = None,
+        params: dict = None,
+        data: dict = None,
+        json: dict = None,
+    ) -> Response:
 
         with warnings.catch_warnings():
-            warnings.simplefilter('ignore', InsecureRequestWarning)
-            return self.session.request(method, url, headers=headers, params=params, data=data, json=json)
+            warnings.simplefilter("ignore", InsecureRequestWarning)
+            return self.session.request(
+                method, url, headers=headers, params=params, data=data, json=json
+            )
 
     @property
     def cookies(self) -> RequestsCookieJar:

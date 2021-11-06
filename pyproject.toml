@@ -42,9 +42,16 @@ pytest = "^6.2.5"
 pre-commit = "^2.15.0"
 sphinx_rtd_theme = "^1.0.0"
 sphinx = "^4.2.0"
+pytest-cov = "^3.0.0"
 
 [tool.poetry.extras]
 docs = ["sphinx", "sphinx_rtd_theme", "myst_parser"]
+
+[tool.pytest.ini_options]
+addopts = "--cov=novelsave_sources"
+testpaths = [
+    "tests",
+]
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

@@ -27,6 +27,21 @@ class Crawler(ABC):
 
         last_updated (datetime.date): The date at which the specific crawler
             implementation was last updated.
+
+        bad_tags (List[str]): List of names of tags that should be removed from
+            chapter content for this specific crawler.
+
+        blacklist_patterns (List[str]): List of regex patterns denoting text that
+            should be removed from chapter content.
+
+        notext_tags (List[str]): List of names of tags that even if there is no
+            text should not be removed from chapter content.
+
+            Elements with no text are usually removed from the chapter content,
+            unless the element is specified in this list.
+
+        preserve_attrs (List[str]): Element attributes that contain meaningful content
+            and should be kept with in the element during attribute cleanup.
     """
 
     lang: str
@@ -73,7 +88,7 @@ class Crawler(ABC):
         """Makes a request to the url and attempts to make a :class:`BeautifulSoup`
         object from the response content.
 
-        Once the response is acquired, soup object is created using ::meth:`~novelsave_sources.sources.Crawler.make_soup`.
+        Once the response is acquired, soup object is created using :meth:`~novelsave_sources.sources.Crawler.make_soup`.
         Then the soup object is checked for the ``body`` to check if document was
         retrieved successfully.
 
@@ -215,7 +230,7 @@ class Crawler(ABC):
           (undesirable text such as ads and watermarks)
 
         If none of the conditions are met, all the attributes except those marked
-        important (self.preserve_attrs) are removed from this element
+        important :attr:`preserve_attrs` are removed from this element
         """
         # remove comments
         if isinstance(element, Comment):

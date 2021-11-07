@@ -94,17 +94,6 @@ python-versions = ">=3.5.0"
 unicode_backport = ["unicodedata2"]
 
 [[package]]
-name = "click"
-version = "8.0.3"
-description = "Composable command line interface toolkit"
-category = "dev"
-optional = false
-python-versions = ">=3.6"
-
-[package.dependencies]
-colorama = {version = "*", markers = "platform_system == \"Windows\""}
-
-[[package]]
 name = "cloudscraper"
 version = "1.2.58"
 description = "A Python module to bypass Cloudflare's anti-bot page."
@@ -659,7 +648,7 @@ docs = ["sphinx", "sphinx_rtd_theme"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "15b0381fcf61ef45fb5210596c655aa6170c5ba96a589667e5141ae056a0f098"
+content-hash = "117a7dad341d4a13b29eb9f43d5394c9b61875d51bcb0d5cdd11db0c5c511b30"
 
 [metadata.files]
 alabaster = [
@@ -697,10 +686,6 @@ cfgv = [
 charset-normalizer = [
     {file = "charset-normalizer-2.0.7.tar.gz", hash = "sha256:e019de665e2bcf9c2b64e2e5aa025fa991da8720daa3c1138cadd2fd1856aed0"},
     {file = "charset_normalizer-2.0.7-py3-none-any.whl", hash = "sha256:f7af805c321bfa1ce6714c51f254e0d5bb5e5834039bc17db7ebe3a4cec9492b"},
-]
-click = [
-    {file = "click-8.0.3-py3-none-any.whl", hash = "sha256:353f466495adaeb40b6b5f592f9f91cb22372351c84caeb068132442a4518ef3"},
-    {file = "click-8.0.3.tar.gz", hash = "sha256:410e932b050f5eed773c4cda94de75971c89cdb3155a72a0831139a79e5ecb5b"},
 ]
 cloudscraper = [
     {file = "cloudscraper-1.2.58-py2.py3-none-any.whl", hash = "sha256:674fd739f9412188aae8d6614e3e6316939fc0670ef5646abd3d316f1a59d3c2"},

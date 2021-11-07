@@ -1,7 +1,7 @@
+import argparse
 import re
 from pathlib import Path
 
-import click
 from mako.template import Template
 
 from novelsave_sources import (
@@ -45,13 +45,11 @@ def render(mako_file: Path, **kwargs):
     print(f"{mako_file.relative_to(BASE_DIR)} -> {rendered_file.relative_to(BASE_DIR)}")
 
 
-@click.group()
 def cli():
     pass
 
 
-@cli.command(name="compile")
-def compile_():
+def compile_(_):
     """Compile all mako files"""
     sources = sorted(novel_source_types(), key=lambda s: (s.lang, s.base_urls[0]))
     meta_sources = sorted(
@@ -67,4 +65,11 @@ def compile_():
 
 
 if __name__ == "__main__":
-    cli()
+    parser = argparse.ArgumentParser()
+    subparsers = parser.add_subparsers()
+
+    compile_parser = subparsers.add_parser("compile")
+    compile_parser.set_defaults(func=compile_)
+
+    args = parser.parse_args()
+    args.func(args)

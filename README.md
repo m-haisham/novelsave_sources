@@ -153,6 +153,12 @@ python3 manage.py compile
         </tr>
         <tr>
             <td align="center">en</td>
+            <td>https://novelsonline.net</td>
+            <td align="center"></td>
+            <td align="center">2021-11-07</td>
+        </tr>
+        <tr>
+            <td align="center">en</td>
             <td>https://novelsrock.com</td>
             <td align="center"></td>
             <td align="center">2021-09-04</td>

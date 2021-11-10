@@ -14,7 +14,7 @@ chapter_list_url = "https://www.webnovel.com/go/pcm/chapter/get-chapter-list?_cs
 
 class Webnovel(Source):
     name = "Webnovel"
-    base_urls = ("https://www.webnovel.com",)
+    base_urls = ["https://www.webnovel.com", "https://m.webnovel.com"]
     last_updated = datetime.date(2021, 9, 3)
 
     def get_csrf_token(self) -> str:

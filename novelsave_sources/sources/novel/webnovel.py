@@ -64,7 +64,7 @@ class Webnovel(Source):
             title=data["bookInfo"]["bookName"],
             synopsis=synopsis,
             thumbnail_url=f"https://img.webnovel.com/bookcover/{novel_id}",
-            url=f"https://www.webnovel.com/book/{novel_id}",
+            url=book_info_url.format(novel_id),
         )
 
         writer_elements = soup.select("._mn > address > p > *")

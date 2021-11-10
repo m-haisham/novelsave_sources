@@ -12,37 +12,18 @@ This is a collection of novel sources offering varying amounts of scraping capab
 
 .. toctree::
    :maxdepth: 2
-   :caption: Usage:
+   :caption: Content:
 
-   usage/installation
-   usage/basic_usage
-   usage/examples
-
-.. toctree::
-   :maxdepth: 2
-   :caption: API:
-
-   api/crawler
-   api/sources
-   api/models
-   api/utilities
-   api/gateways
-   api/exceptions
+   content/usage
+   content/support
+   content/api
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Support:
-
-   support/supported_novel_sources
-   support/supported_metadata_sources
-   support/rejected_sources
-
-.. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Community:
 
-   community/contributing
    community/code_of_conduct
+   community/contributing
 
 Indices and tables
 ==================

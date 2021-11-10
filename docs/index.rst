@@ -11,7 +11,7 @@ Welcome to novelsave-sources's documentation!
 This is a collection of novel sources offering varying amounts of scraping capability.
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
    :caption: Content:
 
    content/usage

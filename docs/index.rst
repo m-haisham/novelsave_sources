@@ -22,8 +22,8 @@ This is a collection of novel sources offering varying amounts of scraping capab
    :maxdepth: 1
    :caption: Community:
 
-   community/code_of_conduct
-   community/contributing
+   comm/code_of_conduct
+   comm/contributing
 
 Indices and tables
 ==================

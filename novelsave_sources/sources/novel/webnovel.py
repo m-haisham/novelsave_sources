@@ -1,6 +1,7 @@
 import datetime
 import json
 from typing import Dict, List, Optional, Tuple
+from urllib.parse import quote_plus
 
 from bs4 import BeautifulSoup
 
@@ -8,17 +9,39 @@ from .source import Source
 from ...exceptions import BadResponseException
 from ...models import Chapter, Metadata, Novel, Volume
 
-book_info_url = "https://www.webnovel.com/book/%s"
+book_info_url = "https://www.webnovel.com/book/{}"
 chapter_list_url = "https://www.webnovel.com/go/pcm/chapter/get-chapter-list?_csrfToken={csrf}&bookId={id}&pageIndex=0"
+search_url = "https://www.webnovel.com/go/pcm/search/result?_csrfToken={csrf}&pageIndex=1&type=1&keywords={query}"
 
 
 class Webnovel(Source):
     name = "Webnovel"
-    base_urls = ("https://www.webnovel.com",)
-    last_updated = datetime.date(2021, 9, 3)
+    base_urls = ["https://www.webnovel.com", "https://m.webnovel.com"]
+    last_updated = datetime.date(2021, 11, 10)
+    search_viable = True
 
     def get_csrf_token(self) -> str:
         return self.http_gateway.cookies.get("_csrfToken", "")
+
+    def search(self, keyword: str, *args, **kwargs) -> List[Novel]:
+        self.http_gateway.get(self.base_urls[0])
+        query = quote_plus(str(keyword).lower())
+        response = self.request_get(
+            search_url.format(csrf=self.get_csrf_token(), query=query)
+        )
+        data = self.validate(response)["data"]
+
+        novels = []
+        for book in data["bookInfo"]["bookItems"]:
+            novel = Novel(
+                title=book["bookName"],
+                author=book["authorName"],
+                url=book_info_url.format(book["bookId"]),
+            )
+
+            novels.append(novel)
+
+        return novels
 
     def novel(self, url: str) -> Novel:
         soup = self.get_soup(url)
@@ -41,7 +64,7 @@ class Webnovel(Source):
             title=data["bookInfo"]["bookName"],
             synopsis=synopsis,
             thumbnail_url=f"https://img.webnovel.com/bookcover/{novel_id}",
-            url=f"https://www.webnovel.com/book/{novel_id}",
+            url=book_info_url.format(novel_id),
         )
 
         writer_elements = soup.select("._mn > address > p > *")

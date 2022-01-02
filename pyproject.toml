@@ -29,8 +29,10 @@ python = "^3.8"
 cloudscraper = "^1.2.58"
 requests = "^2.26.0"
 beautifulsoup4 = "^4.10.0"
-lxml = "^4.6.3"
+lxml = "^4.6.5"
 deprecation = "^2.1.0"
+
+# optional
 sphinx_rtd_theme = { version = "^1.0.0", optional = true}
 sphinx = { version = "^4.2.0", optional = true }
 
@@ -46,7 +48,7 @@ tox = "^3.24.4"
 pytest-mock = "^3.6.1"
 
 [tool.poetry.extras]
-docs = ["sphinx", "sphinx_rtd_theme", "myst_parser"]
+docs = ["sphinx", "sphinx_rtd_theme"]
 
 [tool.pytest.ini_options]
 addopts = "--cov=novelsave_sources"

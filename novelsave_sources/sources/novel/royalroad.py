@@ -9,7 +9,7 @@ from ...models import Chapter, Metadata, Novel
 class RoyalRoad(Source):
     name = "Royal Road"
     base_urls = ("https://www.royalroad.com",)
-    last_updated = datetime.date(2021, 10, 29)
+    last_updated = datetime.date(2022, 1, 2)
     search_viable = True
 
     search_url_template = "https://www.royalroad.com/fictions/search?title={0}&page={1}"
@@ -56,13 +56,16 @@ class RoyalRoad(Source):
         for tr in soup.select("tbody > tr"):
             a = tr.select_one("a[href]")
 
+            time, offset = tr.select_one("time").get("title").rsplit(" ", maxsplit=1)
+            offset = (1 if offset[0] == "+" else -1) * datetime.timedelta(
+                seconds=datetime.datetime.strptime(offset[1:], "%I:%M").timestamp()
+            )
+
             chapter = Chapter(
                 index=len(volume.chapters),
                 title=a.text.strip(),
                 url=self.base_urls[0] + a["href"],
-                updated=datetime.datetime.strptime(
-                    tr.select_one("time").get("title"), "%A, %B %d, %Y %I:%M %p"
-                ),
+                updated=datetime.datetime.strptime(time, "%m/%d/%Y %I:%M:%S %p"),
             )
 
             volume.chapters.append(chapter)

@@ -251,7 +251,7 @@ python3 manage.py compile
             <td align="center">en</td>
             <td>https://www.royalroad.com</td>
             <td align="center">✅</td>
-            <td align="center">2021-10-29</td>
+            <td align="center">2022-01-02</td>
         </tr>
         <tr>
             <td align="center">en</td>
@@ -315,6 +315,12 @@ python3 manage.py compile
             <td>https://www.fanfiction.net</td>
             <td>Has cloudflare bot protection</td>
             <td>2021-10-30</td>
+        </tr>
+        <tr>
+            <td align="center">en</td>
+            <td>https://mtlnation.com</td>
+            <td>Has cloudflare bot protection</td>
+            <td>2022-01-02</td>
         </tr>
     </tbody>
 </table>

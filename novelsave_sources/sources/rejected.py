@@ -10,4 +10,10 @@ rejected_sources = [
         reason="Has cloudflare bot protection",
         added=datetime.date(2021, 10, 30),
     ),
+    Rejected(
+        lang="en",
+        base_url="https://mtlnation.com",
+        reason="Has cloudflare bot protection",
+        added=datetime.date(2022, 1, 2),
+    ),
 ]

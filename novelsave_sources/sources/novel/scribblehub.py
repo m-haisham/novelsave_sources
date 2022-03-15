@@ -1,6 +1,7 @@
 import datetime
 from typing import List
 from urllib.parse import quote_plus
+import dateparser
 
 from bs4 import BeautifulSoup
 
@@ -11,7 +12,7 @@ from ...models import Chapter, Metadata, Novel
 class ScribbleHub(Source):
     name = "Scribble Hub"
     base_urls = ("https://www.scribblehub.com",)
-    last_updated = datetime.date(2021, 10, 29)
+    last_updated = datetime.date(2022, 3, 15)
     search_viable = True
 
     search_url_template = "https://www.scribblehub.com/?s={}&post_type=fictionposts"
@@ -79,14 +80,18 @@ class ScribbleHub(Source):
         chapters = []
         for i, li in enumerate(reversed(soup.select("li.toc_w"))):
             a = li.select_one("a")
+            date = li.select_one(".fic_date_pub").get("title")
+
+            try:
+                updated = datetime.datetime.strptime(date, "%b %d, %Y %I:%M %p")
+            except ValueError:
+                updated = dateparser.parse(date)
 
             chapter = Chapter(
                 index=i,
                 title=a.text.strip(),
                 url=a["href"],
-                updated=datetime.datetime.strptime(
-                    li.select_one(".fic_date_pub").get("title"), "%b %d, %Y %I:%M %p"
-                ),
+                updated=updated,
             )
 
             chapters.append(chapter)

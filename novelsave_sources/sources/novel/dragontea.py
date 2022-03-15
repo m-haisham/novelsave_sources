@@ -9,15 +9,15 @@ from ...models import Chapter, Metadata, Novel
 class DragonTea(Source):
     name = "Dragon Tea"
     base_urls = ("https://dragontea.ink/",)
-    last_updated = datetime.date(2021, 10, 7)
+    last_updated = datetime.date(2022, 3, 15)
 
     def __init__(self, *args, **kwargs):
         super(DragonTea, self).__init__(*args, **kwargs)
         self.bad_tags += ["h1", "h2", "h3", "h4", "h5", "h6", "hr"]
 
     def novel(self, url: str) -> Novel:
-        http_url = url.replace("https:", "http:")
-        soup = self.get_soup(http_url)
+        # http_url = url.replace("https:", "http:")
+        soup = self.get_soup(url)
 
         jumble_map = self.jumble_map()
 
@@ -57,7 +57,7 @@ class DragonTea(Source):
                 )
             )
 
-        soup = self.get_soup(http_url.rstrip("/") + "/ajax/chapters/", method="POST")
+        soup = self.get_soup(url.rstrip("/") + "/ajax/chapters/", method="POST")
         volume = novel.get_default_volume()
         for a in reversed(soup.select(".wp-manga-chapter > a")):
             chapter = Chapter(

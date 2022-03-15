@@ -119,32 +119,42 @@ class DebugGateway(DefaultHttpGateway):
 ChapterRange = namedtuple("ChapterRange", "start end")
 
 
-def parse_novel(source: Source, url: str, chapter_range: Optional[ChapterRange]):
+def parse_novel(
+    source: Source, url: str, chapter_range: Optional[ChapterRange], silent: bool
+):
     novel = source.novel(url)
-    pprint(novel)
+    if not silent:
+        pprint(novel)
 
     if chapter_range is not None:
         flat = [chapter for volume in novel.volumes for chapter in volume.chapters]
         for chapter in flat[chapter_range.start : chapter_range.end]:
             source.chapter(chapter)
-            pprint(chapter)
+            if not silent:
+                pprint(chapter)
 
 
-def parse_metadata(source: MetaSource, url: str):
+def parse_metadata(source: MetaSource, url: str, silent: bool):
     metadata = source.retrieve(url)
-    pprint(metadata)
+    if not silent:
+        pprint(metadata)
 
 
-def parse(url: str, chapter_range: Optional[ChapterRange], gateway: BaseHttpGateway):
+def parse(
+    url: str,
+    chapter_range: Optional[ChapterRange],
+    gateway: BaseHttpGateway,
+    silent: bool,
+):
 
     try:
-        parse_novel(locate_novel_source(url)(gateway), url, chapter_range)
+        parse_novel(locate_novel_source(url)(gateway), url, chapter_range, silent)
         return
     except UnknownSourceException:
         pass
 
     try:
-        parse_metadata(locate_metadata_source(url)(gateway), url)
+        parse_metadata(locate_metadata_source(url)(gateway), url, silent)
         return
     except UnknownSourceException:
         pass
@@ -157,6 +167,7 @@ if __name__ == "__main__":
     parser.add_argument("url", help="The website url to parse.")
     parser.add_argument("-r", "--range", help="Range of chapters to download.")
     parser.add_argument("--no-cache", action="store_true", help="Disable cache usage.")
+    parser.add_argument("--silent", action="store_true", help="Disable cache usage.")
     args = parser.parse_args()
 
     gateway = DebugGateway(cache=not args.no_cache)
@@ -166,4 +177,4 @@ if __name__ == "__main__":
         start, end = args.range.split(":")
         chapter_range = ChapterRange(int(start), int(end))
 
-    parse(args.url, chapter_range, gateway)
+    parse(args.url, chapter_range, gateway, args.silent)

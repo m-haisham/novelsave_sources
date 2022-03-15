@@ -1,4 +1,5 @@
 import argparse
+from collections import namedtuple
 import hashlib
 from datetime import datetime, timedelta
 import pickle
@@ -6,6 +7,7 @@ from typing import Optional
 from requests import Response
 from pathlib import Path
 from novelsave_sources import locate_novel_source, locate_metadata_source
+from novelsave_sources.exceptions import UnknownSourceException
 from novelsave_sources.sources.metadata.metasource import MetaSource
 from novelsave_sources.sources.novel.source import Source
 from novelsave_sources.utils.gateways import BaseHttpGateway, DefaultHttpGateway
@@ -92,7 +94,7 @@ class DebugGateway(DefaultHttpGateway):
         flags = " ".join([f for f in flags if f])
         if self.cache:
             key = make_key(method, url, headers, params, data, json)
-        print(f"{method.upper():4} {url} {flags}... ", end="")
+        print(f"{method.upper()} {url} {flags}... ", end="")
 
         if self.cache:
             if response := get_cache(key):
@@ -114,26 +116,38 @@ class DebugGateway(DefaultHttpGateway):
 
 # End
 
+ChapterRange = namedtuple("ChapterRange", "start end")
 
-def parse_novel(source: Source, url: str):
+
+def parse_novel(source: Source, url: str, chapter_range: Optional[ChapterRange]):
     novel = source.novel(url)
     pprint(novel)
 
+    if chapter_range is not None:
+        flat = [chapter for volume in novel.volumes for chapter in volume.chapters]
+        for chapter in flat[chapter_range.start : chapter_range.end]:
+            source.chapter(chapter)
+            pprint(chapter)
+
 
 def parse_metadata(source: MetaSource, url: str):
-    pass
+    metadata = source.retrieve(url)
+    pprint(metadata)
 
 
-def parse(url: str, gateway: BaseHttpGateway):
-    novel_source = locate_novel_source(url)
-    if novel_source is not None:
-        parse_novel(novel_source(gateway), url)
+def parse(url: str, chapter_range: Optional[ChapterRange], gateway: BaseHttpGateway):
+
+    try:
+        parse_novel(locate_novel_source(url)(gateway), url, chapter_range)
         return
+    except UnknownSourceException:
+        pass
 
-    metadata_source = locate_metadata_source(url)
-    if metadata_source is not None:
-        parse_metadata(metadata_source(gateway), url)
+    try:
+        parse_metadata(locate_metadata_source(url)(gateway), url)
         return
+    except UnknownSourceException:
+        pass
 
     print("Error: The url provided does not match any available source.")
 
@@ -141,8 +155,15 @@ def parse(url: str, gateway: BaseHttpGateway):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("url", help="The website url to parse.")
+    parser.add_argument("-r", "--range", help="Range of chapters to download.")
     parser.add_argument("--no-cache", action="store_true", help="Disable cache usage.")
     args = parser.parse_args()
 
     gateway = DebugGateway(cache=not args.no_cache)
-    parse(args.url, gateway)
+
+    chapter_range = None
+    if args.range is not None:
+        start, end = args.range.split(":")
+        chapter_range = ChapterRange(int(start), int(end))
+
+    parse(args.url, chapter_range, gateway)

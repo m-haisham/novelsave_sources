@@ -322,6 +322,12 @@ python3 manage.py compile
             <td>Has cloudflare bot protection</td>
             <td>2022-01-02</td>
         </tr>
+        <tr>
+            <td align="center">multi</td>
+            <td>https://dreame.com</td>
+            <td>Website does not allow reading full novel.</td>
+            <td>2022-03-16</td>
+        </tr>
     </tbody>
 </table>
 

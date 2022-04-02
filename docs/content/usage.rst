@@ -190,7 +190,7 @@ Searching in all supported sources
     import novelsave_sources as nss
 
     # Get all source types that can search
-    sources = [source() for source in nss.metadata_source_types() if source.search_viable]
+    sources = [source() for source in nss.novel_source_types() if source.search_viable]
 
     # The search query word
     query = 'solo'

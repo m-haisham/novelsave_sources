@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "novelsave-sources"
-version = "0.3.2"
+version = "0.3.3"
 description = "A collection of novel sources offering varying amounts of scraping capability."
 authors = ["Mensch272 <47662901+mensch272@users.noreply.github.com>"]
 maintainers = ["Mensch272 <47662901+mensch272@users.noreply.github.com>"]

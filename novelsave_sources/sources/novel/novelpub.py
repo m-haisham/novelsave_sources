@@ -116,7 +116,3 @@ class NovelPub(Source):
         self.clean_contents(content)
 
         chapter.paragraphs = str(content)
-        
-        # fname = 'testing/' + chapter.title + '.html'
-        # with open(fname, 'w', encoding="utf-8") as f:
-        #     f.writelines(chapter.paragraphs)

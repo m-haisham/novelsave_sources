@@ -256,10 +256,6 @@ class Crawler(ABC):
         elif self.is_blacklisted(element.text):
             element.extract()
 
-        # Remove blacklisted elements by formatting
-        elif self.is_blacklisted(str(element)):
-            element.extract()
-
         # Remove attributes
         elif hasattr(element, "attrs"):
             element.attrs = {

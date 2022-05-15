@@ -14,10 +14,6 @@ class NovelPub(Source):
 
     search_url_template = "https://www.novelpub.com/lnwsearchlive?inputContent={}"
 
-    blacklist_patterns = [
-        "<p><strong><strong>.*?<\/strong><\/strong><\/p>"
-    ]
-
     def __init__(self, *args, **kwargs):
         super(NovelPub, self).__init__(*args, **kwargs)
         self.bad_tags += ["i"]
@@ -111,6 +107,9 @@ class NovelPub(Source):
         soup = self.get_soup(chapter.url)
         content = soup.select_one("#chapter-container")
         for element in content.select(".adsbox, adsbygoogle"):
+            element.extract()
+
+        for element in content.select("strong > strong"):
             element.extract()
 
         self.clean_contents(content)

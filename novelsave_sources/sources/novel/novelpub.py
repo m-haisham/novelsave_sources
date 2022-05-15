@@ -14,6 +14,10 @@ class NovelPub(Source):
 
     search_url_template = "https://www.novelpub.com/lnwsearchlive?inputContent={}"
 
+    blacklist_patterns = [
+        "<p><strong><strong>.*?<\/strong><\/strong><\/p>"
+    ]
+
     def __init__(self, *args, **kwargs):
         super(NovelPub, self).__init__(*args, **kwargs)
         self.bad_tags += ["i"]
@@ -112,3 +116,7 @@ class NovelPub(Source):
         self.clean_contents(content)
 
         chapter.paragraphs = str(content)
+        
+        # fname = 'testing/' + chapter.title + '.html'
+        # with open(fname, 'w', encoding="utf-8") as f:
+        #     f.writelines(chapter.paragraphs)

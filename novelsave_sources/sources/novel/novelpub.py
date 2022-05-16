@@ -9,7 +9,7 @@ from ...models import Chapter, Novel
 
 class NovelPub(Source):
     base_urls = ("https://www.novelpub.com",)
-    last_updated = datetime.date(2021, 10, 29)
+    last_updated = datetime.date(2022, 5, 14)
     search_viable = True
 
     search_url_template = "https://www.novelpub.com/lnwsearchlive?inputContent={}"
@@ -107,6 +107,9 @@ class NovelPub(Source):
         soup = self.get_soup(chapter.url)
         content = soup.select_one("#chapter-container")
         for element in content.select(".adsbox, adsbygoogle"):
+            element.extract()
+
+        for element in content.select("strong > strong"):
             element.extract()
 
         self.clean_contents(content)
